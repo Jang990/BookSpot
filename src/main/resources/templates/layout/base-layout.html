@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html th:fragment="base-layout (title, links, content)" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:replace="${title}">레이아웃 타이틀</title>
+  <th:block th:replcae="${links}" />
+</head>
+<body>
+  <div class="container">
+    <div class="container custom-container-width">
+      <div th:replace="${content}">
+        본문 페이지
+      </div>
+    </div>
+  </div>
+</body>
+</html>
