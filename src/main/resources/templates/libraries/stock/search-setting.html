@@ -1,11 +1,20 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layout/base-layout :: base-layout (~{::title},~{::link},~{::section})}">
 <head>
-    <title>카테고리 목록</title>
+    <title>BookSpot 검색 세팅</title>
 </head>
     <body>
         <section>
-            재고 검색 세팅
+            <form action="/libraries/stock" method="post">
+                <label>위도</label> <input type="number" name="latitude" id="latitude"> <br>
+                <label>경도</label> <input type="number" name="longitude" id="longitude"> <br>
+                <label>책ID 1 </label> <input type="text" name="bookId"> <br>
+                <label>책ID 2 </label> <input type="text" name="bookId"> <br>
+                <label>책ID 3 </label> <input type="text" name="bookId"> <br>
+                <label>책ID 4 </label> <input type="text" name="bookId"> <br>
+                <label>책ID 5 </label> <input type="text" name="bookId"> <br>
+                <input type="submit" value="확인">
+            </form>
         </section>
     </body>
 </html>
