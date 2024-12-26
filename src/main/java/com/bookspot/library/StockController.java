@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class SimpleController {
+public class StockController {
     @GetMapping("/libraries/stock/search-setting")
     public String settingPage() {
         return "libraries/stock/search-setting";
