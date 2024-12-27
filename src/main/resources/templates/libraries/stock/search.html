@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base-layout :: base-layout (~{::title},~{::link},~{::section})}">
+<head>
+    <title>BookSpot 검색</title>
+</head>
+    <body>
+        <section>
+            <h3>검색 결과</h3>
+            <div>
+                <div><label>도서관 이름 :</label> <span>A도서관</span></div>
+                <div><label>거리 :</label> <span>3.41km</span></div>
+                <div>
+                    <label>보유 현황 :</label> <span>6 / 10</span>
+                    <ul>
+                        <li>미보유 도서</li>
+                        <ul>
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div><label>도서관 이름 :</label> <span>B도서관</span></div>
+                <div><label>거리 :</label> <span>4.41km</span></div>
+                <div>
+                    <label>보유 현황 :</label> <span>8 / 10</span>
+                    <ul>
+                        <li>미보유 도서</li>
+                        <ul>
+                            <li>1</li>
+                            <li>2</li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

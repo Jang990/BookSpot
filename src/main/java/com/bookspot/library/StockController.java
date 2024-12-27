@@ -15,7 +15,7 @@ public class StockController {
 
     @PostMapping("/libraries/stock")
     public String searchLibrariesStock(StockSearchForm stockSearchForm) {
-        return "redirect:/";
+        return "libraries/stock/search";
     }
 
     @GetMapping("/")
