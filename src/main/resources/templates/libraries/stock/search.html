@@ -6,31 +6,17 @@
     <body>
         <section>
             <h3>검색 결과</h3>
-            <div>
-                <div><label>도서관 이름 :</label> <span>A도서관</span></div>
-                <div><label>거리 :</label> <span>3.41km</span></div>
+            <div th:each="content : ${contents}" th:object="${content}">
+                <div><label>도서관 이름 :</label> <span th:text="*{libraryName}">A 도서관</span></div>
+                <div><label>거리 :</label> <span th:text="|*{distance}Km|">3.41km</span></div>
                 <div>
-                    <label>보유 현황 :</label> <span>6 / 10</span>
+                    <label>보유 현황 :</label> <span th:text="|*{availableBooksCount} / *{totalBooksRequested}|">6 / 10</span>
                     <ul>
                         <li>미보유 도서</li>
                         <ul>
-                            <li>1</li>
-                            <li>2</li>
-                            <li>3</li>
-                            <li>4</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div><label>도서관 이름 :</label> <span>B도서관</span></div>
-                <div><label>거리 :</label> <span>4.41km</span></div>
-                <div>
-                    <label>보유 현황 :</label> <span>8 / 10</span>
-                    <ul>
-                        <li>미보유 도서</li>
-                        <ul>
-                            <li>1</li>
-                            <li>2</li>
+                            <li th:each="name : *{unavailableBooks}">
+                                <span th:text="${name}">책이름</span>
+                            </li>
                         </ul>
                     </ul>
                 </div>
