@@ -1,4 +1,4 @@
-package com.bookspot.library;
+package com.bookspot.stock;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
