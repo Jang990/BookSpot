@@ -9,12 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class StockController {
     private final LibraryService libraryService;
+    private final LibraryStockService libraryStockService;
 
     @GetMapping("/libraries/stock/search-setting")
     public String settingPage(Model model) {
@@ -33,16 +35,15 @@ public class StockController {
         List<LibraryDistanceDto> libraries = libraryService.findLibrariesWithin5km(
                 stockSearchForm.getLatitude(), stockSearchForm.getLongitude());
 
-        List<LibraryStockDto> result = List.of(
-                new LibraryStockDto(
-                        libraries.get(0).getLibraryName(), libraries.get(0).getDistance(),
-                        10, 6,
-                        List.of("AAA", "BBB", "CCC", "DDD")),
-                new LibraryStockDto(
-                        libraries.get(1).getLibraryName(), libraries.get(1).getDistance(),
-                        10,8,
-                        List.of("BBB", "CCC"))
-        );
+        List<LibraryStockDto> result = new LinkedList<>();
+        for (LibraryDistanceDto library : libraries) {
+            List<Long> unavailableBookIds1 = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
+            result.add(
+                    new LibraryStockDto(
+                            library.getLibraryName(), library.getDistance(),
+                            stockSearchForm.getBookId().size(), stockSearchForm.getBookId().size() - unavailableBookIds1.size(),
+                            library.getLibraryId() == 1L ? List.of("AAA", "BBB", "CCC", "DDD") : List.of("BBB", "CCC")));
+        }
         model.addAttribute("contents", result);
 
         return "libraries/stock/search";

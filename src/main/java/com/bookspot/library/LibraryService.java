@@ -8,8 +8,8 @@ import java.util.List;
 public class LibraryService {
     public List<LibraryDistanceDto> findLibrariesWithin5km(double latitude, double longitude) {
         return List.of(
-                new LibraryDistanceDto("A도서관", 3.41),
-                new LibraryDistanceDto("B도서관", 4.41)
+                new LibraryDistanceDto(1L, "A도서관", 3.41),
+                new LibraryDistanceDto(2L, "B도서관", 4.41)
         );
     }
 }
