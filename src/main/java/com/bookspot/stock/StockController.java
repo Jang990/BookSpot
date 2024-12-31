@@ -1,5 +1,6 @@
 package com.bookspot.stock;
 
+import com.bookspot.book.BookService;
 import com.bookspot.library.LibraryDistanceDto;
 import com.bookspot.library.LibraryService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import java.util.List;
 public class StockController {
     private final LibraryService libraryService;
     private final LibraryStockService libraryStockService;
+    private final BookService bookService;
 
     @GetMapping("/libraries/stock/search-setting")
     public String settingPage(Model model) {
@@ -37,12 +39,12 @@ public class StockController {
 
         List<LibraryStockDto> result = new LinkedList<>();
         for (LibraryDistanceDto library : libraries) {
-            List<Long> unavailableBookIds1 = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
+            List<Long> unavailableBookIds = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
             result.add(
                     new LibraryStockDto(
                             library.getLibraryName(), library.getDistance(),
-                            stockSearchForm.getBookId().size(), stockSearchForm.getBookId().size() - unavailableBookIds1.size(),
-                            library.getLibraryId() == 1L ? List.of("AAA", "BBB", "CCC", "DDD") : List.of("BBB", "CCC")));
+                            stockSearchForm.getBookId().size(), stockSearchForm.getBookId().size() - unavailableBookIds.size(),
+                            bookService.findAll(unavailableBookIds)));
         }
         model.addAttribute("contents", result);
 
