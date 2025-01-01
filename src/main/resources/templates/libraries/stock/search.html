@@ -8,7 +8,7 @@
             <h3>검색 결과</h3>
             <div th:each="content : ${contents}" th:object="${content}">
                 <div><label>도서관 이름 :</label> <span th:text="*{libraryName}">A 도서관</span></div>
-                <div><label>거리 :</label> <span th:text="|*{distance}Km|">3.41km</span></div>
+                <div><label>거리 :</label> <span th:text="|*{distance}m|">3.41km</span></div>
                 <div>
                     <label>보유 현황 :</label> <span th:text="|*{availableBooksCount} / *{totalBooksRequested}|">6 / 10</span>
                     <ul>

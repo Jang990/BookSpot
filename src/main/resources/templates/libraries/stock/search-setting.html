@@ -14,10 +14,10 @@
 
         <form action="/libraries/stock" method="get" th:object="${stockSearchForm}">
             <div class="field-error" th:errors="*{latitude}">위도 오류</div>
-            <label>위도</label> <input type="number" th:field="*{latitude}"> <br>
+            <label>위도</label> <input type="text" th:field="*{latitude}"> <br>
 
             <div class="field-error" th:errors="*{longitude}">경도 오류</div>
-            <label>경도</label> <input type="number" th:field="*{longitude}"> <br>
+            <label>경도</label> <input type="text" th:field="*{longitude}"> <br>
 
             <div class="field-error" th:errors="*{bookId}">상품 오류</div>
             <label>책ID 1 </label> <input type="text" name="bookId"> <br>

@@ -1,15 +1,22 @@
 package com.bookspot.library;
 
+import com.bookspot.library.infra.LibraryRepositoryForView;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class LibraryService {
+    private final LibraryRepositoryForView repositoryForView;
+
     public List<LibraryDistanceDto> findLibrariesWithin5km(double latitude, double longitude) {
-        return List.of(
-                new LibraryDistanceDto(1L, "A도서관", 3.41),
-                new LibraryDistanceDto(2L, "B도서관", 4.41)
-        );
+        // TODO: Page<T> 반환으로 변경할 것
+        return repositoryForView.findLibrariesWithinRadius(
+                latitude, longitude,
+                PageRequest.of(0, 10))
+                .getContent();
     }
 }
