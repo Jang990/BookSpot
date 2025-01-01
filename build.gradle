@@ -30,6 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	implementation 'org.hibernate:hibernate-spatial:6.4.0.Final'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
