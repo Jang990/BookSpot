@@ -19,7 +19,7 @@ import java.util.List;
 public class LibraryRepositoryForView {
     private static final String SEARCH_SQL = """
             SELECT id, name,
-                   (ST_Distance_Sphere(location, ST_GeomFromText(?, 4326)) / 1000) AS distance
+                   (ST_Distance_Sphere(location, ST_GeomFromText(?, 4326))) AS distance
             FROM library
             WHERE ST_Distance_Sphere(location, ST_GeomFromText(?, 4326)) <= 5000
             ORDER BY distance ASC
