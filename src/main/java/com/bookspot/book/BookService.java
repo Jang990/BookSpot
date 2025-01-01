@@ -14,13 +14,7 @@ public class BookService {
     private final BookRepository repository;
 
     public List<String> findAll(List<Long> bookIds) {
-        List<Long> ids = bookIds.stream().map(id -> {
-            if (id > 5)
-                return id - 5;
-            return id;
-        }).toList();
-
-        return repository.findAllById(ids).stream()
+        return repository.findAllById(bookIds).stream()
                 .map(Book::getTitle)
                 .toList();
     }

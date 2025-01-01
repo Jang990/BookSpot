@@ -1,16 +1,26 @@
 package com.bookspot.stock;
 
+import com.bookspot.stock.domain.LibraryStockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LibraryStockService {
+    private final LibraryStockRepository repository;
     public List<Long> findUnavailableBookIds(long libraryId, List<Long> bookIds) {
-        if(libraryId % 2 == 1)
-            return List.of(libraryId, 1L, 2L, 3L);
-        return List.of(libraryId, 2L, 3L);
+        List<Long> result = new LinkedList<>();
+
+        for (Long bookId : bookIds) {
+            if (!repository.existsByLibraryIdAndBookId(libraryId, bookId))
+                result.add(bookId);
+        }
+
+        return result;
     }
 }
