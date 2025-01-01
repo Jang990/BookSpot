@@ -6,7 +6,7 @@ INSERT INTO library (name, location) VALUES
 ('부평구립청천도서관', ST_GeomFromText('POINT(37.5059306 126.714393)', 4326)),
 ('미추홀도서관', ST_GeomFromText('POINT(37.4469986 126.7248424)', 4326));
 
-INSERT INTO BOOK (name, isbn13, classification) VALUES
+INSERT INTO BOOK (title, isbn13, classification) VALUES
 ('객체지향의 사실과 오해 : 역할, 책임, 협력 관점에서 본 객체지향', '9788998139766', '005.115')
 ('(가상 면접 사례로 배우는) 대규모 시스템 설계 기초', '9788966263158', '005.12')
 ('Java의 정석', '9788995379493', '004.57')

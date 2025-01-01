@@ -5,7 +5,6 @@ import com.bookspot.book.domain.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class BookService {
         }).toList();
 
         return repository.findAllById(ids).stream()
-                .map(Book::getName)
+                .map(Book::getTitle)
                 .toList();
     }
 }

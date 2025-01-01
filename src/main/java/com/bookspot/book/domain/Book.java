@@ -12,7 +12,7 @@ public class Book {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     @Column(nullable = false, unique = true, length = 13)
     private String isbn13;
@@ -20,7 +20,7 @@ public class Book {
     // TODO: 검색을 위해 suffix(005) prefix(115) 나눠야?
     private String classification; // 005.115
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 }
