@@ -9,8 +9,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LibraryStockService {
     public List<Long> findUnavailableBookIds(long libraryId, List<Long> bookIds) {
-        if(libraryId == 1L)
-            return List.of(1L, 2L, 3L, 4L);
-        return List.of(2L, 3L);
+        if(libraryId % 2 == 1)
+            return List.of(libraryId, 1L, 2L, 3L);
+        return List.of(libraryId, 2L, 3L);
     }
 }
