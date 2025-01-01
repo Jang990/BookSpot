@@ -19,4 +19,8 @@ public class Book {
 
     // TODO: 검색을 위해 suffix(005) prefix(115) 나눠야?
     private String classification; // 005.115
+
+    public String getName() {
+        return name;
+    }
 }
