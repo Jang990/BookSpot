@@ -15,12 +15,9 @@
         <div class="field-error" th:errors="*{longitude}">경도 오류</div>
         <label>경도</label> <input type="text" th:field="*{longitude}"> <br>
 
-        <div class="field-error" th:errors="*{bookId}">상품 오류</div>
-        <label>책ID 1 </label> <input type="text" name="bookId"> <br>
-        <label>책ID 2 </label> <input type="text" name="bookId"> <br>
-        <label>책ID 3 </label> <input type="text" name="bookId"> <br>
-        <label>책ID 4 </label> <input type="text" name="bookId"> <br>
-        <label>책ID 5 </label> <input type="text" name="bookId"> <br>
+        <div th:replace="~{libraries/stock/fragment-search-book-manager :: fragment-search-book-manager(bookId=*{bookId})}">
+            재고를 검색할 책 리스트
+        </div>
 
         <input type="submit" value="확인">
     </form>
