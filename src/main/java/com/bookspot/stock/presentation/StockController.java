@@ -1,8 +1,9 @@
-package com.bookspot.stock;
+package com.bookspot.stock.presentation;
 
 import com.bookspot.book.BookService;
 import com.bookspot.library.LibraryDistanceDto;
 import com.bookspot.library.LibraryService;
+import com.bookspot.stock.application.LibraryStockService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

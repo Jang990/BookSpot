@@ -1,4 +1,4 @@
-package com.bookspot.stock;
+package com.bookspot.stock.application;
 
 import com.bookspot.stock.domain.LibraryStockRepository;
 import lombok.RequiredArgsConstructor;
