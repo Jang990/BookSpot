@@ -5,6 +5,10 @@
 </head>
     <body>
         <section>
+            <div th:replace="~{libraries/stock/fragment-search-form :: fragment-search-form(stockSearchForm=${stockSearchForm})}">
+                도서 재고 확인을 위한 검색창
+            </div>
+
             <h3>검색 결과</h3>
             <div th:each="content : ${contents}" th:object="${content}">
                 <div><label>도서관 이름 :</label> <span th:text="*{libraryName}">A 도서관</span></div>

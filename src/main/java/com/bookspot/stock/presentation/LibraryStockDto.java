@@ -1,4 +1,4 @@
-package com.bookspot.stock;
+package com.bookspot.stock.presentation;
 
 import lombok.Data;
 

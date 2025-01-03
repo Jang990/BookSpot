@@ -1,8 +1,9 @@
-package com.bookspot.stock;
+package com.bookspot.stock.presentation;
 
 import com.bookspot.book.BookService;
 import com.bookspot.library.LibraryDistanceDto;
 import com.bookspot.library.LibraryService;
+import com.bookspot.stock.application.LibraryStockService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,35 +21,32 @@ public class StockController {
     private final LibraryStockService libraryStockService;
     private final BookService bookService;
 
-    @GetMapping("/libraries/stock/search-setting")
-    public String settingPage(Model model) {
-        model.addAttribute("stockSearchForm", new StockSearchForm());
-        return "libraries/stock/search-setting";
-    }
-
     @GetMapping("/libraries/stock")
     public String searchLibrariesStock(
             Model model,
             @Valid StockSearchForm stockSearchForm,
             BindingResult bindingResult) {
+        model.addAttribute("stockSearchForm", stockSearchForm);
         if(bindingResult.hasErrors())
-            return "libraries/stock/search-setting";
+            return "libraries/stock/search";
 
-        List<LibraryDistanceDto> libraries = libraryService.findLibrariesWithin5km(
-                stockSearchForm.getLatitude(), stockSearchForm.getLongitude());
-
-        List<LibraryStockDto> result = new LinkedList<>();
-        for (LibraryDistanceDto library : libraries) {
-            List<Long> unavailableBookIds = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
-            result.add(
-                    new LibraryStockDto(
-                            library.getLibraryName(), library.getDistance(),
-                            stockSearchForm.getBookId().size(), stockSearchForm.getBookId().size() - unavailableBookIds.size(),
-                            bookService.findAll(unavailableBookIds)));
-        }
+        List<LibraryStockDto> result = libraryService.findLibrariesWithin5km(
+                        stockSearchForm.getLatitude(),
+                        stockSearchForm.getLongitude()
+                )
+                .stream().map(library -> findLibraryStock(stockSearchForm, library)).toList();
         model.addAttribute("contents", result);
 
         return "libraries/stock/search";
+    }
+
+    private LibraryStockDto findLibraryStock(StockSearchForm stockSearchForm, LibraryDistanceDto library) {
+        List<Long> unavailableBookIds = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
+        return new LibraryStockDto(
+                library.getLibraryName(), library.getDistance(),
+                stockSearchForm.getBookId().size(),
+                stockSearchForm.getBookId().size() - unavailableBookIds.size(),
+                bookService.findAll(unavailableBookIds));
     }
 
     @GetMapping("/")
