@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="fragment-search-form(stockSearchForm)" class="text-center">
+    <style>
+        .field-error {
+         border-color: #dc3545;
+         color: #dc3545;
+        }
+    </style>
+
+    <form action="/libraries/stock" method="get" th:object="${stockSearchForm}">
+        <div class="field-error" th:errors="*{latitude}">위도 오류</div>
+        <label>위도</label> <input type="text" th:field="*{latitude}"> <br>
+
+        <div class="field-error" th:errors="*{longitude}">경도 오류</div>
+        <label>경도</label> <input type="text" th:field="*{longitude}"> <br>
+
+        <div class="field-error" th:errors="*{bookId}">상품 오류</div>
+        <label>책ID 1 </label> <input type="text" name="bookId"> <br>
+        <label>책ID 2 </label> <input type="text" name="bookId"> <br>
+        <label>책ID 3 </label> <input type="text" name="bookId"> <br>
+        <label>책ID 4 </label> <input type="text" name="bookId"> <br>
+        <label>책ID 5 </label> <input type="text" name="bookId"> <br>
+
+        <input type="submit" value="확인">
+    </form>
+</div>
+</html>

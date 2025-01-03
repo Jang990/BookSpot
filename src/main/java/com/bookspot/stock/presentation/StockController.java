@@ -32,8 +32,9 @@ public class StockController {
             Model model,
             @Valid StockSearchForm stockSearchForm,
             BindingResult bindingResult) {
+        model.addAttribute("stockSearchForm", stockSearchForm);
         if(bindingResult.hasErrors())
-            return "libraries/stock/search-setting";
+            return "libraries/stock/search";
 
         List<LibraryDistanceDto> libraries = libraryService.findLibrariesWithin5km(
                 stockSearchForm.getLatitude(), stockSearchForm.getLongitude());
