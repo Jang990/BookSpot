@@ -35,16 +35,20 @@ public class StockController {
 
         List<LibraryStockDto> result = new LinkedList<>();
         for (LibraryDistanceDto library : libraries) {
-            List<Long> unavailableBookIds = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
-            result.add(
-                    new LibraryStockDto(
-                            library.getLibraryName(), library.getDistance(),
-                            stockSearchForm.getBookId().size(), stockSearchForm.getBookId().size() - unavailableBookIds.size(),
-                            bookService.findAll(unavailableBookIds)));
+            result.add(findLibraryStock(stockSearchForm, library));
         }
         model.addAttribute("contents", result);
 
         return "libraries/stock/search";
+    }
+
+    private LibraryStockDto findLibraryStock(StockSearchForm stockSearchForm, LibraryDistanceDto library) {
+        List<Long> unavailableBookIds = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
+        return new LibraryStockDto(
+                library.getLibraryName(), library.getDistance(),
+                stockSearchForm.getBookId().size(),
+                stockSearchForm.getBookId().size() - unavailableBookIds.size(),
+                bookService.findAll(unavailableBookIds));
     }
 
     @GetMapping("/")
