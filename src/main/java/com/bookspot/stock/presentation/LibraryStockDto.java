@@ -22,4 +22,9 @@ public class LibraryStockDto {
         this.availableBooksCount = availableBooksCount;
         this.unavailableBooks = unavailableBooks;
     }
+
+    public LibraryStockDto(String libraryName, double distance) {
+        this.libraryName = libraryName;
+        this.distance = (int) Math.round(distance);
+    }
 }
