@@ -30,13 +30,11 @@ public class StockController {
         if(bindingResult.hasErrors())
             return "libraries/stock/search";
 
-        List<LibraryDistanceDto> libraries = libraryService.findLibrariesWithin5km(
-                stockSearchForm.getLatitude(), stockSearchForm.getLongitude());
-
-        List<LibraryStockDto> result = new LinkedList<>();
-        for (LibraryDistanceDto library : libraries) {
-            result.add(findLibraryStock(stockSearchForm, library));
-        }
+        List<LibraryStockDto> result = libraryService.findLibrariesWithin5km(
+                        stockSearchForm.getLatitude(),
+                        stockSearchForm.getLongitude()
+                )
+                .stream().map(library -> findLibraryStock(stockSearchForm, library)).toList();
         model.addAttribute("contents", result);
 
         return "libraries/stock/search";
