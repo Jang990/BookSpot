@@ -41,6 +41,9 @@ public class StockController {
     }
 
     private LibraryStockDto findLibraryStock(StockSearchForm stockSearchForm, LibraryDistanceDto library) {
+        if(stockSearchForm.getBookId() == null || stockSearchForm.getBookId().isEmpty())
+            return new LibraryStockDto(library.getLibraryName(), library.getDistance());
+
         List<Long> unavailableBookIds = libraryStockService.findUnavailableBookIds(library.getLibraryId(), stockSearchForm.getBookId());
         return new LibraryStockDto(
                 library.getLibraryName(), library.getDistance(),
