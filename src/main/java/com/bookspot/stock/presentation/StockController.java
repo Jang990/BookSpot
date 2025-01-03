@@ -21,12 +21,6 @@ public class StockController {
     private final LibraryStockService libraryStockService;
     private final BookService bookService;
 
-    @GetMapping("/libraries/stock/search-setting")
-    public String settingPage(Model model) {
-        model.addAttribute("stockSearchForm", new StockSearchForm());
-        return "libraries/stock/search-setting";
-    }
-
     @GetMapping("/libraries/stock")
     public String searchLibrariesStock(
             Model model,
