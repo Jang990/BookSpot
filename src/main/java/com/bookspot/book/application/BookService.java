@@ -24,7 +24,9 @@ public class BookService {
 
     public Slice<BookSummaryResponse> findBook(String title, Pageable pageable) {
         return repository.findByTitleContaining(title, pageable)
-                .map(book -> new BookSummaryResponse(book.getTitle()));
+                .map(book -> new BookSummaryResponse(
+                        book.getId(), book.getTitle()
+                ));
     }
 
 
