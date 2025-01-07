@@ -19,6 +19,11 @@ class BookControllerTest {
     @MockitoBean
     BookService bookService;
 
+    @Test
+    void 제목은_필수() throws Exception {
+        mvc.perform(get("/api/book"))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     void 제목은_2글자_이하일_수_없다() throws Exception {
