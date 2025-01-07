@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    const keywordLengthMin = 2;
     let page = 0; // 현재 페이지 번호
     let isLoading = false; // 데이터 로딩 상태
     let hasMore = true; // 추가 데이터 여부
@@ -11,7 +12,7 @@ $(document).ready(function () {
 
         // 디바운스: 0.5초 후 실행
         debounceTimer = setTimeout(function () {
-            if (keyword.length < 2) {
+            if (keyword.length < keywordLengthMin) {
                 $("#resultContainer").empty(); // 결과 초기화
                 $("#resultContainer").append("<p>검색어를 입력해주세요.</p>")
                 page = 0;
@@ -37,7 +38,7 @@ $(document).ready(function () {
         // 사용자가 스크롤 끝에 도달했을 때
         if (!isLoading && hasMore && scrollTop + containerHeight >= scrollHeight - 50) {
             const keyword = $("#keywordInput").val().trim();
-            if (keyword.length >= 2) {
+            if (keyword.length >= keywordLengthMin) {
                 loadMoreBooks(keyword);
             }
         }
