@@ -1,4 +1,4 @@
-package com.bookspot.book;
+package com.bookspot.book.application;
 
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
