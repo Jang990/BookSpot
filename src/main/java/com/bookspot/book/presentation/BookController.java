@@ -20,6 +20,8 @@ public class BookController {
     public ResponseEntity<Slice<BookSummaryResponse>> findBook(
             @Valid BookSearchRequest request,
             Pageable pageable) {
+        if(pageable.getPageSize() > 50)
+            return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(bookService.findBook(request.getTitle(), pageable));
     }
 
