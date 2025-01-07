@@ -4,6 +4,7 @@ import com.bookspot.book.application.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,10 +16,10 @@ public class BookController {
 
     @GetMapping("/api/book")
     @ResponseBody
-    public Slice<BookSummaryResponse> findBook(
+    public ResponseEntity<Slice<BookSummaryResponse>> findBook(
             String title,
             Pageable pageable) {
-        return bookService.findBook(title, pageable);
+        return ResponseEntity.ok(bookService.findBook(title, pageable));
     }
 
     @GetMapping("/libraries/stock/book")

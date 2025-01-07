@@ -1,52 +1,77 @@
 $(document).ready(function () {
-    let timer = null;
+    let page = 0; // 현재 페이지 번호
+    let isLoading = false; // 데이터 로딩 상태
+    let hasMore = true; // 추가 데이터 여부
+    let debounceTimer; // 디바운스를 위한 타이머
 
+    // 검색창 입력 이벤트 (디바운스 적용)
     $("#keywordInput").on("input", function () {
+        clearTimeout(debounceTimer); // 이전 타이머 취소
         const keyword = $(this).val().trim();
 
-        // 입력이 멈출 때까지 기다림
-        if (timer) {
-            clearTimeout(timer); // 이전 타이머를 취소
-        }
-
-        // 0.5초 후 실행
-        timer = setTimeout(function () {
-            if (keyword.length >= 2) {
-                searchBooks(keyword);
-            } else {
-                clearResults(); // 2글자 미만일 때 기존 결과를 지움
+        // 디바운스: 0.5초 후 실행
+        debounceTimer = setTimeout(function () {
+            if (keyword.length < 2) {
+                $("#resultContainer").empty(); // 결과 초기화
+                $("#resultContainer").append("<p>검색어를 입력해주세요.</p>")
+                page = 0;
+                hasMore = true;
+                return;
             }
-        }, 500); // 500ms 대기
-    });
-});
 
-// 책 검색 함수
-function searchBooks(keyword) {
-    $.ajax({
-        url: "/api/book", // Spring API 엔드포인트
-        type: "GET",
-        data: {
-            title: keyword,
-            page: 0,
-            size: 10
-        },
-        success: function (response) {
-            displayBooks(response.content); // 데이터를 화면에 표시
-        },
-        error: function (xhr, status, error) {
-            console.error("Error fetching books:", error);
+            // 새로운 검색어로 초기화
+            $("#resultContainer").empty();
+            page = 0;
+            hasMore = true;
+            loadMoreBooks(keyword);
+        }, 500); // 0.5초 대기
+    });
+
+    // 스크롤 이벤트 리스너를 #resultContainer에 추가
+    $("#resultContainer").on("scroll", function () {
+        const container = $(this);
+        const scrollTop = container.scrollTop();
+        const scrollHeight = container[0].scrollHeight;
+        const containerHeight = container.height();
+
+        // 사용자가 스크롤 끝에 도달했을 때
+        if (!isLoading && hasMore && scrollTop + containerHeight >= scrollHeight - 50) {
+            const keyword = $("#keywordInput").val().trim();
+            if (keyword.length >= 2) {
+                loadMoreBooks(keyword);
+            }
         }
     });
-}
 
-// 화면에 데이터를 표시하는 함수
-function displayBooks(books) {
-    const resultContainer = $("#resultContainer");
-    resultContainer.empty(); // 기존 결과를 지움
+    // AJAX 요청으로 추가 데이터 로드
+    function loadMoreBooks(keyword) {
+        isLoading = true;
+        $.ajax({
+            url: "/api/book",
+            type: "GET",
+            data: {
+                title: keyword,
+                page: page,
+                size: 10
+            },
+            success: function (response) {
+                displayBooks(response.content);
+                page++; // 다음 페이지로 이동
+                hasMore = !response.last; // 마지막 페이지 여부
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching books:", error);
+            },
+            complete: function () {
+                isLoading = false; // 로딩 상태 초기화
+            }
+        });
+    }
 
-    if (books.length === 0) {
-        resultContainer.append("<p>책을 찾을 수 없습니다.</p>");
-    } else {
+    // 데이터 표시
+    function displayBooks(books) {
+        const resultContainer = $("#resultContainer");
+
         books.forEach(book => {
             const bookItem = `<div class="book-item">
                 <h3>${book.title}</h3>
@@ -55,10 +80,4 @@ function displayBooks(books) {
             resultContainer.append(bookItem);
         });
     }
-}
-
-// 결과를 초기화하는 함수
-function clearResults() {
-    $("#resultContainer").empty();
-    $("#resultContainer").append("<p>책을 검색해주세요.</p>");
-}
+});
