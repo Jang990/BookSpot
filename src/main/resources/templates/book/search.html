@@ -7,11 +7,16 @@
         <section>
             <div>
                 <h3>책 검색</h3>
-                <input type="text" name="title" placeholder="2글자 이상 입력">
+                <input type="text" id="keywordInput" placeholder="2글자 이상 입력">
             </div>
-            <div>
-                검색 결과
+
+            <br>
+
+            <!-- 검색 결과가 여기에 표시됩니다 -->
+            <div id="resultContainer">
             </div>
+
+            <script th:src="@{/js/book/titleSearch.js}" href="../../static/js/book/titleSearch.js"></script>
         </section>
     </body>
 </html>
