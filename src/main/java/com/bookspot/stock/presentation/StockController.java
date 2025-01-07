@@ -1,6 +1,6 @@
 package com.bookspot.stock.presentation;
 
-import com.bookspot.book.BookService;
+import com.bookspot.book.application.BookService;
 import com.bookspot.library.LibraryDistanceDto;
 import com.bookspot.library.LibraryService;
 import com.bookspot.stock.application.LibraryStockService;
@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Controller
