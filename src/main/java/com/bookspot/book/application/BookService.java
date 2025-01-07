@@ -1,6 +1,6 @@
 package com.bookspot.book.application;
 
-import com.bookspot.book.controller.BookSummaryResponse;
+import com.bookspot.book.presentation.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,9 @@ public class BookService {
 
     public Slice<BookSummaryResponse> findBook(String title, Pageable pageable) {
         return repository.findByTitleContaining(title, pageable)
-                .map(book -> new BookSummaryResponse(book.getTitle()));
+                .map(book -> new BookSummaryResponse(
+                        book.getId(), book.getTitle()
+                ));
     }
 
 

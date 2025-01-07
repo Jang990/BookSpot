@@ -1,6 +1,7 @@
-package com.bookspot.book.controller;
+package com.bookspot.book.presentation;
 
 import com.bookspot.book.application.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -17,9 +18,11 @@ public class BookController {
     @GetMapping("/api/book")
     @ResponseBody
     public ResponseEntity<Slice<BookSummaryResponse>> findBook(
-            String title,
+            @Valid BookSearchRequest request,
             Pageable pageable) {
-        return ResponseEntity.ok(bookService.findBook(title, pageable));
+        if(pageable.getPageSize() > 50)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(bookService.findBook(request.getTitle(), pageable));
     }
 
     @GetMapping("/libraries/stock/book")
