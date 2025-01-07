@@ -1,4 +1,4 @@
-package com.bookspot.book.controller;
+package com.bookspot.book.presentation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

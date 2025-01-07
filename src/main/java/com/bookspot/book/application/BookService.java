@@ -1,6 +1,6 @@
 package com.bookspot.book.application;
 
-import com.bookspot.book.controller.BookSummaryResponse;
+import com.bookspot.book.presentation.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import lombok.RequiredArgsConstructor;
