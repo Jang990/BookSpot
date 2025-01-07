@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base-layout :: base-layout (~{::title},~{::link},~{::section})}">
+<head>
+    <title>책 검색</title>
+</head>
+    <body>
+        <section>
+            <div>
+                <h3>책 검색</h3>
+                <input type="text" name="title" placeholder="2글자 이상 입력">
+            </div>
+            <div>
+                검색 결과
+            </div>
+        </section>
+    </body>
+</html>
