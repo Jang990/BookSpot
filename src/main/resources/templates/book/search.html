@@ -20,6 +20,10 @@
                     border-bottom: 1px solid #eee;
                     cursor: pointer;
                 }
+                .field-error {
+                 border-color: #dc3545;
+                 color: #dc3545;
+                }
             </style>
 
             <h3>책 검색</h3>
@@ -30,6 +34,11 @@
 
                 <div th:replace="~{book/fragment-search-form :: fragment-search-form(stockSearchForm=${stockSearchForm})}">
                     도서 재고 확인을 위한 검색창
+                </div>
+
+                <div class="field-error" th:errors="${stockSearchForm.bookId}">상품 오류</div>
+                <div th:replace="~{book/fragment-search-book-manager :: fragment-search-book-manager(selectedBooks=${selectedBooks})}">
+                    재고를 검색할 책 리스트
                 </div>
 
                 <input type="submit" value="소장 도서관 찾기">

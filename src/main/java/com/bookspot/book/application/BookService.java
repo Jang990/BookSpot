@@ -1,5 +1,6 @@
 package com.bookspot.book.application;
 
+import com.bookspot.book.presentation.BookDto;
 import com.bookspot.book.presentation.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
@@ -16,9 +17,9 @@ public class BookService {
 
     private final BookRepository repository;
 
-    public List<String> findAll(List<Long> bookIds) {
+    public List<BookDto> findAll(List<Long> bookIds) {
         return repository.findAllById(bookIds).stream()
-                .map(Book::getTitle)
+                .map(book -> new BookDto(book.getId(), book.getTitle()))
                 .toList();
     }
 

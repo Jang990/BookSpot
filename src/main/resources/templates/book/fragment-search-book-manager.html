@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="fragment-search-book-manager(bookId)" class="text-center">
-    <div class="field-error" th:errors="*{bookId}">상품 오류</div>
-
+<div th:fragment="fragment-search-book-manager(selectedBooks)" class="text-center">
     <div class="book-ids-div">
-        <div th:each="id : ${bookId}">
-            <span th:text="${id}"></span>
-            <input type="hidden" name="bookId" th:value="${id}">
+        <div th:each="book : ${selectedBooks}">
+            <span th:text="${book.title}"></span>
+            <input type="hidden" name="bookId" th:value="${book.id}">
             <button class="delete-button">X</button>
         </div>
     </div>

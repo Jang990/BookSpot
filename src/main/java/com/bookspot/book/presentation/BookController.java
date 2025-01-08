@@ -13,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class BookController {
@@ -36,6 +38,9 @@ public class BookController {
         model.addAttribute("stockSearchForm", stockSearchForm);
         if(bindingResult.hasErrors())
             return "book/search";
+
+        List<BookDto> selectedBooks = bookService.findAll(stockSearchForm.getBookId());
+        model.addAttribute("selectedBooks", selectedBooks);
 
         return "book/search";
     }

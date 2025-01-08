@@ -16,8 +16,8 @@
                     <ul>
                         <li>미보유 도서</li>
                         <ul>
-                            <li th:each="name : *{unavailableBooks}">
-                                <span th:text="${name}">책이름</span>
+                            <li th:each="book : *{unavailableBooks}">
+                                <span th:text="${book.title}">책이름</span>
                             </li>
                         </ul>
                     </ul>
