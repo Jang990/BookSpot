@@ -74,7 +74,8 @@ $(document).ready(function () {
         const resultContainer = $("#resultContainer");
 
         books.forEach(book => {
-            const bookItem = `<div class="book-item">
+            const bookItem = `
+            <div class="book-item" data-title="${book.title}" data-id="${book.id}">
                 <h3>${book.title}</h3>
                 <p>ID: ${book.id}</p>
             </div>`;
