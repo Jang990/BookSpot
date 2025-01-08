@@ -9,17 +9,17 @@
     </style>
 
     <form action="/libraries/stock" method="get" th:object="${stockSearchForm}">
-        <div class="field-error" th:errors="*{latitude}">위도 오류</div>
-        <label>위도</label> <input type="text" th:field="*{latitude}"> <br>
+        <label>위도</label> <input type="text" th:field="*{latitude}">
+        <span class="field-error" th:errors="*{latitude}">위도 오류</span> <br>
 
-        <div class="field-error" th:errors="*{longitude}">경도 오류</div>
-        <label>경도</label> <input type="text" th:field="*{longitude}"> <br>
+        <label>경도</label> <input type="text" th:field="*{longitude}">
+        <span class="field-error" th:errors="*{longitude}">경도 오류</span> <br>
 
         <div th:replace="~{libraries/stock/fragment-search-book-manager :: fragment-search-book-manager(bookId=*{bookId})}">
             재고를 검색할 책 리스트
         </div>
 
-        <input type="submit" value="찾아보기">
+        <input type="submit" value="소장 도서관 찾기">
     </form>
 </div>
 </html>
