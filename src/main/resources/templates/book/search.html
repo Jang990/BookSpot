@@ -30,6 +30,7 @@
             <form action="/libraries/stock" method="get">
                 <div>
                     <input type="text" th:field="${stockSearchForm.keywordInput}" placeholder="2글자 이상 입력">
+                    <span id="loadingMessage" style="display:none;">로딩중...</span>
                 </div>
 
                 <div th:replace="~{book/fragment-search-form :: fragment-search-form(stockSearchForm=${stockSearchForm})}">
@@ -48,7 +49,6 @@
 
             <!-- 검색 결과가 여기에 표시됩니다 -->
             <div id="resultContainer">
-                <p>검색어를 입력해주세요.</p>
             </div>
 
             <script th:src="@{/js/book/titleSearch.js}" href="../../static/js/book/titleSearch.js"></script>
