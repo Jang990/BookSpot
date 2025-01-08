@@ -1,5 +1,6 @@
 package com.bookspot.stock.presentation;
 
+import com.bookspot.book.presentation.BookDto;
 import lombok.Data;
 
 import java.util.List;
@@ -10,12 +11,12 @@ public class LibraryStockDto {
     private int distance; // 미터 단위
     private int totalBooksRequested;
     private int availableBooksCount;
-    private List<String> unavailableBooks;
+    private List<BookDto> unavailableBooks;
 
     public LibraryStockDto(
             String libraryName, double distance,
             int totalBooksRequested, int availableBooksCount,
-            List<String> unavailableBooks) {
+            List<BookDto> unavailableBooks) {
         this.libraryName = libraryName;
         this.distance = (int) Math.round(distance);
         this.totalBooksRequested = totalBooksRequested;

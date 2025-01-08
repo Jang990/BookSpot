@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="fragment-search-form(stockSearchForm)" class="text-center">
+    <th:block th:object="${stockSearchForm}">
+        <label>위도</label> <input type="text" th:field="*{latitude}">
+        <span class="field-error" th:errors="*{latitude}">위도 오류</span> <br>
+
+        <label>경도</label> <input type="text" th:field="*{longitude}">
+        <span class="field-error" th:errors="*{longitude}">경도 오류</span> <br>
+    </th:block>
+</div>
+</html>

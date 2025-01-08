@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="fragment-search-book-manager(selectedBooks)" class="text-center">
+    <div class="book-ids-div">
+        <div th:each="book : ${selectedBooks}">
+            <span th:text="${book.title}"></span>
+            <input type="hidden" name="bookId" th:value="${book.id}">
+            <button class="delete-button">X</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // 클릭 이벤트: book-item
+            $('#resultContainer').on('click', '.book-item', function () {
+              const bookId = $(this).data('id'); // data-id 가져오기
+              const bookTitle = $(this).data('title'); // data-title 가져오기
+
+              // 중복 검사
+              if ($(`.book-ids-div input[value="${bookId}"]`).length > 0) {
+                alert('이미 추가된 책입니다!');
+                return;
+              }
+
+              // DOM에 추가할 템플릿 생성
+              const template = `
+                <div>
+                  <span>${bookTitle}</span>
+                  <input type="hidden" name="bookId" value="${bookId}">
+                  <button type="button" class="delete-button">X</button>
+                </div>
+              `;
+
+              // book-ids-div에 추가
+              $('.book-ids-div').append(template);
+            });
+
+            // 삭제 버튼 클릭 이벤트
+            $('.book-ids-div').on('click', '.delete-button', function () {
+              $(this).parent().remove(); // 해당 항목 삭제
+            });
+          });
+    </script>
+</div>
+</html>
