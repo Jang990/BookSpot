@@ -8,7 +8,6 @@
         }
     </style>
 
-    <h2>도서관 재고</h2>
     <form action="/libraries/stock" method="get" th:object="${stockSearchForm}">
         <div class="field-error" th:errors="*{latitude}">위도 오류</div>
         <label>위도</label> <input type="text" th:field="*{latitude}"> <br>

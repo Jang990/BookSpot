@@ -26,6 +26,10 @@
                 <input type="text" id="keywordInput" placeholder="2글자 이상 입력">
             </div>
 
+            <div th:replace="~{libraries/stock/fragment-search-form :: fragment-search-form(stockSearchForm=${stockSearchForm})}">
+                도서 재고 확인을 위한 검색창
+            </div>
+
             <br>
 
             <!-- 검색 결과가 여기에 표시됩니다 -->
