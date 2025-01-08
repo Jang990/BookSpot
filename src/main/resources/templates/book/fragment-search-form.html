@@ -15,7 +15,7 @@
         <label>경도</label> <input type="text" th:field="*{longitude}">
         <span class="field-error" th:errors="*{longitude}">경도 오류</span> <br>
 
-        <div th:replace="~{libraries/stock/fragment-search-book-manager :: fragment-search-book-manager(bookId=*{bookId})}">
+        <div th:replace="~{book/fragment-search-book-manager :: fragment-search-book-manager(bookId=*{bookId})}">
             재고를 검색할 책 리스트
         </div>
 
