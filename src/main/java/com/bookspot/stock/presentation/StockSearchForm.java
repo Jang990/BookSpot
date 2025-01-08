@@ -9,6 +9,8 @@ import java.util.List;
 
 @Data
 public class StockSearchForm {
+    private String keywordInput;
+
     @NotNull
     @Range(min = -90, max = 90)
     private Double latitude;
@@ -19,4 +21,5 @@ public class StockSearchForm {
 
     @Size(max = 10)
     private List<Long> bookId;
+
 }

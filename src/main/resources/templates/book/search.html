@@ -22,14 +22,18 @@
                 }
             </style>
 
-            <div>
-                <h3>책 검색</h3>
-                <input type="text" id="keywordInput" placeholder="2글자 이상 입력">
-            </div>
+            <h3>책 검색</h3>
+            <form action="/libraries/stock" method="get">
+                <div>
+                    <input type="text" th:field="${stockSearchForm.keywordInput}" placeholder="2글자 이상 입력">
+                </div>
 
-            <div th:replace="~{book/fragment-search-form :: fragment-search-form(stockSearchForm=${stockSearchForm})}">
-                도서 재고 확인을 위한 검색창
-            </div>
+                <div th:replace="~{book/fragment-search-form :: fragment-search-form(stockSearchForm=${stockSearchForm})}">
+                    도서 재고 확인을 위한 검색창
+                </div>
+
+                <input type="submit" value="소장 도서관 찾기">
+            </form>
 
             <br>
 
