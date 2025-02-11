@@ -20,11 +20,22 @@ public class Book {
     // TODO: 검색을 위해 suffix(005) prefix(115) 나눠야?
     private String classification; // 005.115
 
+    private String author;
+    private int publicationYear;
+    private String publisher;
+    private String volumeName;
+
     public Long getId() {
         return id;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public String getFullName() {
+        if(volumeName == null || volumeName.isBlank())
+            return title;
+        return title.concat(" (%s)".formatted(volumeName));
     }
 }
