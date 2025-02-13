@@ -1,6 +1,7 @@
 package com.bookspot.book.application;
 
 import com.bookspot.book.presentation.BookDto;
+import com.bookspot.book.presentation.BookDetailResponse;
 import com.bookspot.book.presentation.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
@@ -32,6 +33,21 @@ public class BookService {
                         book.getPublicationYear(),
                         book.getPublisher()
                 ));
+    }
+
+    public BookDetailResponse find(long id){
+        Book book = repository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        return new BookDetailResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getIsbn13(),
+                book.getClassification(),
+                book.getAuthor(),
+                book.getPublicationYear(),
+                book.getPublisher(),
+                book.getVolumeName()
+        );
     }
 
 

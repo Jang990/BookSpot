@@ -1,21 +1,17 @@
 package com.bookspot.book.presentation;
 
 import com.bookspot.book.application.BookService;
-import com.bookspot.stock.presentation.StockSearchForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
@@ -30,18 +26,10 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBook(request.getTitle(), pageable));
     }
 
-    @GetMapping("/libraries/stock/book")
-    public String searchBookPage(
-            Model model,
-            @Valid StockSearchForm stockSearchForm,
-            BindingResult bindingResult) {
-        model.addAttribute("stockSearchForm", stockSearchForm);
-        if(bindingResult.hasErrors())
-            return "book/search";
-
-        List<BookDto> selectedBooks = bookService.findAll(stockSearchForm.getBookId());
-        model.addAttribute("selectedBooks", selectedBooks);
-
-        return "book/search";
+    @GetMapping("/api/books/{bookId}")
+    public ResponseEntity<BookDetailResponse> findBook(@PathVariable Long bookId) {
+        return ResponseEntity.ok(bookService.find(bookId));
     }
+
+
 }
