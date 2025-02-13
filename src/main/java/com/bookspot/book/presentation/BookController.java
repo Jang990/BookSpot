@@ -20,7 +20,7 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping("/api/book")
+    @GetMapping("/api/books")
     @ResponseBody
     public ResponseEntity<Slice<BookSummaryResponse>> findBook(
             @Valid BookSearchRequest request,

@@ -8,4 +8,7 @@ import lombok.Getter;
 public class BookSummaryResponse {
     private final long id;
     private final String title;
+    private String author;
+    private Integer publicationYear;
+    private String publisher;
 }

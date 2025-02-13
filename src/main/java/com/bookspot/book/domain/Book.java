@@ -2,9 +2,11 @@ package com.bookspot.book.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Book {
     @Id
@@ -21,7 +23,7 @@ public class Book {
     private String classification; // 005.115
 
     private String author;
-    private int publicationYear;
+    private Integer publicationYear;
     private String publisher;
     private String volumeName;
 
