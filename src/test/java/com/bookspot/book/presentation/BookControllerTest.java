@@ -21,19 +21,19 @@ class BookControllerTest {
 
     @Test
     void 제목은_필수() throws Exception {
-        mvc.perform(get("/api/book"))
+        mvc.perform(get("/api/books"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void 제목은_2글자_이하일_수_없다() throws Exception {
-        mvc.perform(get("/api/book?title=a"))
+        mvc.perform(get("/api/books?title=a"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void 페이지_크기는_50을_초과할_수_없다() throws Exception {
-        mvc.perform(get("/api/book?size=51&title=abc"))
+        mvc.perform(get("/api/books?size=51&title=abc"))
                 .andExpect(status().isBadRequest());
     }
 
