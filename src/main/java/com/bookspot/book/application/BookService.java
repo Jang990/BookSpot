@@ -24,8 +24,30 @@ public class BookService {
                 .toList();
     }
 
-    public Slice<BookSummaryResponse> findBook(String title, Pageable pageable) {
+    public Slice<BookSummaryResponse> findBooks(String title, Pageable pageable) {
         return repository.findByTitleContaining(title, pageable)
+                .map(book -> new BookSummaryResponse(
+                        book.getId(),
+                        book.getFullName(),
+                        book.getAuthor(),
+                        book.getPublicationYear(),
+                        book.getPublisher()
+                ));
+    }
+
+    public Slice<BookSummaryResponse> findBooks(List<Long> bookIds, Pageable pageable) {
+        return repository.findAllById(bookIds, pageable)
+                .map(book -> new BookSummaryResponse(
+                        book.getId(),
+                        book.getFullName(),
+                        book.getAuthor(),
+                        book.getPublicationYear(),
+                        book.getPublisher()
+                ));
+    }
+
+    public Slice<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
+        return repository.findBooks(title, bookIds, pageable)
                 .map(book -> new BookSummaryResponse(
                         book.getId(),
                         book.getFullName(),
