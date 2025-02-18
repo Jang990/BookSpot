@@ -2,6 +2,7 @@ package com.bookspot.book.application;
 
 import com.bookspot.book.presentation.BookDto;
 import com.bookspot.book.presentation.BookDetailResponse;
+import com.bookspot.book.presentation.BookResponse;
 import com.bookspot.book.presentation.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
@@ -18,9 +19,12 @@ public class BookService {
 
     private final BookRepository repository;
 
-    public List<BookDto> findAll(List<Long> bookIds) {
-        return repository.findAllById(bookIds).stream()
-                .map(book -> new BookDto(book.getId(), book.getTitle()))
+    public List<BookResponse> findAll(List<Long> bookIds) {
+        List<Book> books = repository.findAllById(bookIds);
+        if(books.size() != bookIds.size())
+            throw new IllegalArgumentException("찾을 수 없는 ID가 포함돼 있음");
+        return books.stream()
+                .map(book -> new BookResponse(book.getId(), book.getTitle()))
                 .toList();
     }
 

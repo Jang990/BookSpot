@@ -1,6 +1,7 @@
 package com.bookspot.library.infra;
 
 import com.bookspot.library.LibraryDistanceDto;
+import com.bookspot.library.LibraryDistanceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,18 +35,18 @@ public class LibraryRepositoryForView {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public Page<LibraryDistanceDto> findLibrariesWithinRadius(double latitude, double longitude, Pageable pageable) {
+    public Page<LibraryDistanceResponse> findLibrariesWithinRadius(double latitude, double longitude, Pageable pageable) {
         final String userLocation = String.format(POINT_FORMAT, latitude, longitude);
 
         // 데이터 매핑
-        RowMapper<LibraryDistanceDto> rowMapper =
-                (rs, rowNum) -> new LibraryDistanceDto(
+        RowMapper<LibraryDistanceResponse> rowMapper =
+                (rs, rowNum) -> new LibraryDistanceResponse(
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getDouble("distance"));
 
         // 데이터 조회
-        List<LibraryDistanceDto> libraries = jdbcTemplate.query(
+        List<LibraryDistanceResponse> libraries = jdbcTemplate.query(
                 SEARCH_SQL, rowMapper,
                 userLocation, userLocation,
                 pageable.getPageSize(), pageable.getOffset());

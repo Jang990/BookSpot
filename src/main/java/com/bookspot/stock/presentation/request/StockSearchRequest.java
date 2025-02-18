@@ -1,4 +1,4 @@
-package com.bookspot.stock.presentation;
+package com.bookspot.stock.presentation.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,9 +8,7 @@ import org.hibernate.validator.constraints.Range;
 import java.util.List;
 
 @Data
-public class StockSearchForm {
-    private String keywordInput;
-
+public class StockSearchRequest {
     @NotNull
     @Range(min = -90, max = 90)
     private Double latitude;
@@ -20,6 +18,5 @@ public class StockSearchForm {
     private Double longitude;
 
     @Size(max = 10)
-    private List<Long> bookId;
-
+    private List<Long> bookIds;
 }

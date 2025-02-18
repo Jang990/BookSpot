@@ -12,7 +12,7 @@ import java.util.List;
 public class LibraryService {
     private final LibraryRepositoryForView repositoryForView;
 
-    public List<LibraryDistanceDto> findLibrariesWithin5km(double latitude, double longitude) {
+    public List<LibraryDistanceResponse> findLibrariesWithin5km(double latitude, double longitude) {
         // TODO: Page<T> 반환으로 변경할 것
         return repositoryForView.findLibrariesWithinRadius(
                 latitude, longitude,

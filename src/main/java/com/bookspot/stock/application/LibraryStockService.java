@@ -13,11 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LibraryStockService {
     private final LibraryStockRepository repository;
-    public List<Long> findUnavailableBookIds(long libraryId, List<Long> bookIds) {
+
+    public List<Long> findAvailableBookIds(long libraryId, List<Long> bookIds) {
         List<Long> result = new LinkedList<>();
 
         for (Long bookId : bookIds) {
-            if (!repository.existsByLibraryIdAndBookId(libraryId, bookId))
+            if (repository.existsByLibraryIdAndBookId(libraryId, bookId))
                 result.add(bookId);
         }
 

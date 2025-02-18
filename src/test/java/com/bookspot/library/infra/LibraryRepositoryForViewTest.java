@@ -1,6 +1,7 @@
 package com.bookspot.library.infra;
 
 import com.bookspot.library.LibraryDistanceDto;
+import com.bookspot.library.LibraryDistanceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,11 @@ class LibraryRepositoryForViewTest {
 //    @Test
     @DisplayName("삼산고등학교 기준 반경 검색")
     void test() {
-        Page<LibraryDistanceDto> result = repository.findLibrariesWithinRadius(
+        Page<LibraryDistanceResponse> result = repository.findLibrariesWithinRadius(
                 37.521449, 126.7456143,
                 PageRequest.of(0, 10));
-        for (LibraryDistanceDto libraryDistanceDto : result) {
-            System.out.println(libraryDistanceDto);
+        for (LibraryDistanceResponse libraryDistance : result) {
+            System.out.println(libraryDistance);
         }
     }
 }
