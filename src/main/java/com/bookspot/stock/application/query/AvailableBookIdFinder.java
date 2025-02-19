@@ -12,7 +12,7 @@ import java.util.List;
 public class AvailableBookIdFinder {
     private static  final String AVAILABLE_BOOK_SQL = """
             Select ls.book_id
-            From LibraryStock ls
+            From Library_Stock ls
             Where ls.library_id = :libraryId And ls.book_id in (:bookIds)
             """;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
