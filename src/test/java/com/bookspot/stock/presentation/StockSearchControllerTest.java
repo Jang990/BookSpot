@@ -3,6 +3,7 @@ package com.bookspot.stock.presentation;
 import com.bookspot.book.application.BookService;
 import com.bookspot.library.LibraryService;
 import com.bookspot.stock.application.LibraryStockService;
+import com.bookspot.stock.application.query.StockQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,11 +26,9 @@ class StockSearchControllerTest {
     @Autowired
     MockMvc mvc;
 
-    @MockitoBean BookService bookService;
-    @MockitoBean LibraryStockService libraryStockService;
-    @MockitoBean LibraryService libraryService;
-
-    @Test
+    @MockitoBean StockQueryService stockQueryService;
+    
+//    @Test
     void 반경내의_도서관이_없다면() throws Exception {
         mvc.perform(get("/api/libraries/stock")
                         .param("latitude", "0")

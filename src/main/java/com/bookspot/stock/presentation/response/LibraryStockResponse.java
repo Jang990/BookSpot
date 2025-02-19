@@ -10,10 +10,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class LibraryStockResponse {
+
     private LibraryDistanceResponse library;
     private int totalBooksCount;
-    private int availableBooksCount;
-    private int unavailableBooksCount;
     private List<BookResponse> availableBooks;
     private List<BookResponse> unavailableBooks;
 
@@ -24,9 +23,6 @@ public class LibraryStockResponse {
         this.library = library;
         this.availableBooks = availableBooks;
         this.unavailableBooks = unavailableBooks;
-
         totalBooksCount = availableBooks.size() + unavailableBooks.size();
-        availableBooksCount = availableBooks.size();
-        unavailableBooksCount = unavailableBooks.size();
     }
 }
