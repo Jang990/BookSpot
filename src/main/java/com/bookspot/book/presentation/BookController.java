@@ -5,6 +5,7 @@ import com.bookspot.book.presentation.consts.BookBindingError;
 import com.bookspot.book.presentation.consts.BookRequestCond;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class BookController {
 
     @GetMapping("/api/books")
     @ResponseBody
-    public ResponseEntity<Slice<BookSummaryResponse>> findBook(
+    public ResponseEntity<Page<BookSummaryResponse>> findBook(
             @Valid BookSearchRequest request,
             Pageable pageable,
             BindingResult bindingResult) throws BindException {
@@ -31,9 +32,15 @@ public class BookController {
         if(request.hasTitle() && request.hasBookIds())
             return ResponseEntity.ok(
                     bookService.findBooks(
-                            request.getTitle(), request.getBookIds(), pageable));
+                            request.getTitle(),
+                            request.getBookIds(),
+                            pageable
+                    )
+            );
+
         if(request.hasTitle())
             return ResponseEntity.ok(bookService.findBooks(request.getTitle(), pageable));
+
         return ResponseEntity.ok(bookService.findBooks(request.getBookIds(), pageable));
     }
 

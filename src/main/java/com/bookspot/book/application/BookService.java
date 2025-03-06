@@ -1,14 +1,13 @@
 package com.bookspot.book.application;
 
-import com.bookspot.book.presentation.BookDto;
 import com.bookspot.book.presentation.BookDetailResponse;
 import com.bookspot.book.presentation.BookResponse;
 import com.bookspot.book.presentation.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class BookService {
                 .toList();
     }
 
-    public Slice<BookSummaryResponse> findBooks(String title, Pageable pageable) {
+    public Page<BookSummaryResponse> findBooks(String title, Pageable pageable) {
         return repository.findByTitleContaining(title, pageable)
                 .map(book -> new BookSummaryResponse(
                         book.getId(),
@@ -39,7 +38,7 @@ public class BookService {
                 ));
     }
 
-    public Slice<BookSummaryResponse> findBooks(List<Long> bookIds, Pageable pageable) {
+    public Page<BookSummaryResponse> findBooks(List<Long> bookIds, Pageable pageable) {
         return repository.findAllById(bookIds, pageable)
                 .map(book -> new BookSummaryResponse(
                         book.getId(),
@@ -50,7 +49,7 @@ public class BookService {
                 ));
     }
 
-    public Slice<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
+    public Page<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
         return repository.findBooks(title, bookIds, pageable)
                 .map(book -> new BookSummaryResponse(
                         book.getId(),
