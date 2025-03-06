@@ -32,6 +32,8 @@ dependencies {
 	implementation 'org.hibernate:hibernate-spatial:6.4.0.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
+	implementation group: 'org.springframework.data', name: 'spring-data-elasticsearch', version: '5.4.3'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
