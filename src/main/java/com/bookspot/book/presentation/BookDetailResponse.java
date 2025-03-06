@@ -9,9 +9,8 @@ public class BookDetailResponse {
     private Long id;
     private String title;
     private String isbn13;
-    private String classification;
+    private int subjectCode;
     private String author;
     private Integer publicationYear;
     private String publisher;
-    private String volumeName;
 }

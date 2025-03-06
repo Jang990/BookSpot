@@ -32,7 +32,7 @@ public class BookService {
         return repository.findByTitleContaining(title, pageable)
                 .map(book -> new BookSummaryResponse(
                         book.getId(),
-                        book.getFullName(),
+                        book.getTitle(),
                         book.getAuthor(),
                         book.getPublicationYear(),
                         book.getPublisher()
@@ -43,7 +43,7 @@ public class BookService {
         return repository.findAllById(bookIds, pageable)
                 .map(book -> new BookSummaryResponse(
                         book.getId(),
-                        book.getFullName(),
+                        book.getTitle(),
                         book.getAuthor(),
                         book.getPublicationYear(),
                         book.getPublisher()
@@ -54,7 +54,7 @@ public class BookService {
         return repository.findBooks(title, bookIds, pageable)
                 .map(book -> new BookSummaryResponse(
                         book.getId(),
-                        book.getFullName(),
+                        book.getTitle(),
                         book.getAuthor(),
                         book.getPublicationYear(),
                         book.getPublisher()
@@ -68,11 +68,10 @@ public class BookService {
                 book.getId(),
                 book.getTitle(),
                 book.getIsbn13(),
-                book.getClassification(),
+                book.getSubjectCode(),
                 book.getAuthor(),
                 book.getPublicationYear(),
-                book.getPublisher(),
-                book.getVolumeName()
+                book.getPublisher()
         );
     }
 
