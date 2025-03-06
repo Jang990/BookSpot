@@ -37,24 +37,12 @@ public class BookService {
 
     public Page<BookSummaryResponse> findBooks(List<Long> bookIds, Pageable pageable) {
         return repository.findAllById(bookIds, pageable)
-                .map(book -> new BookSummaryResponse(
-                        book.getId(),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        book.getPublicationYear(),
-                        book.getPublisher()
-                ));
+                .map(BookDataMapper::transform);
     }
 
     public Page<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
         return repository.findBooks(title, bookIds, pageable)
-                .map(book -> new BookSummaryResponse(
-                        book.getId(),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        book.getPublicationYear(),
-                        book.getPublisher()
-                ));
+                .map(BookDataMapper::transform);
     }
 
     public BookDetailResponse find(long id){

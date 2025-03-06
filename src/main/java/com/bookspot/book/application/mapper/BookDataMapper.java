@@ -8,6 +8,16 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookDataMapper {
+    public static BookSummaryResponse transform(Book book) {
+        return new BookSummaryResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getPublicationYear(),
+                book.getPublisher()
+        );
+    }
+
     public static BookSummaryResponse transform(BookDocument book) {
         return new BookSummaryResponse(
                 book.getId(),
