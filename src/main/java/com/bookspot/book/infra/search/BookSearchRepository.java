@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
+import java.util.List;
+
 public interface BookSearchRepository extends ElasticsearchRepository<BookDocument, Long> {
     @Query("""
             {
@@ -17,4 +19,19 @@ public interface BookSearchRepository extends ElasticsearchRepository<BookDocume
             }
             """)
     Page<BookDocument> findWithKeyword(String keyword, Pageable pageable);
+
+    @Query("""
+            {
+                "bool" : {
+                    "should" : [
+                        { "match" : { "title" : "?0" } },
+                        { "match" : { "author" : "?0" } }
+                    ],
+                    "must" : {
+                        "terms" : { "id" : ?1 }
+                    }
+                }
+            }
+            """)
+    Page<BookDocument> find(String keyword, List<Long> ids, Pageable pageable);
 }

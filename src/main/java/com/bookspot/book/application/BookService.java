@@ -41,7 +41,7 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
-        return repository.findBooks(title, bookIds, pageable)
+        return bookSearchRepository.find(title, bookIds, pageable)
                 .map(BookDataMapper::transform);
     }
 
