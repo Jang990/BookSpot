@@ -31,7 +31,7 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(String title, Pageable pageable) {
-        return bookSearchRepository.findWithKeyword(title, pageable)
+        return bookSearchRepository.search(title, pageable)
                 .map(BookDataMapper::transform);
     }
 
@@ -41,7 +41,7 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
-        return bookSearchRepository.find(title, bookIds, pageable)
+        return bookSearchRepository.search(title, bookIds, pageable)
                 .map(BookDataMapper::transform);
     }
 

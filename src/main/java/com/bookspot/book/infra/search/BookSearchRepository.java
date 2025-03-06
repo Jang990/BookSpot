@@ -18,7 +18,7 @@ public interface BookSearchRepository extends ElasticsearchRepository<BookDocume
                 }
             }
             """)
-    Page<BookDocument> findWithKeyword(String keyword, Pageable pageable);
+    Page<BookDocument> search(String keyword, Pageable pageable);
 
     @Query("""
             {
@@ -33,5 +33,5 @@ public interface BookSearchRepository extends ElasticsearchRepository<BookDocume
                 }
             }
             """)
-    Page<BookDocument> find(String keyword, List<Long> ids, Pageable pageable);
+    Page<BookDocument> search(String keyword, List<Long> ids, Pageable pageable);
 }
