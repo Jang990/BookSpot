@@ -77,13 +77,16 @@ class StockQueryServiceTest {
         assertEquals("A 도서관", result.getLibrary().getLibraryName());
         assertEquals(1234d, result.getLibrary().getDistanceMeter());
 
-        assertEquals(2, result.getTotalBooksCount());
+        assertEquals(1, result.getAvailableBooksCount());
+        assertEquals(1, result.getUnavailableBooksCount());
 
-        assertEquals(1L, result.getAvailableBooks().getFirst().getId());
-        assertEquals("A 도서", result.getAvailableBooks().getFirst().getTitle());
+        assertEquals(1L, result.getBookStocks().getFirst().getId());
+        assertEquals("A 도서", result.getBookStocks().getFirst().getTitle());
+        assertTrue(result.getBookStocks().getFirst().isAvailable());
 
-        assertEquals(2L, result.getUnavailableBooks().getFirst().getId());
-        assertEquals("B 도서", result.getUnavailableBooks().getFirst().getTitle());
+        assertEquals(2L, result.getBookStocks().getLast().getId());
+        assertEquals("B 도서", result.getBookStocks().getLast().getTitle());
+        assertFalse(result.getBookStocks().getLast().isAvailable());
     }
 
     private Book createMockBook(long id, String title) {
