@@ -1,5 +1,7 @@
 package com.bookspot.book.application;
 
+import com.bookspot.book.application.mapper.BookDataMapper;
+import com.bookspot.book.infra.search.BookSearchRepository;
 import com.bookspot.book.presentation.BookDetailResponse;
 import com.bookspot.book.presentation.BookResponse;
 import com.bookspot.book.presentation.BookSummaryResponse;
@@ -17,6 +19,7 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository repository;
+    private final BookSearchRepository bookSearchRepository;
 
     public List<BookResponse> findAll(List<Long> bookIds) {
         List<Book> books = repository.findAllById(bookIds);
@@ -28,14 +31,8 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(String title, Pageable pageable) {
-        return repository.findByTitleContaining(title, pageable)
-                .map(book -> new BookSummaryResponse(
-                        book.getId(),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        book.getPublicationYear(),
-                        book.getPublisher()
-                ));
+        return bookSearchRepository.findWithKeyword(title, pageable)
+                .map(BookDataMapper::transform);
     }
 
     public Page<BookSummaryResponse> findBooks(List<Long> bookIds, Pageable pageable) {
