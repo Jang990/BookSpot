@@ -18,10 +18,8 @@ public class Book {
 
     @Column(nullable = false, unique = true, length = 13)
     private String isbn13;
-
-    // TODO: 검색을 위해 suffix(005) prefix(115) 나눠야?
-    private int subjectCode; // 005.115
-
+    
+    private Integer subjectCode; // 005.115
     private String author;
     private Integer publicationYear;
     private String publisher;
