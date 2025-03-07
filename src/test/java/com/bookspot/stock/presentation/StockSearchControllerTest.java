@@ -28,11 +28,13 @@ class StockSearchControllerTest {
 
     @MockitoBean StockQueryService stockQueryService;
     
-//    @Test
-    void 반경내의_도서관이_없다면() throws Exception {
-        mvc.perform(get("/api/libraries/stock")
-                        .param("latitude", "0")
-                        .param("longitude", "0")
+    @Test
+    void 검색_필수요소() throws Exception {
+        mvc.perform(get("/api/libraries/stocks")
+                        .param("nwLat", "0")
+                        .param("nwLon", "0")
+                        .param("seLat", "0")
+                        .param("seLon", "0")
                         .param("bookIds", "1,2,3")
                 )
                 .andExpect(status().isOk());

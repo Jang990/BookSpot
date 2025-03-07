@@ -18,14 +18,11 @@ public class StockSearchController {
     private final StockQueryService stockQueryService;
 
     @GetMapping("/api/libraries/stocks")
-    public ResponseEntity<List<LibraryStockResponse>> findLibraryStock(
+    public ResponseEntity<String> findLibraryStock(
             @Valid StockSearchRequest request) {
-        return ResponseEntity.ok(
-                stockQueryService.findLibraryStockIn5km(
-                        request.getBookIds(),
-                        new Location(
-                                request.getLatitude(),
-                                request.getLongitude()))
-        );
+        System.out.println(request);
+
+        // TODO: mbr 박스 만들고 도서관 검색 + 재고 검색
+        return ResponseEntity.ok("Hello World");
     }
 }
