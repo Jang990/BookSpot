@@ -16,7 +16,7 @@ public class LocationQuery {
 
     private final String LOCATION_FILED_NAME = "location";
 
-    public String createLibrarySearchQuery(LocationMBR locationMBR, Pageable pageable) {
+    public String createLibrarySearchQuery(LocationMBR locationMBR) {
         LocationPoint center = new LocationPoint(37.526527106062204, 126.75283453090972);
         return """
                 SELECT id, name,
@@ -24,11 +24,9 @@ public class LocationQuery {
                 FROM library
                 WHERE %s
                 ORDER BY distance ASC
-                LIMIT %d OFFSET %d
                 """.formatted(
                         center.toString(),
-                        locationMBR.mbrContains(LOCATION_FILED_NAME),
-                        pageable.getPageSize(), pageable.getOffset()
+                        locationMBR.mbrContains(LOCATION_FILED_NAME)
         );
     }
 }

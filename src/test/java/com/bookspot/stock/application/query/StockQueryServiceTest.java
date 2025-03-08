@@ -47,7 +47,7 @@ class StockQueryServiceTest {
     void 인근_도서관이_존재하지_않으면_빈_리스트_반환() {
         when(bookRepository.findAllById(anyList()))
                 .thenReturn(List.of(mock(Book.class)));
-        when(libraryRepository.findLibrariesInBound(any(), any()))
+        when(libraryRepository.findLibrariesInBound(any()))
                 .thenReturn(List.of());
 
         assertEquals(List.of(), service.findLibraryStockIn5km(
@@ -68,7 +68,7 @@ class StockQueryServiceTest {
 
         when(bookRepository.findAllById(anyList()))
                 .thenReturn(List.of(aBook, bBook));
-        when(libraryRepository.findLibrariesInBound(any(), any()))
+        when(libraryRepository.findLibrariesInBound(any()))
                 .thenReturn(libraries);
         when(availableBookIdFinder.find(anyLong(), anyList()))
                 .thenReturn(List.of(1L));

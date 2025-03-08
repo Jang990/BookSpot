@@ -16,9 +16,9 @@ public class LibraryRepositoryForView {
     private final JdbcTemplate jdbcTemplate;
     private final LocationQuery queryCreator;
 
-    public List<LibraryDistanceResponse> findLibrariesInBound(LocationMBR location, Pageable pageable) {
+    public List<LibraryDistanceResponse> findLibrariesInBound(LocationMBR location) {
         return jdbcTemplate.query(
-                queryCreator.createLibrarySearchQuery(location, pageable),
+                queryCreator.createLibrarySearchQuery(location),
                 LocationQuery.ROW_MAPPER
         );
     }
