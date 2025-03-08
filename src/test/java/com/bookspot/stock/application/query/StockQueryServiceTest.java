@@ -2,7 +2,7 @@ package com.bookspot.stock.application.query;
 
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
-import com.bookspot.library.LibraryDistanceResponse;
+import com.bookspot.library.presentation.LibraryDistanceResponse;
 import com.bookspot.library.infra.LibraryRepositoryForView;
 import com.bookspot.stock.presentation.response.LibraryStockResponse;
 import org.junit.jupiter.api.Test;
@@ -10,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 
 import java.util.List;
 

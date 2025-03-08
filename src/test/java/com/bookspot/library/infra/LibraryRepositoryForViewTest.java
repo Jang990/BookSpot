@@ -1,6 +1,6 @@
 package com.bookspot.library.infra;
 
-import com.bookspot.library.LibraryDistanceResponse;
+import com.bookspot.library.presentation.LibraryDistanceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

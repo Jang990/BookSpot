@@ -1,7 +1,7 @@
 package com.bookspot.stock.presentation.response;
 
 import com.bookspot.book.presentation.BookResponse;
-import com.bookspot.library.LibraryDistanceResponse;
+import com.bookspot.library.presentation.LibraryDistanceResponse;
 import lombok.Getter;
 
 import java.util.LinkedList;

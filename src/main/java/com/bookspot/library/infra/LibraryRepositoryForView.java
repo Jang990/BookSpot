@@ -1,6 +1,6 @@
 package com.bookspot.library.infra;
 
-import com.bookspot.library.LibraryDistanceResponse;
+import com.bookspot.library.presentation.LibraryDistanceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;

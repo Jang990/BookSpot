@@ -1,6 +1,6 @@
 package com.bookspot.library.infra;
 
-import com.bookspot.library.LibraryDistanceResponse;
+import com.bookspot.library.presentation.LibraryDistanceResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;

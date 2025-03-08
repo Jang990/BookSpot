@@ -3,7 +3,7 @@ package com.bookspot.stock.application.query;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import com.bookspot.book.presentation.BookResponse;
-import com.bookspot.library.LibraryDistanceResponse;
+import com.bookspot.library.presentation.LibraryDistanceResponse;
 import com.bookspot.library.infra.LibraryRepositoryForView;
 import com.bookspot.library.infra.LocationMBR;
 import com.bookspot.stock.presentation.response.LibraryStockResponse;

@@ -1,11 +1,8 @@
-package com.bookspot.library;
+package com.bookspot.library.application;
 
 import com.bookspot.library.infra.LibraryRepositoryForView;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
