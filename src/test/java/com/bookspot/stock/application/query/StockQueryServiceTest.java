@@ -1,9 +1,5 @@
 package com.bookspot.stock.application.query;
 
-import com.bookspot.book.domain.Book;
-import com.bookspot.book.domain.BookRepository;
-import com.bookspot.library.presentation.LibraryDistanceResponse;
-import com.bookspot.library.infra.LibraryRepositoryForView;
 import com.bookspot.stock.presentation.response.LibraryStockResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,83 +20,61 @@ class StockQueryServiceTest {
     존재하지 않는 도서 정보는 unavilableBooks로 반환
      */
 
-    @Mock BookRepository bookRepository;
-    @Mock LibraryRepositoryForView libraryRepository;
     @Mock AvailableBookIdFinder availableBookIdFinder;
 
     @InjectMocks StockQueryService service;
 
     @Test
-    void 요청한_책이_존재하지_않으면_예외가_발생한다() {
-        when(bookRepository.findAllById(anyList()))
-                .thenReturn(List.of(mock(Book.class), mock(Book.class)));
+    void 도서관의_책_재고현황_파악() {
+        setAvailableBookIds(List.of(10L, 30L));
 
-        assertThrows(IllegalArgumentException.class,
-                () -> service.findLibraryStockIn5km(
-                        List.of(1L, 2L, 3L),
-                        new Location(37.52739176387812, 126.75269026468787),
-                        new Location(37.50568658729097, 126.71657056097237))
-        );
-    }
-
-    @Test
-    void 인근_도서관이_존재하지_않으면_빈_리스트_반환() {
-        when(bookRepository.findAllById(anyList()))
-                .thenReturn(List.of(mock(Book.class)));
-        when(libraryRepository.findLibrariesInBound(any()))
-                .thenReturn(List.of());
-
-        assertEquals(List.of(), service.findLibraryStockIn5km(
+        LibraryStockResponse result = service.findLibraryStock(
                 List.of(1L),
-                new Location(37.52739176387812, 126.75269026468787),
-                new Location(37.50568658729097, 126.71657056097237))
-        );
+                List.of(10L, 20L, 30L)).getFirst();
+
+        assertEquals(List.of(10L, 30L), result.availableBookIds());
+        assertEquals(List.of(20L), result.unavailableBookIds());
+        assertEquals(3, result.totalBooksCount());
     }
 
     @Test
-    void 재고_정보_통합() {
-        Book aBook = createMockBook(1L, "A 도서");
-        Book bBook = createMockBook(2L, "B 도서");
-        List<LibraryDistanceResponse> libraries = List.of(
-                new LibraryDistanceResponse(
-                        1L, "A 도서관", 1234d)
+    void 여러_도서관의_재고현황_파악() {
+        setAvailableBookIds(
+                1L,
+                List.of(10L, 20L, 30L),
+                List.of(10L, 30L)
         );
 
-        when(bookRepository.findAllById(anyList()))
-                .thenReturn(List.of(aBook, bBook));
-        when(libraryRepository.findLibrariesInBound(any()))
-                .thenReturn(libraries);
-        when(availableBookIdFinder.find(anyLong(), anyList()))
-                .thenReturn(List.of(1L));
+        setAvailableBookIds(
+                2L,
+                List.of(10L, 20L, 30L),
+                List.of(30L)
+        );
 
-        LibraryStockResponse result =
-                service.findLibraryStockIn5km(
-                                List.of(1L, 2L),
-                                new Location(37.52739176387812, 126.75269026468787),
-                                new Location(37.50568658729097, 126.71657056097237))
-                .getFirst();
+        List<LibraryStockResponse> result = service.findLibraryStock(
+                List.of(1L, 2L),
+                List.of(10L, 20L, 30L));
 
-        assertEquals(1L, result.getLibrary().getLibraryId());
-        assertEquals("A 도서관", result.getLibrary().getLibraryName());
-        assertEquals(1234d, result.getLibrary().getDistanceMeter());
+        assertEquals(List.of(10L, 30L), result.getFirst().availableBookIds());
+        assertEquals(List.of(20L), result.getFirst().unavailableBookIds());
+        assertEquals(3, result.getFirst().totalBooksCount());
 
-        assertEquals(1, result.getAvailableBooksCount());
-        assertEquals(1, result.getUnavailableBooksCount());
-
-        assertEquals(1L, result.getBookStocks().getFirst().getId());
-        assertEquals("A 도서", result.getBookStocks().getFirst().getTitle());
-        assertTrue(result.getBookStocks().getFirst().isAvailable());
-
-        assertEquals(2L, result.getBookStocks().getLast().getId());
-        assertEquals("B 도서", result.getBookStocks().getLast().getTitle());
-        assertFalse(result.getBookStocks().getLast().isAvailable());
+        assertEquals(List.of(30L), result.getLast().availableBookIds());
+        assertEquals(List.of(10L, 20L), result.getLast().unavailableBookIds());
+        assertEquals(3, result.getLast().totalBooksCount());
     }
 
-    private Book createMockBook(long id, String title) {
-        Book book = mock(Book.class);
-        when(book.getId()).thenReturn(id);
-        when(book.getTitle()).thenReturn(title);
-        return book;
+    private void setAvailableBookIds(List<Long> ids) {
+        when(availableBookIdFinder.find(anyLong(), anyList()))
+                .thenReturn(ids);
+    }
+
+    private void setAvailableBookIds(
+            long libraryIds,
+            List<Long> bookIds,
+            List<Long> availableBookIds) {
+        when(availableBookIdFinder.find(libraryIds, bookIds))
+                .thenReturn(availableBookIds);
     }
 
 }

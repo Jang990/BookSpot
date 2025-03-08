@@ -1,6 +1,5 @@
 package com.bookspot.stock.presentation;
 
-import com.bookspot.stock.application.query.Location;
 import com.bookspot.stock.application.query.StockQueryService;
 import com.bookspot.stock.presentation.request.StockSearchRequest;
 import com.bookspot.stock.presentation.response.LibraryStockResponse;
@@ -18,16 +17,13 @@ public class StockSearchController {
     private final StockQueryService stockQueryService;
 
     @GetMapping("/api/libraries/stocks")
-    public ResponseEntity<String> findLibraryStock(
+    public ResponseEntity<List<LibraryStockResponse>> findLibraryStock(
             @Valid StockSearchRequest request) {
-        System.out.println(request);
-        stockQueryService.findLibraryStockIn5km(
-                request.getBookIds().stream().filter(id -> id == 1L).toList(),
-                new Location(request.getNwLat(), request.getNwLon()),
-                new Location(request.getSeLat(), request.getSeLon())
+        return ResponseEntity.ok(
+                stockQueryService.findLibraryStock(
+                        request.getLibraryIds(),
+                        request.getBookIds()
+                )
         );
-
-        // TODO: mbr 박스 만들고 도서관 검색 + 재고 검색
-        return ResponseEntity.ok("Hello World");
     }
 }
