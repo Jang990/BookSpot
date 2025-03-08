@@ -12,6 +12,8 @@ public class LocationQuery {
             (rs, rowNum) -> new LibraryDistanceResponse(
                     rs.getLong("id"),
                     rs.getString("name"),
+                    rs.getDouble("longitude"),
+                    rs.getDouble("latitude"),
                     rs.getDouble("distance"));
 
     private final String LOCATION_FILED_NAME = "location";
@@ -20,6 +22,8 @@ public class LocationQuery {
         LocationPoint center = new LocationPoint(37.526527106062204, 126.75283453090972);
         return """
                 SELECT id, name,
+                    ST_X(location) AS longitude,
+                    ST_Y(location) AS latitude,
                     (ST_Distance_Sphere(location, %s)) AS distance
                 FROM library
                 WHERE %s
