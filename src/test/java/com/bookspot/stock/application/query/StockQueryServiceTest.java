@@ -40,37 +40,46 @@ class StockQueryServiceTest {
         assertThrows(IllegalArgumentException.class,
                 () -> service.findLibraryStockIn5km(
                         List.of(1L, 2L, 3L),
-                        new Location(0, 0)));
+                        new Location(37.52739176387812, 126.75269026468787),
+                        new Location(37.50568658729097, 126.71657056097237))
+        );
     }
 
     @Test
     void 인근_도서관이_존재하지_않으면_빈_리스트_반환() {
         when(bookRepository.findAllById(anyList()))
                 .thenReturn(List.of(mock(Book.class)));
-        when(libraryRepository.findLibrariesWithinRadius(anyDouble(), anyDouble(), any()))
-                .thenReturn(new PageImpl<>(List.of()));
+        when(libraryRepository.findLibrariesInBound(any(), any()))
+                .thenReturn(List.of());
 
-        assertEquals(List.of(), service.findLibraryStockIn5km(List.of(1L), new Location(0, 0)));
+        assertEquals(List.of(), service.findLibraryStockIn5km(
+                List.of(1L),
+                new Location(37.52739176387812, 126.75269026468787),
+                new Location(37.50568658729097, 126.71657056097237))
+        );
     }
 
     @Test
     void 재고_정보_통합() {
         Book aBook = createMockBook(1L, "A 도서");
         Book bBook = createMockBook(2L, "B 도서");
-        Page<LibraryDistanceResponse> libraries = new PageImpl<>(
-                List.of(new LibraryDistanceResponse(
-                        1L, "A 도서관", 1234d)));
+        List<LibraryDistanceResponse> libraries = List.of(
+                new LibraryDistanceResponse(
+                        1L, "A 도서관", 1234d)
+        );
 
         when(bookRepository.findAllById(anyList()))
                 .thenReturn(List.of(aBook, bBook));
-        when(libraryRepository.findLibrariesWithinRadius(anyDouble(), anyDouble(), any()))
+        when(libraryRepository.findLibrariesInBound(any(), any()))
                 .thenReturn(libraries);
         when(availableBookIdFinder.find(anyLong(), anyList()))
                 .thenReturn(List.of(1L));
 
         LibraryStockResponse result =
                 service.findLibraryStockIn5km(
-                        List.of(1L, 2L), new Location(0, 0))
+                                List.of(1L, 2L),
+                                new Location(37.52739176387812, 126.75269026468787),
+                                new Location(37.50568658729097, 126.71657056097237))
                 .getFirst();
 
         assertEquals(1L, result.getLibrary().getLibraryId());

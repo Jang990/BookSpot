@@ -21,6 +21,11 @@ public class StockSearchController {
     public ResponseEntity<String> findLibraryStock(
             @Valid StockSearchRequest request) {
         System.out.println(request);
+        stockQueryService.findLibraryStockIn5km(
+                request.getBookIds().stream().filter(id -> id == 1L).toList(),
+                new Location(request.getNwLat(), request.getNwLon()),
+                new Location(request.getSeLat(), request.getSeLon())
+        );
 
         // TODO: mbr 박스 만들고 도서관 검색 + 재고 검색
         return ResponseEntity.ok("Hello World");

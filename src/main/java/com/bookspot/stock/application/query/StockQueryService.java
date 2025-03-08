@@ -5,11 +5,10 @@ import com.bookspot.book.domain.BookRepository;
 import com.bookspot.book.presentation.BookResponse;
 import com.bookspot.library.LibraryDistanceResponse;
 import com.bookspot.library.infra.LibraryRepositoryForView;
-import com.bookspot.stock.domain.LibraryStockRepository;
+import com.bookspot.library.infra.LocationMBR;
 import com.bookspot.stock.presentation.response.LibraryStockResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,13 +26,12 @@ public class StockQueryService {
     private final AvailableBookIdFinder availableBookIdFinder;
 
     // TODO: 한방 쿼리?
-    // TODO: Page<T>으로 변경
-    public List<LibraryStockResponse> findLibraryStockIn5km(List<Long> bookIds, Location location) {
+    public List<LibraryStockResponse> findLibraryStockIn5km(List<Long> bookIds, Location nw, Location se) {
         List<Book> books = bookRepository.findAllById(bookIds);
         if(books.size() != bookIds.size())
             throw new IllegalArgumentException(); // TODO: 커스텀 예외 필요
 
-        List<LibraryDistanceResponse> libraries = findLibraryIn5Km(location);
+        List<LibraryDistanceResponse> libraries = findLibrariesInBound(nw, se);
         if(libraries.isEmpty())
             return List.of();
 
@@ -67,11 +65,13 @@ public class StockQueryService {
                 .toList();
     }
 
-    private List<LibraryDistanceResponse> findLibraryIn5Km(Location location) {
-        return  libraryRepository.findLibrariesWithinRadius(
-                location.latitude(),
-                location.longitude(),
+    private List<LibraryDistanceResponse> findLibrariesInBound(Location nw, Location se) {
+        return libraryRepository.findLibrariesInBound(
+                new LocationMBR(
+                  nw.latitude(), nw.longitude(),
+                  se.latitude(), se.longitude()
+                ),
                 PageRequest.of(0, 10)
-        ).getContent();
+        );
     }
 }
