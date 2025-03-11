@@ -32,6 +32,7 @@ class StockQueryServiceTest {
                 List.of(1L),
                 List.of(10L, 20L, 30L)).getFirst();
 
+        assertEquals(1L, result.libraryId());
         assertEquals(List.of(10L, 30L), result.availableBookIds());
         assertEquals(List.of(20L), result.unavailableBookIds());
         assertEquals(3, result.totalBooksCount());
@@ -55,10 +56,12 @@ class StockQueryServiceTest {
                 List.of(1L, 2L),
                 List.of(10L, 20L, 30L));
 
+        assertEquals(1L, result.getFirst().libraryId());
         assertEquals(List.of(10L, 30L), result.getFirst().availableBookIds());
         assertEquals(List.of(20L), result.getFirst().unavailableBookIds());
         assertEquals(3, result.getFirst().totalBooksCount());
 
+        assertEquals(2L, result.getLast().libraryId());
         assertEquals(List.of(30L), result.getLast().availableBookIds());
         assertEquals(List.of(10L, 20L), result.getLast().unavailableBookIds());
         assertEquals(3, result.getLast().totalBooksCount());

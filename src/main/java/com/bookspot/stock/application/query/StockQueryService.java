@@ -17,6 +17,7 @@ public class StockQueryService {
         return libraryIds.stream().map(libraryId -> {
             List<Long> availableBookIds = availableBookIdFinder.find(libraryId, bookIds);
             return new LibraryStockResponse(
+                    libraryId,
                     availableBookIds,
                     unavailableBookIds(bookIds, availableBookIds)
             );
