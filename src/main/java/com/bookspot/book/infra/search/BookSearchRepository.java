@@ -12,8 +12,8 @@ public interface BookSearchRepository extends ElasticsearchRepository<BookDocume
             {
                 "bool" : {
                     "should" : [
-                        { "match" : { "title" : "?0" } },
-                        { "match" : { "author" : "?0" } }
+                        { "match_phrase": { "title": "?0" } },
+                        { "match_phrase": { "author": "?0" } }
                     ]
                 }
             }
@@ -24,8 +24,8 @@ public interface BookSearchRepository extends ElasticsearchRepository<BookDocume
             {
                 "bool" : {
                     "should" : [
-                        { "match" : { "title" : "?0" } },
-                        { "match" : { "author" : "?0" } }
+                        { "match_phrase": { "title": "?0" } },
+                        { "match_phrase": { "author": "?0" } }
                     ],
                     "must" : {
                         "terms" : { "id" : ?1 }
