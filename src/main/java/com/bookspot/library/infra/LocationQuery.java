@@ -14,9 +14,9 @@ public class LocationQuery {
                     rs.getDouble("longitude"),
                     rs.getDouble("latitude"),
                     rs.getString("address"),
-                    rs.getString("homePage"),
-                    rs.getString("closedInfo"),
-                    rs.getString("operatingInfo")
+                    rs.getString("home_page"),
+                    rs.getString("closed_info"),
+                    rs.getString("operating_info")
             );
 
     private final String LOCATION_FILED_NAME = "location";
@@ -27,9 +27,9 @@ public class LocationQuery {
                     ST_X(location) AS longitude,
                     ST_Y(location) AS latitude,
                     address,
-                    homePage,
-                    closedInfo,
-                    operatingInfo
+                    home_page,
+                    closed_info,
+                    operating_info
                 FROM library
                 WHERE %s
                 """.formatted(
