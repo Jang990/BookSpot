@@ -12,7 +12,12 @@ public class LocationQuery {
                     rs.getLong("id"),
                     rs.getString("name"),
                     rs.getDouble("longitude"),
-                    rs.getDouble("latitude"));
+                    rs.getDouble("latitude"),
+                    rs.getString("address"),
+                    rs.getString("homePage"),
+                    rs.getString("closedInfo"),
+                    rs.getString("operatingInfo")
+            );
 
     private final String LOCATION_FILED_NAME = "location";
 
@@ -20,7 +25,11 @@ public class LocationQuery {
         return """
                 SELECT id, name,
                     ST_X(location) AS longitude,
-                    ST_Y(location) AS latitude
+                    ST_Y(location) AS latitude,
+                    address,
+                    homePage,
+                    closedInfo,
+                    operatingInfo
                 FROM library
                 WHERE %s
                 """.formatted(

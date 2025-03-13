@@ -10,4 +10,8 @@ public class LibraryDistanceResponse {
     private String libraryName;
     private double latitude;
     private double longitude;
+    private String address;
+    private String homePage;
+    private String closedInfo;
+    private String operatingInfo;
 }
