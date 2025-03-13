@@ -10,5 +10,4 @@ public class LibraryDistanceResponse {
     private String libraryName;
     private double latitude;
     private double longitude;
-    private double distanceMeter;
 }
