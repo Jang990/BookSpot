@@ -13,8 +13,10 @@ public class BookDataMapper {
                 book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
+                book.getIsbn13(),
                 book.getPublicationYear(),
-                book.getPublisher()
+                book.getPublisher(),
+                book.getLoanCount()
         );
     }
 
@@ -23,8 +25,10 @@ public class BookDataMapper {
                 book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
+                book.getIsbn13(),
                 book.getPublicationYear(),
-                book.getPublisher()
+                book.getPublisher(),
+                book.getLoanCount()
         );
     }
 }
