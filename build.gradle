@@ -32,8 +32,6 @@ dependencies {
 	implementation 'org.hibernate:hibernate-spatial:6.4.0.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-	implementation group: 'org.springframework.data', name: 'spring-data-elasticsearch', version: '5.4.3'
-
 	// OpenSearch
 	implementation("org.opensearch.client:opensearch-rest-client:2.11.0")
 	implementation("org.opensearch.client:opensearch-java:2.11.0")
