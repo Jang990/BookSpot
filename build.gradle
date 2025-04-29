@@ -34,6 +34,11 @@ dependencies {
 
 	implementation group: 'org.springframework.data', name: 'spring-data-elasticsearch', version: '5.4.3'
 
+	// OpenSearch
+	implementation("org.opensearch.client:opensearch-rest-client:2.11.0")
+	implementation("org.opensearch.client:opensearch-java:2.11.0")
+	implementation("jakarta.json:jakarta.json-api")
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'

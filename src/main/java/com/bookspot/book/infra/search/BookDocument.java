@@ -1,23 +1,27 @@
 package com.bookspot.book.infra.search;
 
-import com.bookspot.global.consts.Indices;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.elasticsearch.annotations.Document;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Document(indexName = Indices.BOOK_INDEX)
 public class BookDocument {
-    @Id
+    @JsonProperty("book_id")
     private Long id;
     private String title;
     private String isbn13;
+    @JsonProperty("subject_code")
     private int subjectCode;
     private String author;
+    @JsonProperty("publication_year")
     private Integer publicationYear;
     private String publisher;
+    @JsonProperty("loan_count")
     private int loanCount;
+    @JsonProperty("library_ids")
+    private List<Long> libraryIds;
 }

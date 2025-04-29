@@ -2,6 +2,11 @@ elasticsearch:
   uri: localhost:9200
   api_key: bTRReWFaVUJzYnB2TkJ3QXNVd1c6b0g3VGpXUlBUTmVBTWFDWXk0LW1rUQ==
 
+opensearch:
+  serverUrl: http://localhost:9200
+  username: elastic
+  password: changeme
+
 spring:
   messages:
     basename: messages,errors
