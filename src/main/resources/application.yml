@@ -6,6 +6,8 @@ opensearch:
   serverUrl: http://localhost:9200
   username: elastic
   password: changeme
+front:
+  serverUrl: http://localhost:3000
 
 spring:
   messages:
