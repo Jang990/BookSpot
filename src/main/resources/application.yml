@@ -16,14 +16,14 @@ spring:
     name: bookspot
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/BookSpot
+    url: jdbc:mysql://localhost:3306/BookSpot_sample
     hikari:
       username: root
       password: 1234
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
