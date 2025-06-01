@@ -3,10 +3,8 @@ package com.bookspot.book.infra.search;
 import com.bookspot.global.consts.Indices;
 import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch.OpenSearchClient;
-import org.opensearch.client.opensearch._types.FieldValue;
 import org.opensearch.client.opensearch._types.SortOrder;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
-import org.opensearch.client.opensearch.core.SearchRequest;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.opensearch.client.util.ObjectBuilder;
@@ -34,6 +32,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                         b -> b.minimumShouldMatch("1")
                                 .should(matchPhrase("title", keyword))
                                 .should(matchPhrase("author", keyword))
+                                .should(term("publisher", keyword))
                 ),
                 pageable
         );
@@ -57,6 +56,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                                 .minimumShouldMatch("1")
                                 .should(matchPhrase("title", keyword))
                                 .should(matchPhrase("author", keyword))
+                                .should(term("publisher", keyword))
                 ),
                 pageable
         );
@@ -102,5 +102,12 @@ public class BookOpenSearchRepository implements BookSearchRepository {
 
     private Function<Query.Builder, ObjectBuilder<Query>> matchPhrase(String fieldName, String keyword) {
         return sh -> sh.matchPhrase(mp -> mp.field(fieldName).query(keyword));
+    }
+
+    private Function<Query.Builder, ObjectBuilder<Query>> term(String fieldName, String keyword) {
+        return sh -> sh.term(
+                mp -> mp.field(fieldName)
+                        .value(fv -> fv.stringValue(keyword))
+        );
     }
 }
