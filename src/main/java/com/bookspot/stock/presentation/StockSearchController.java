@@ -1,5 +1,6 @@
 package com.bookspot.stock.presentation;
 
+import com.bookspot.global.log.BasicLog;
 import com.bookspot.stock.application.query.StockQueryService;
 import com.bookspot.stock.presentation.request.StockSearchRequest;
 import com.bookspot.stock.presentation.response.LibraryStockResponse;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@BasicLog
 @RestController
 @RequiredArgsConstructor
 public class StockSearchController {

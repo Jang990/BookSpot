@@ -3,6 +3,7 @@ package com.bookspot.book.presentation;
 import com.bookspot.book.application.BookService;
 import com.bookspot.book.presentation.consts.BookBindingError;
 import com.bookspot.book.presentation.consts.BookRequestCond;
+import com.bookspot.global.log.BasicLog;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@BasicLog
 @RestController
 @RequiredArgsConstructor
 public class BookController {

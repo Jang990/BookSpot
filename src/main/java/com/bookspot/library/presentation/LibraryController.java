@@ -1,5 +1,6 @@
 package com.bookspot.library.presentation;
 
+import com.bookspot.global.log.BasicLog;
 import com.bookspot.library.application.LibraryService;
 import com.bookspot.library.application.query.Location;
 import jakarta.validation.Valid;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@BasicLog
 @RestController
 @RequiredArgsConstructor
 public class LibraryController {
