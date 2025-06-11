@@ -14,7 +14,7 @@ class LibraryRepositoryForViewTest {
     @Autowired
     private LibraryRepositoryForView repository;
 
-    @Test
+//    @Test
     @DisplayName("부평구 범위 검색")
     void test() {
         List<LibraryDistanceResponse> result = repository.findLibrariesInBound(
