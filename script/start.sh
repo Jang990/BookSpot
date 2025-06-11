@@ -6,7 +6,7 @@ ABSPATH=$(readlink -f $0)
 ABSDIR=$(dirname $ABSPATH) # start.sh 경로 찾기
 source ${ABSDIR}/profile.sh # import 구문
 
-REPOSITORY=/home/ec2-user/app/step3
+REPOSITORY=/home/ec2-user/app/project
 PROJECT_NAME=bookspot
 
 echo "> Build 파일 복사"
