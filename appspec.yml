@@ -5,15 +5,15 @@ files:
     destination: /home/ec2-user/app/project/zip
     overwrite: yes
 hooks:
-  AfterInstall:
-    - location: stop.sh
-      timeout: 60
-      runas: ec2-user
   ApplicationStart:
     - location: start.sh
       timeout: 60
       runas: ec2-user
   ValidateService:
     - location: health.sh
+      timeout: 60
+      runas: ec2-user
+  AfterAllowTraffic:
+    - location: stop.sh
       timeout: 60
       runas: ec2-user
