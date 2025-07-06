@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -24,4 +25,12 @@ public class BookDocument {
     private int loanCount;
     @JsonProperty("library_ids")
     private List<Long> libraryIds;
+    @JsonProperty("book_categories")
+    private List<String> bookCategories;
+    @JsonProperty("created_at")
+    private String createdAt;
+
+    public LocalDate getCreatedAt() {
+        return LocalDate.parse(createdAt);
+    }
 }
