@@ -24,15 +24,16 @@ import java.util.stream.Collectors;
 public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
 
-
     @Override
     public Page<BookDocument> search(String keyword, Pageable pageable) {
         SearchResponse<BookDocument> resp = request(
                 q -> q.bool(
                         b -> b.minimumShouldMatch("1")
-                                .should(matchPhrase("title", keyword))
-                                .should(matchPhrase("author", keyword))
-                                .should(term("publisher", keyword))
+                                .should(
+                                        matchPhrase("title", keyword),
+                                        matchPhrase("author", keyword),
+                                        term("publisher", keyword)
+                                )
                 ),
                 pageable
         );
@@ -54,9 +55,11 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 q -> q.bool(
                         b -> b.filter(ids(ids))
                                 .minimumShouldMatch("1")
-                                .should(matchPhrase("title", keyword))
-                                .should(matchPhrase("author", keyword))
-                                .should(term("publisher", keyword))
+                                .should(
+                                        matchPhrase("title", keyword),
+                                        matchPhrase("author", keyword),
+                                        term("publisher", keyword)
+                                )
                 ),
                 pageable
         );
@@ -100,14 +103,18 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         }
     }
 
-    private Function<Query.Builder, ObjectBuilder<Query>> matchPhrase(String fieldName, String keyword) {
-        return sh -> sh.matchPhrase(mp -> mp.field(fieldName).query(keyword));
+    private Query matchPhrase(String fieldName, String keyword) {
+        return new Query.Builder()
+                .matchPhrase(mp -> mp.field(fieldName).query(keyword))
+                .build();
     }
 
-    private Function<Query.Builder, ObjectBuilder<Query>> term(String fieldName, String keyword) {
-        return sh -> sh.term(
-                mp -> mp.field(fieldName)
-                        .value(fv -> fv.stringValue(keyword))
-        );
+    private Query term(String fieldName, String keyword) {
+        return new Query.Builder()
+                .term(
+                        mp -> mp.field(fieldName)
+                                .value(fv-> fv.stringValue(keyword))
+                )
+                .build();
     }
 }
