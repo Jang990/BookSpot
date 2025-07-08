@@ -2,8 +2,10 @@ package com.bookspot.book.application;
 
 import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.infra.search.BookSearchRepository;
+import com.bookspot.book.infra.search.BookSearchCond;
 import com.bookspot.book.presentation.BookDetailResponse;
 import com.bookspot.book.presentation.BookResponse;
+import com.bookspot.book.presentation.BookSearchRequest;
 import com.bookspot.book.presentation.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
@@ -30,18 +32,19 @@ public class BookService {
                 .toList();
     }
 
-    public Page<BookSummaryResponse> findBooks(String title, Pageable pageable) {
-        return bookSearchRepository.search(title, pageable)
-                .map(BookDataMapper::transform);
-    }
+    public Page<BookSummaryResponse> findBooks(BookSearchRequest bookSearchRequest, Pageable pageable) {
+        if(bookSearchRequest.hasOnlyBookIds())
+            return repository.findAllById(bookSearchRequest.getBookIds(), pageable)
+                    .map(BookDataMapper::transform);
 
-    public Page<BookSummaryResponse> findBooks(List<Long> bookIds, Pageable pageable) {
-        return repository.findAllById(bookIds, pageable)
-                .map(BookDataMapper::transform);
-    }
-
-    public Page<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
-        return bookSearchRepository.search(title, bookIds, pageable)
+        return bookSearchRepository.search(
+                        BookSearchCond.builder()
+                                .keyword(bookSearchRequest.getTitle())
+                                .bookIds(bookSearchRequest.getBookIds())
+                                .libraryId(bookSearchRequest.getLibraryId())
+                                .pageable(pageable)
+                                .build()
+                )
                 .map(BookDataMapper::transform);
     }
 

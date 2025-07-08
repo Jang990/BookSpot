@@ -28,22 +28,13 @@ public class BookController {
     public ResponseEntity<Page<BookSummaryResponse>> findBook(
             @Valid BookSearchRequest request,
             Pageable pageable,
-            BindingResult bindingResult) throws BindException {
+            BindingResult bindingResult
+    ) throws BindException {
         validateRequest(request, pageable, bindingResult);
 
-        if(request.hasTitle() && request.hasBookIds())
-            return ResponseEntity.ok(
-                    bookService.findBooks(
-                            request.getTitle(),
-                            request.getBookIds(),
-                            pageable
-                    )
-            );
-
-        if(request.hasTitle())
-            return ResponseEntity.ok(bookService.findBooks(request.getTitle(), pageable));
-
-        return ResponseEntity.ok(bookService.findBooks(request.getBookIds(), pageable));
+        return ResponseEntity.ok(
+                bookService.findBooks(request, pageable)
+        );
     }
 
     private void validateRequest(BookSearchRequest request, Pageable pageable, BindingResult bindingResult) throws BindException {

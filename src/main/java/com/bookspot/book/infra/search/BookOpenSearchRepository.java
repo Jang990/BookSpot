@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -24,17 +23,31 @@ import java.util.stream.Collectors;
 public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
 
-
     @Override
-    public Page<BookDocument> search(String keyword, Pageable pageable) {
+    public Page<BookDocument> search(BookSearchCond searchRequest) {
+        if(searchRequest.getPageable() == null)
+            throw new IllegalArgumentException("검색 시 pageable은 필수");
+
         SearchResponse<BookDocument> resp = request(
                 q -> q.bool(
-                        b -> b.minimumShouldMatch("1")
-                                .should(matchPhrase("title", keyword))
-                                .should(matchPhrase("author", keyword))
-                                .should(term("publisher", keyword))
-                ),
-                pageable
+                        builder -> {
+
+                            if(searchRequest.hasBookIds())
+                                builder.filter(ids(searchRequest.getBookIds()));
+                            if(searchRequest.hasLibraryId())
+                                builder.filter(term("library_ids", searchRequest.getLibraryId().toString()));
+
+                            if(searchRequest.hasKeyword())
+                                builder.minimumShouldMatch("1")
+                                        .should(
+                                                matchPhrase("title", searchRequest.getKeyword()),
+                                                matchPhrase("author", searchRequest.getKeyword()),
+                                                term("publisher", searchRequest.getKeyword())
+                                        );
+
+                            return builder;
+                        }),
+                searchRequest.getPageable()
         );
 
         List<BookDocument> list = resp.hits().hits().stream()
@@ -42,32 +55,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 .collect(Collectors.toList());
 
         long total = resp.hits().total().value();
-        return new PageImpl<>(list, pageable, total);
-    }
-
-    @Override
-    public Page<BookDocument> search(String keyword, List<Long> ids, Pageable pageable) {
-        if(ids.isEmpty())
-            return new PageImpl<>(Collections.emptyList(), pageable, 0);
-
-        SearchResponse<BookDocument> resp = request(
-                q -> q.bool(
-                        b -> b.filter(ids(ids))
-                                .minimumShouldMatch("1")
-                                .should(matchPhrase("title", keyword))
-                                .should(matchPhrase("author", keyword))
-                                .should(term("publisher", keyword))
-                ),
-                pageable
-        );
-
-
-        List<BookDocument> list = resp.hits().hits().stream()
-                .map(Hit::source)
-                .collect(Collectors.toList());
-
-        long total = resp.hits().total().value();
-        return new PageImpl<>(list, pageable, total);
+        return new PageImpl<>(list, searchRequest.getPageable(), total);
     }
 
     private Function<Query.Builder, ObjectBuilder<Query>> ids(List<Long> docIds) {
@@ -100,14 +88,18 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         }
     }
 
-    private Function<Query.Builder, ObjectBuilder<Query>> matchPhrase(String fieldName, String keyword) {
-        return sh -> sh.matchPhrase(mp -> mp.field(fieldName).query(keyword));
+    private Query matchPhrase(String fieldName, String keyword) {
+        return new Query.Builder()
+                .matchPhrase(mp -> mp.field(fieldName).query(keyword))
+                .build();
     }
 
-    private Function<Query.Builder, ObjectBuilder<Query>> term(String fieldName, String keyword) {
-        return sh -> sh.term(
-                mp -> mp.field(fieldName)
-                        .value(fv -> fv.stringValue(keyword))
-        );
+    private Query term(String fieldName, String keyword) {
+        return new Query.Builder()
+                .term(
+                        mp -> mp.field(fieldName)
+                                .value(fv-> fv.stringValue(keyword))
+                )
+                .build();
     }
 }
