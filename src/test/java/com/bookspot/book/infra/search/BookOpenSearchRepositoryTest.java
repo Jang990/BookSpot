@@ -1,6 +1,5 @@
 package com.bookspot.book.infra.search;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
@@ -23,7 +22,7 @@ class BookOpenSearchRepositoryTest {
         33158 - (개싸움을 지적 토론의 장으로 만드는) 어른의 문답법
         85303 - 이기적 유전자:진화론의 새로운 패러다임 {1, 4, 5, ...}
          */
-        BookSearchRequest request = new BookSearchRequest(
+        BookSearchCond request = new BookSearchCond(
                 List.of(22286L, 26663L, 33158L, 85303L),
                 "이기적 유전자", 5L,
                 PageRequest.of(0, 10)

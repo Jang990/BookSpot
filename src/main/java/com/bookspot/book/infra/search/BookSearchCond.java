@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class BookSearchRequest {
+public class BookSearchCond {
     private List<Long> bookIds;
     private String keyword;
     private Long libraryId;

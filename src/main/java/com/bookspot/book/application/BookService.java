@@ -2,7 +2,7 @@ package com.bookspot.book.application;
 
 import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.infra.search.BookSearchRepository;
-import com.bookspot.book.infra.search.BookSearchRequest;
+import com.bookspot.book.infra.search.BookSearchCond;
 import com.bookspot.book.presentation.BookDetailResponse;
 import com.bookspot.book.presentation.BookResponse;
 import com.bookspot.book.presentation.BookSummaryResponse;
@@ -35,7 +35,7 @@ public class BookService {
 
     public Page<BookSummaryResponse> findBooks(String title, Pageable pageable) {
         return bookSearchRepository.search(
-                        BookSearchRequest.builder()
+                        BookSearchCond.builder()
                                 .keyword(title)
                                 .pageable(pageable)
                                 .build()
@@ -54,7 +54,7 @@ public class BookService {
 
 
         return bookSearchRepository.search(
-                        BookSearchRequest.builder()
+                        BookSearchCond.builder()
                                 .keyword(title)
                                 .bookIds(bookIds)
                                 .pageable(pageable)

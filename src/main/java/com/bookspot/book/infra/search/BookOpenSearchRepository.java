@@ -24,7 +24,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
 
     @Override
-    public Page<BookDocument> search(BookSearchRequest searchRequest) {
+    public Page<BookDocument> search(BookSearchCond searchRequest) {
         if(searchRequest.getPageable() == null)
             throw new IllegalArgumentException("검색 시 pageable은 필수");
 
