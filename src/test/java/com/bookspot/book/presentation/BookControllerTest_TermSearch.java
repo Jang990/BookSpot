@@ -42,8 +42,10 @@ class BookControllerTest_TermSearch {
             "/api/books?title=ABC",
             "/api/books?bookIds=1,2,3",
             "/api/books?bookIds=1&bookIds=2&bookIds=3",
-            "/api/books?title=ABC&bookIds=1,2,3"})
-    void 제목_또는_책ID가_존재한다면_정상처리(String testApi) throws Exception {
+            "/api/books?title=ABC&bookIds=1,2,3",
+            "/api/books?title=ABC&bookIds=1,2,3&libraryId=1"
+    })
+    void 제목_책ID_도서관ID_정상처리(String testApi) throws Exception {
         mvc.perform(get(testApi))
                 .andExpect(status().isOk());
     }

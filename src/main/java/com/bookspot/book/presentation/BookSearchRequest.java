@@ -1,11 +1,8 @@
 package com.bookspot.book.presentation;
 
-import com.bookspot.book.presentation.consts.BookBindingError;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ public class BookSearchRequest {
     @Size(min = 2)
     private String title;
     private List<Long> bookIds;
+    private Long libraryId;
 
     public boolean hasBookIds() {
         return bookIds != null && !bookIds.isEmpty();
@@ -24,7 +22,15 @@ public class BookSearchRequest {
         return title != null && !title.isBlank();
     }
 
+    public boolean hasLibraryId() {
+        return libraryId != null;
+    }
+
+    public boolean hasOnlyBookIds() {
+        return !hasTitle() && hasBookIds() && !hasLibraryId();
+    }
+
     public boolean isCriteriaMissing() {
-        return !hasTitle() && !hasBookIds();
+        return !hasTitle() && !hasBookIds() && !hasLibraryId();
     }
 }
