@@ -11,4 +11,6 @@ public interface BookSearchRepository {
 
 
     Page<BookDocument> search(String keyword, List<Long> ids, Pageable pageable);
+
+    Page<BookDocument> search(BookSearchRequest searchRequest);
 }

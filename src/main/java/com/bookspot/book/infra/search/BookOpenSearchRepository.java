@@ -73,6 +73,41 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         return new PageImpl<>(list, pageable, total);
     }
 
+    @Override
+    public Page<BookDocument> search(BookSearchRequest searchRequest) {
+        if(searchRequest.getPageable() == null)
+            throw new IllegalArgumentException("검색 시 pageable은 필수");
+
+        SearchResponse<BookDocument> resp = request(
+                q -> q.bool(
+                        builder -> {
+
+                            if(searchRequest.hasBookIds())
+                                builder.filter(ids(searchRequest.getBookIds()));
+                            if(searchRequest.hasLibraryId())
+                                builder.filter(term("library_ids", searchRequest.getLibraryId().toString()));
+
+                            if(searchRequest.hasKeyword())
+                                builder.minimumShouldMatch("1")
+                                        .should(
+                                                matchPhrase("title", searchRequest.getKeyword()),
+                                                matchPhrase("author", searchRequest.getKeyword()),
+                                                term("publisher", searchRequest.getKeyword())
+                                        );
+
+                            return builder;
+                        }),
+                searchRequest.getPageable()
+        );
+
+        List<BookDocument> list = resp.hits().hits().stream()
+                .map(Hit::source)
+                .collect(Collectors.toList());
+
+        long total = resp.hits().total().value();
+        return new PageImpl<>(list, searchRequest.getPageable(), total);
+    }
+
     private Function<Query.Builder, ObjectBuilder<Query>> ids(List<Long> docIds) {
         return f -> f.ids(
                 fn -> fn.values(
