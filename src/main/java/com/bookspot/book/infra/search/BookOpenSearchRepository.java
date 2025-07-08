@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,55 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
-
-    @Override
-    public Page<BookDocument> search(String keyword, Pageable pageable) {
-        SearchResponse<BookDocument> resp = request(
-                q -> q.bool(
-                        b -> b.minimumShouldMatch("1")
-                                .should(
-                                        matchPhrase("title", keyword),
-                                        matchPhrase("author", keyword),
-                                        term("publisher", keyword)
-                                )
-                ),
-                pageable
-        );
-
-        List<BookDocument> list = resp.hits().hits().stream()
-                .map(Hit::source)
-                .collect(Collectors.toList());
-
-        long total = resp.hits().total().value();
-        return new PageImpl<>(list, pageable, total);
-    }
-
-    @Override
-    public Page<BookDocument> search(String keyword, List<Long> ids, Pageable pageable) {
-        if(ids.isEmpty())
-            return new PageImpl<>(Collections.emptyList(), pageable, 0);
-
-        SearchResponse<BookDocument> resp = request(
-                q -> q.bool(
-                        b -> b.filter(ids(ids))
-                                .minimumShouldMatch("1")
-                                .should(
-                                        matchPhrase("title", keyword),
-                                        matchPhrase("author", keyword),
-                                        term("publisher", keyword)
-                                )
-                ),
-                pageable
-        );
-
-
-        List<BookDocument> list = resp.hits().hits().stream()
-                .map(Hit::source)
-                .collect(Collectors.toList());
-
-        long total = resp.hits().total().value();
-        return new PageImpl<>(list, pageable, total);
-    }
 
     @Override
     public Page<BookDocument> search(BookSearchRequest searchRequest) {

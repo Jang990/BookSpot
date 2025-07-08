@@ -2,6 +2,7 @@ package com.bookspot.book.application;
 
 import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.infra.search.BookSearchRepository;
+import com.bookspot.book.infra.search.BookSearchRequest;
 import com.bookspot.book.presentation.BookDetailResponse;
 import com.bookspot.book.presentation.BookResponse;
 import com.bookspot.book.presentation.BookSummaryResponse;
@@ -9,9 +10,11 @@ import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,7 +34,12 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(String title, Pageable pageable) {
-        return bookSearchRepository.search(title, pageable)
+        return bookSearchRepository.search(
+                        BookSearchRequest.builder()
+                                .keyword(title)
+                                .pageable(pageable)
+                                .build()
+                )
                 .map(BookDataMapper::transform);
     }
 
@@ -41,7 +49,17 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(String title, List<Long> bookIds, Pageable pageable) {
-        return bookSearchRepository.search(title, bookIds, pageable)
+        if(bookIds.isEmpty())
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+
+
+        return bookSearchRepository.search(
+                        BookSearchRequest.builder()
+                                .keyword(title)
+                                .bookIds(bookIds)
+                                .pageable(pageable)
+                                .build()
+                )
                 .map(BookDataMapper::transform);
     }
 

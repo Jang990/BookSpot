@@ -17,14 +17,6 @@ class BookOpenSearchRepositoryTest {
 
 //    @Test
     void 검색테스트() {
-        Page<BookDocument> result = repository.search("객체지향", PageRequest.of(0, 10));
-        for (BookDocument bookDocument : result) {
-            System.out.println(bookDocument.getTitle() + " " + bookDocument.getLoanCount());
-        }
-    }
-
-    @Test
-    void 검색테스트2() {
         /*
         22286 - 게으른 완벽주의자를 위한 심리학
         26663 - 이기적 유전자 (40주년 기념판) {2, 5, 6 ... }
