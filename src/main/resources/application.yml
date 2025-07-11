@@ -29,3 +29,6 @@ spring:
         format_sql: true
         show_sql: true
         default_batch_fetch_size: 100
+        # Deprecated인 클래스임.  JDBC 공식 스펙이 아니기 때문이라는 듯. 괜찮나...?
+        dialect: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
+
