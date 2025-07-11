@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,4 +21,13 @@ public class Library {
 
     @Column(nullable = false, columnDefinition = "POINT SRID 4326")
     private Point location;
+
+    private String address;
+    private String contactNumber;
+    private String homePage;
+    private String closedInfo;
+    private String operatingInfo;
+    
+    private LocalDate updatedAt;
+    private LocalDate stockUpdatedAt;
 }
