@@ -41,6 +41,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                                 builder.minimumShouldMatch("1")
                                         .should(
                                                 matchPhrase("title", searchRequest.getKeyword(), 1),
+                                                match("title.ngram", searchRequest.getKeyword()),
                                                 matchPhrase("author", searchRequest.getKeyword()),
                                                 term("publisher", searchRequest.getKeyword())
                                         );
@@ -86,6 +87,14 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Query match(String fieldName, String keyword) {
+        return new Query.Builder()
+                .match(mp -> mp.field(fieldName)
+                        .query(f -> f.stringValue(keyword))
+                )
+                .build();
     }
 
     private Query matchPhrase(String fieldName, String keyword) {
