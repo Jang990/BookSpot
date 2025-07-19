@@ -23,7 +23,8 @@ public class BookDataMapper {
                 book.getPublicationYear(),
                 book.getPublisher(),
                 book.getLoanCount(),
-                leafCategory
+                leafCategory,
+                book.getCreatedAt().toString()
         );
     }
 

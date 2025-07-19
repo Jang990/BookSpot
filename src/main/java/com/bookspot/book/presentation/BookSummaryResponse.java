@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -17,4 +16,5 @@ public class BookSummaryResponse {
     private String publisher;
     private int loanCount;
     private CategoryResponse category;
+    private String createdAt;
 }
