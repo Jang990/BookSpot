@@ -26,10 +26,6 @@ public class BookSearchRequest {
         return libraryId != null;
     }
 
-    public boolean hasOnlyBookIds() {
-        return !hasTitle() && hasBookIds() && !hasLibraryId();
-    }
-
     public boolean isCriteriaMissing() {
         return !hasTitle() && !hasBookIds() && !hasLibraryId();
     }
