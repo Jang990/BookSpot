@@ -3,6 +3,8 @@ package com.bookspot.book.presentation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Getter
 @AllArgsConstructor
 public class BookSummaryResponse {
@@ -13,4 +15,6 @@ public class BookSummaryResponse {
     private Integer publicationYear;
     private String publisher;
     private int loanCount;
+    private CategoryResponse category;
+    private String createdAt;
 }

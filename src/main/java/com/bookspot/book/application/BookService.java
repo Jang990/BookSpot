@@ -33,10 +33,6 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(BookSearchRequest bookSearchRequest, Pageable pageable) {
-        if(bookSearchRequest.hasOnlyBookIds())
-            return repository.findAllById(bookSearchRequest.getBookIds(), pageable)
-                    .map(BookDataMapper::transform);
-
         return bookSearchRepository.search(
                         BookSearchCond.builder()
                                 .keyword(bookSearchRequest.getTitle())

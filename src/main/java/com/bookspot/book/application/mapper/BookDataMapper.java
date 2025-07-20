@@ -1,14 +1,20 @@
 package com.bookspot.book.application.mapper;
 
-import com.bookspot.book.domain.Book;
 import com.bookspot.book.infra.search.BookDocument;
 import com.bookspot.book.presentation.BookSummaryResponse;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.bookspot.book.presentation.CategoryResponse;
+import org.springframework.stereotype.Service;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+import java.util.List;
+
+@Service
 public class BookDataMapper {
-    public static BookSummaryResponse transform(Book book) {
+    public static BookSummaryResponse transform(BookDocument book) {
+        List<CategoryResponse> categories = book.getBookCategories().stream()
+                .map(BookDataMapper::transform)
+                .toList();
+
+        CategoryResponse leafCategory = categories.getLast();
         return new BookSummaryResponse(
                 book.getId(),
                 book.getTitle(),
@@ -16,19 +22,17 @@ public class BookDataMapper {
                 book.getIsbn13(),
                 book.getPublicationYear(),
                 book.getPublisher(),
-                book.getLoanCount()
+                book.getLoanCount(),
+                leafCategory,
+                book.getCreatedAt().toString()
         );
     }
 
-    public static BookSummaryResponse transform(BookDocument book) {
-        return new BookSummaryResponse(
-                book.getId(),
-                book.getTitle(),
-                book.getAuthor(),
-                book.getIsbn13(),
-                book.getPublicationYear(),
-                book.getPublisher(),
-                book.getLoanCount()
+    private static CategoryResponse transform(String category) {
+        int dotIdx = category.indexOf(".");
+        return new CategoryResponse(
+                Integer.parseInt(category.substring(0, dotIdx)),
+                category.substring(dotIdx + 1)
         );
     }
 }
