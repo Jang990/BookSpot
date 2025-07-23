@@ -9,12 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @BasicLog
 @RestController
@@ -22,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping("/api/books")
-    @ResponseBody
+    @GetMapping(value = "/api/books", params = {
+            BookSearchAfterRequest.IGNORE_PARAM_LAST_LOAN_COUNT,
+            BookSearchAfterRequest.IGNORE_PARAM_LAST_BOOK_ID
+    })
     public ResponseEntity<Page<BookSummaryResponse>> findBook(
             @Valid BookSearchRequest request,
             Pageable pageable,
@@ -34,6 +34,25 @@ public class BookController {
         return ResponseEntity.ok(
                 bookService.findBooks(request, pageable)
         );
+    }
+
+    @GetMapping(value = "/api/books", params = {
+            BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT,
+            BookSearchAfterRequest.PARAM_LAST_BOOK_ID
+    })
+    public ResponseEntity<Page<BookSummaryResponse>> findBook(
+            @Valid BookSearchRequest request,
+            @Valid BookSearchAfterRequest searchAfterRequest,
+            @RequestParam(defaultValue = "12") int size
+    ) throws BindException {
+        return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/api/books")
+    public ResponseEntity<Void> handleInvalidSearchAfterParams() throws BindException {
+        BindingResult bindingResult = new BeanPropertyBindingResult(null, "bookSearch");
+        bindingResult.addError(BookBindingError.SEARCH_CRITERIA_INVALID.error());
+        throw new BindException(bindingResult);
     }
 
     private void validateRequest(BookSearchRequest request, Pageable pageable, BindingResult bindingResult) throws BindException {

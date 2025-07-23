@@ -43,15 +43,25 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void search_After기반의_방식은_온전한_SearchAfterRequest_필드들이_필요() throws Exception {
+        mvc.perform(get("/api/books?lastLoanCount=111"))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(get("/api/books?lastBookId=111"))
+                .andExpect(status().isBadRequest());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",
             "/api/books?bookIds=1,2,3",
             "/api/books?bookIds=1&bookIds=2&bookIds=3",
             "/api/books?title=ABC&bookIds=1,2,3",
-            "/api/books?title=ABC&bookIds=1,2,3&libraryId=1"
+            "/api/books?title=ABC&bookIds=1,2,3&libraryId=1",
+            "/api/books?lastLoanCount=123&lastBookId=123"
     })
-    void 제목_책ID_도서관ID_정상처리(String testApi) throws Exception {
+    void 정상처리_API(String testApi) throws Exception {
         mvc.perform(get(testApi))
                 .andExpect(status().isOk());
     }
