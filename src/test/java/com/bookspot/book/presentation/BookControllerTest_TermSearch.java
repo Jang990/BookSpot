@@ -37,6 +37,12 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void 페이지_번호는_50을_초과할_수_없다() throws Exception {
+        mvc.perform(get("/api/books?page=51&title=abc"))
+                .andExpect(status().isBadRequest());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",

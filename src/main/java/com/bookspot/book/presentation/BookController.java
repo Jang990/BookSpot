@@ -8,7 +8,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -40,6 +39,11 @@ public class BookController {
     private void validateRequest(BookSearchRequest request, Pageable pageable, BindingResult bindingResult) throws BindException {
         if(bindingResult.hasErrors())
             throw new BindException(bindingResult);
+
+        if (pageable.getPageNumber() > BookRequestCond.MAX_SEARCH_PAGE_NUMBER) {
+            bindingResult.addError(BookBindingError.TOO_LARGE_PAGE_NUMBER.error());
+            throw new BindException(bindingResult);
+        }
 
         if (pageable.getPageSize() > BookRequestCond.MAX_SEARCH_PAGE_SIZE) {
             bindingResult.addError(BookBindingError.TOO_LARGE_PAGE_SIZE.error());
