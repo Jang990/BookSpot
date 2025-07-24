@@ -29,25 +29,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             throw new IllegalArgumentException("검색 시 pageable은 필수");
 
         SearchResponse<BookDocument> resp = request(
-                q -> q.bool(
-                        builder -> {
-
-                            if(searchRequest.hasBookIds())
-                                builder.filter(ids(searchRequest.getBookIds()));
-                            if(searchRequest.hasLibraryId())
-                                builder.filter(term("library_ids", searchRequest.getLibraryId().toString()));
-
-                            if(searchRequest.hasKeyword())
-                                builder.minimumShouldMatch("1")
-                                        .should(
-                                                matchPhrase("title", searchRequest.getKeyword(), 1),
-                                                match("title.ngram", searchRequest.getKeyword()),
-                                                matchPhrase("author", searchRequest.getKeyword()),
-                                                term("publisher", searchRequest.getKeyword())
-                                        );
-
-                            return builder;
-                        }),
+                createBookSearchQuery(searchRequest),
                 pageable
         );
 
@@ -57,6 +39,28 @@ public class BookOpenSearchRepository implements BookSearchRepository {
 
         long total = resp.hits().total().value();
         return new PageImpl<>(list, pageable, total);
+    }
+
+    private Function<Query.Builder, ObjectBuilder<Query>> createBookSearchQuery(BookSearchCond searchRequest) {
+        return q -> q.bool(
+                builder -> {
+
+                    if (searchRequest.hasBookIds())
+                        builder.filter(ids(searchRequest.getBookIds()));
+                    if (searchRequest.hasLibraryId())
+                        builder.filter(term("library_ids", searchRequest.getLibraryId().toString()));
+
+                    if (searchRequest.hasKeyword())
+                        builder.minimumShouldMatch("1")
+                                .should(
+                                        matchPhrase("title", searchRequest.getKeyword(), 1),
+                                        match("title.ngram", searchRequest.getKeyword()),
+                                        matchPhrase("author", searchRequest.getKeyword()),
+                                        term("publisher", searchRequest.getKeyword())
+                                );
+
+                    return builder;
+                });
     }
 
     private Function<Query.Builder, ObjectBuilder<Query>> ids(List<Long> docIds) {
