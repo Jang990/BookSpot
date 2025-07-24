@@ -1,6 +1,6 @@
 package com.bookspot.book.infra.search.builder;
 
-import com.bookspot.book.infra.search.SearchAfterCond;
+import com.bookspot.book.infra.search.cond.SearchAfterCond;
 import com.bookspot.global.consts.Indices;
 import org.opensearch.client.opensearch._types.FieldSort;
 import org.opensearch.client.opensearch._types.SortOptions;

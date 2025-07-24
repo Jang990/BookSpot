@@ -1,4 +1,4 @@
-package com.bookspot.book.infra.search;
+package com.bookspot.book.infra.search.cond;
 
 import lombok.Builder;
 import lombok.Getter;

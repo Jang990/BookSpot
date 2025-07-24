@@ -1,6 +1,6 @@
 package com.bookspot.book.infra.search.builder;
 
-import com.bookspot.book.infra.search.BookSearchCond;
+import com.bookspot.book.infra.search.cond.BookSearchCond;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;

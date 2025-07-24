@@ -2,6 +2,10 @@ package com.bookspot.book.infra.search;
 
 import com.bookspot.book.infra.search.builder.BookQueryBuilder;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
+import com.bookspot.book.infra.search.cond.BookSearchCond;
+import com.bookspot.book.infra.search.cond.SearchAfterCond;
+import com.bookspot.book.infra.search.result.BookPageResult;
+import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.opensearch.core.SearchResponse;
