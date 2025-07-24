@@ -7,7 +7,7 @@ import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
-import com.bookspot.book.presentation.response.BookSummaryResponse;
+import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.global.log.BasicLog;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class BookController {
             BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT,
             BookSearchAfterRequest.PARAM_LAST_BOOK_ID
     })
-    public ResponseEntity<Page<BookSummaryResponse>> findBook(
+    public ResponseEntity<Page<BookPreviewResponse>> findBook(
             @Valid BookSearchRequest request,
             @Valid BookSearchAfterRequest searchAfterRequest,
             @RequestParam(defaultValue = "12") int size

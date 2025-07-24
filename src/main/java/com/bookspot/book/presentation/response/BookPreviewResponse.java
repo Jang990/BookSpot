@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BookSummaryResponse {
+public class BookPreviewResponse {
     private final long id;
     private final String title;
     private String author;

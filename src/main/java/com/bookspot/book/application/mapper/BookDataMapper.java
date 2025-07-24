@@ -1,7 +1,7 @@
 package com.bookspot.book.application.mapper;
 
 import com.bookspot.book.infra.search.BookDocument;
-import com.bookspot.book.presentation.response.BookSummaryResponse;
+import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
 import org.springframework.stereotype.Service;
 
@@ -9,13 +9,13 @@ import java.util.List;
 
 @Service
 public class BookDataMapper {
-    public static BookSummaryResponse transform(BookDocument book) {
+    public static BookPreviewResponse transform(BookDocument book) {
         List<CategoryResponse> categories = book.getBookCategories().stream()
                 .map(BookDataMapper::transform)
                 .toList();
 
         CategoryResponse leafCategory = categories.getLast();
-        return new BookSummaryResponse(
+        return new BookPreviewResponse(
                 book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
