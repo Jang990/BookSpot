@@ -24,11 +24,10 @@ class BookOpenSearchRepositoryTest {
          */
         BookSearchCond request = new BookSearchCond(
                 List.of(22286L, 26663L, 33158L, 85303L),
-                "이기적 유전자", 5L,
-                PageRequest.of(0, 10)
+                "이기적 유전자", 5L
         );
 
-        Page<BookDocument> result = repository.search(request);
+        Page<BookDocument> result = repository.search(request, PageRequest.of(0, 10));
         for (BookDocument bookDocument : result) {
             System.out.println(bookDocument.getTitle() + " " + bookDocument.getLoanCount());
         }

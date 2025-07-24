@@ -24,8 +24,8 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
 
     @Override
-    public Page<BookDocument> search(BookSearchCond searchRequest) {
-        if(searchRequest.getPageable() == null)
+    public Page<BookDocument> search(BookSearchCond searchRequest, Pageable pageable) {
+        if(pageable == null)
             throw new IllegalArgumentException("검색 시 pageable은 필수");
 
         SearchResponse<BookDocument> resp = request(
@@ -48,7 +48,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
 
                             return builder;
                         }),
-                searchRequest.getPageable()
+                pageable
         );
 
         List<BookDocument> list = resp.hits().hits().stream()
@@ -56,7 +56,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 .collect(Collectors.toList());
 
         long total = resp.hits().total().value();
-        return new PageImpl<>(list, searchRequest.getPageable(), total);
+        return new PageImpl<>(list, pageable, total);
     }
 
     private Function<Query.Builder, ObjectBuilder<Query>> ids(List<Long> docIds) {

@@ -38,8 +38,8 @@ public class BookService {
                                 .keyword(bookSearchRequest.getTitle())
                                 .bookIds(bookSearchRequest.getBookIds())
                                 .libraryId(bookSearchRequest.getLibraryId())
-                                .pageable(pageable)
-                                .build()
+                                .build(),
+                        pageable
                 )
                 .map(BookDataMapper::transform);
     }
