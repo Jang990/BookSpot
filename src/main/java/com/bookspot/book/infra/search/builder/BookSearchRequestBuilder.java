@@ -1,5 +1,6 @@
 package com.bookspot.book.infra.search.builder;
 
+import com.bookspot.book.infra.search.SearchAfterCond;
 import com.bookspot.global.consts.Indices;
 import org.opensearch.client.opensearch._types.FieldSort;
 import org.opensearch.client.opensearch._types.SortOptions;
@@ -23,6 +24,33 @@ public class BookSearchRequestBuilder {
                 List.of(
                         buildSort("loan_count", SortOrder.Desc)
 //                        buildSort("book_id", SortOrder.Asc)
+                )
+        );
+
+        return builder.build();
+    }
+
+    public SearchRequest build(
+            Query query,
+            SearchAfterCond searchAfterCond,
+            int pageSize
+    ) {
+        SearchRequest.Builder builder = new SearchRequest.Builder();
+        builder.index(Indices.BOOK_INDEX);
+        builder.query(query);
+
+        builder.size(pageSize);
+        builder.searchAfter(
+                List.of(
+                        String.valueOf(searchAfterCond.lastLoanCount()),
+                        String.valueOf(searchAfterCond.lastBookId())
+                )
+        );
+
+        builder.sort(
+                List.of(
+                        buildSort("loan_count", SortOrder.Desc),
+                        buildSort("book_id", SortOrder.Asc)
                 )
         );
 

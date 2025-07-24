@@ -44,6 +44,45 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         }
     }
 
+    @Override
+    public BookSearchAfterResult search(
+            BookSearchCond searchCond,
+            SearchAfterCond searchAfterCond,
+            int pageSize
+    ) {
+        if(searchCond == null || searchAfterCond == null)
+            throw new IllegalArgumentException("필수 조건 누락");
+
+        try {
+            SearchResponse<BookDocument> resp = client.search(
+                    searchRequestBuilder.build(
+                            queryBuilder.buildBool(searchCond),
+                            searchAfterCond,
+                            pageSize
+                    ),
+                    BookDocument.class
+            );
+
+            return createSearchAfterResult(resp);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private BookSearchAfterResult createSearchAfterResult(SearchResponse<BookDocument> resp) {
+        List<BookDocument> list = resp.hits().hits().stream()
+                .map(Hit::source)
+                .collect(Collectors.toList());
+
+        return new BookSearchAfterResult(
+                list,
+                list.getLast().getLoanCount(),
+                list.getLast().getId(),
+                resp.hits().total().value()
+        );
+    }
+
+
     private BookPageResult createPageResult(SearchResponse<BookDocument> resp, Pageable pageable) {
         List<BookDocument> list = resp.hits().hits().stream()
                 .map(Hit::source)
