@@ -1,8 +1,8 @@
 package com.bookspot.book.application.mapper;
 
 import com.bookspot.book.infra.search.BookDocument;
-import com.bookspot.book.presentation.BookSummaryResponse;
-import com.bookspot.book.presentation.CategoryResponse;
+import com.bookspot.book.presentation.response.BookSummaryResponse;
+import com.bookspot.book.presentation.response.CategoryResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
