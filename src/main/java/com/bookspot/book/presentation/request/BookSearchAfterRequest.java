@@ -1,4 +1,4 @@
-package com.bookspot.book.presentation;
+package com.bookspot.book.presentation.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

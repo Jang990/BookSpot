@@ -3,6 +3,8 @@ package com.bookspot.book.presentation;
 import com.bookspot.book.application.BookService;
 import com.bookspot.book.presentation.consts.BookBindingError;
 import com.bookspot.book.presentation.consts.BookRequestCond;
+import com.bookspot.book.presentation.request.BookSearchAfterRequest;
+import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookSummaryResponse;
 import com.bookspot.global.log.BasicLog;

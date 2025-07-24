@@ -1,6 +1,6 @@
 package com.bookspot.book.presentation.consts;
 
-import com.bookspot.book.presentation.BookSearchAfterRequest;
+import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import org.springframework.validation.ObjectError;
 
 public enum BookBindingError {

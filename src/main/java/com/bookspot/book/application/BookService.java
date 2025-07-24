@@ -6,7 +6,7 @@ import com.bookspot.book.infra.search.BookSearchRepository;
 import com.bookspot.book.infra.search.BookSearchCond;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookResponse;
-import com.bookspot.book.presentation.BookSearchRequest;
+import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookSummaryResponse;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
