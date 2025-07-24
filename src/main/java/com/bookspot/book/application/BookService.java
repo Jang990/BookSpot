@@ -1,6 +1,7 @@
 package com.bookspot.book.application;
 
 import com.bookspot.book.application.mapper.BookDataMapper;
+import com.bookspot.book.infra.search.BookPageResult;
 import com.bookspot.book.infra.search.BookSearchRepository;
 import com.bookspot.book.infra.search.BookSearchCond;
 import com.bookspot.book.presentation.BookDetailResponse;
@@ -33,15 +34,16 @@ public class BookService {
     }
 
     public Page<BookSummaryResponse> findBooks(BookSearchRequest bookSearchRequest, Pageable pageable) {
-        return bookSearchRepository.search(
-                        BookSearchCond.builder()
-                                .keyword(bookSearchRequest.getTitle())
-                                .bookIds(bookSearchRequest.getBookIds())
-                                .libraryId(bookSearchRequest.getLibraryId())
-                                .build(),
-                        pageable
-                )
-                .map(BookDataMapper::transform);
+        BookPageResult pageResult = bookSearchRepository.search(
+                BookSearchCond.builder()
+                        .keyword(bookSearchRequest.getTitle())
+                        .bookIds(bookSearchRequest.getBookIds())
+                        .libraryId(bookSearchRequest.getLibraryId())
+                        .build(),
+                pageable
+        );
+
+        return pageResult.books().map(BookDataMapper::transform);
     }
 
     public BookDetailResponse find(long id){

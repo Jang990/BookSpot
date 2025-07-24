@@ -27,8 +27,8 @@ class BookOpenSearchRepositoryTest {
                 "이기적 유전자", 5L
         );
 
-        Page<BookDocument> result = repository.search(request, PageRequest.of(0, 10));
-        for (BookDocument bookDocument : result) {
+        BookPageResult result = repository.search(request, PageRequest.of(0, 10));
+        for (BookDocument bookDocument : result.books()) {
             System.out.println(bookDocument.getTitle() + " " + bookDocument.getLoanCount());
         }
     }

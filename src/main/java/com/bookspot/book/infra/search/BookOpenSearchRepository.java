@@ -8,7 +8,6 @@ import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.opensearch.client.util.ObjectBuilder;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -24,7 +23,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
 
     @Override
-    public Page<BookDocument> search(BookSearchCond searchRequest, Pageable pageable) {
+    public BookPageResult search(BookSearchCond searchRequest, Pageable pageable) {
         if(pageable == null)
             throw new IllegalArgumentException("검색 시 pageable은 필수");
         if(pageable.getOffset() + pageable.getPageSize() >= 10_000)
@@ -35,12 +34,29 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 pageable
         );
 
+        return createPageResult(resp, pageable);
+    }
+
+    private BookPageResult createPageResult(SearchResponse<BookDocument> resp, Pageable pageable) {
         List<BookDocument> list = resp.hits().hits().stream()
                 .map(Hit::source)
                 .collect(Collectors.toList());
 
         long total = resp.hits().total().value();
-        return new PageImpl<>(list, pageable, total);
+        PageImpl<BookDocument> bookDocuments = new PageImpl<>(list, pageable, total);
+
+        if(list.isEmpty())
+            return new BookPageResult(
+                    bookDocuments,
+                    null,
+                    null
+            );
+
+        return new BookPageResult(
+                bookDocuments,
+                list.getLast().getLoanCount(),
+                list.getLast().getId()
+        );
     }
 
     private Function<Query.Builder, ObjectBuilder<Query>> createBookSearchQuery(BookSearchCond searchRequest) {
