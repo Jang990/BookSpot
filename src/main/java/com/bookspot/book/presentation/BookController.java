@@ -6,6 +6,7 @@ import com.bookspot.book.presentation.consts.BookRequestCond;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
+import com.bookspot.book.presentation.response.BookPreviewPageResponse;
 import com.bookspot.book.presentation.response.BookSummaryResponse;
 import com.bookspot.global.log.BasicLog;
 import jakarta.validation.Valid;
@@ -28,7 +29,7 @@ public class BookController {
             BookSearchAfterRequest.IGNORE_PARAM_LAST_LOAN_COUNT,
             BookSearchAfterRequest.IGNORE_PARAM_LAST_BOOK_ID
     })
-    public ResponseEntity<Page<BookSummaryResponse>> findBook(
+    public ResponseEntity<BookPreviewPageResponse> findBook(
             @Valid BookSearchRequest request,
             Pageable pageable,
             BindingResult bindingResult
