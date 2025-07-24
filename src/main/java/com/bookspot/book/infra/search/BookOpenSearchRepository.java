@@ -27,6 +27,8 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     public Page<BookDocument> search(BookSearchCond searchRequest, Pageable pageable) {
         if(pageable == null)
             throw new IllegalArgumentException("검색 시 pageable은 필수");
+        if(pageable.getOffset() + pageable.getPageSize() >= 10_000)
+            throw new IllegalArgumentException("Pageable 검색 시 1만건 이하의 offset만 검색 가능");
 
         SearchResponse<BookDocument> resp = request(
                 createBookSearchQuery(searchRequest),
