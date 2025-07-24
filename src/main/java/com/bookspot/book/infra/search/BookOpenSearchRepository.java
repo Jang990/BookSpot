@@ -4,18 +4,14 @@ import com.bookspot.book.infra.search.builder.BookQueryBuilder;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch.OpenSearchClient;
-import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
-import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
-import org.opensearch.client.util.ObjectBuilder;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Repository
@@ -28,16 +24,24 @@ public class BookOpenSearchRepository implements BookSearchRepository {
 
     @Override
     public BookPageResult search(BookSearchCond searchRequest, Pageable pageable) {
-        if(pageable == null)
-            throw new IllegalArgumentException("검색 시 pageable은 필수");
+        if(searchRequest == null || pageable == null)
+            throw new IllegalArgumentException("필수 조건 누락");
         if(pageable.getOffset() + pageable.getPageSize() >= 10_000)
             throw new IllegalArgumentException("Pageable 검색 시 1만건 이하의 offset만 검색 가능");
 
-        SearchResponse<BookDocument> resp = request(
-                queryBuilder.buildBool(searchRequest), pageable
-        );
 
-        return createPageResult(resp, pageable);
+        try {
+            SearchResponse<BookDocument> resp = client.search(
+                    searchRequestBuilder.build(
+                            queryBuilder.buildBool(searchRequest), pageable
+                    ),
+                    BookDocument.class
+            );
+
+            return createPageResult(resp, pageable);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private BookPageResult createPageResult(SearchResponse<BookDocument> resp, Pageable pageable) {
@@ -60,26 +64,5 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 list.getLast().getLoanCount(),
                 list.getLast().getId()
         );
-    }
-
-    private Function<Query.Builder, ObjectBuilder<Query>> ids(List<Long> docIds) {
-        return f -> f.ids(
-                fn -> fn.values(
-                        docIds.stream()
-                                .map(String::valueOf)
-                                .toList()
-                )
-        );
-    }
-
-    private SearchResponse<BookDocument> request(Query query, Pageable pageable) {
-        try {
-            return client.search(
-                    searchRequestBuilder.build(query, pageable),
-                    BookDocument.class
-            );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
