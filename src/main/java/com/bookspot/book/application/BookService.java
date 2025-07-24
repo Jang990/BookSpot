@@ -4,8 +4,10 @@ import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.infra.search.BookPageResult;
 import com.bookspot.book.infra.search.BookSearchRepository;
 import com.bookspot.book.infra.search.BookSearchCond;
+import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
+import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
 import com.bookspot.book.presentation.response.BookResponse;
 import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.domain.Book;
@@ -47,6 +49,14 @@ public class BookService {
                 pageResult.lastLoanCount(),
                 pageResult.lastBookId()
         );
+    }
+
+    public BookPreviewSearchAfterResponse findBooks(
+            BookSearchRequest bookSearchRequest,
+            BookSearchAfterRequest searchAfterCond,
+            int pageSize
+    ) {
+        return null;
     }
 
     public BookDetailResponse find(long id){

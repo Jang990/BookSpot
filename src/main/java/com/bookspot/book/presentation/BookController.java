@@ -8,6 +8,7 @@ import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
+import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
 import com.bookspot.global.log.BasicLog;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,12 +46,18 @@ public class BookController {
             BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT,
             BookSearchAfterRequest.PARAM_LAST_BOOK_ID
     })
-    public ResponseEntity<Page<BookPreviewResponse>> findBook(
+    public ResponseEntity<BookPreviewSearchAfterResponse> findBook(
             @Valid BookSearchRequest request,
             @Valid BookSearchAfterRequest searchAfterRequest,
             @RequestParam(defaultValue = "12") int size
     ) throws BindException {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(
+                bookService.findBooks(
+                        request,
+                        searchAfterRequest,
+                        size
+                )
+        );
     }
 
     @GetMapping("/api/books")
