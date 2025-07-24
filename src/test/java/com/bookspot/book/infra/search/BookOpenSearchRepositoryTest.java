@@ -23,10 +23,10 @@ class BookOpenSearchRepositoryTest {
         33158 - (개싸움을 지적 토론의 장으로 만드는) 어른의 문답법
         85303 - 이기적 유전자:진화론의 새로운 패러다임 {1, 4, 5, ...}
          */
-        BookSearchCond request = new BookSearchCond(
-                List.of(22286L, 26663L, 33158L, 85303L),
-                "이기적 유전자", 5L
-        );
+        BookSearchCond request = BookSearchCond.builder()
+                .bookIds(List.of(22286L, 26663L, 33158L, 85303L))
+                .keyword("이기적 유전자")
+                .build();
 
         BookPageResult result = repository.search(request, PageRequest.of(0, 10));
         for (BookDocument bookDocument : result.books()) {
