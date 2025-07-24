@@ -1,9 +1,10 @@
 package com.bookspot.book.infra.search;
 
-import com.bookspot.global.consts.Indices;
+import com.bookspot.book.infra.search.builder.BookQueryBuilder;
+import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch.OpenSearchClient;
-import org.opensearch.client.opensearch._types.SortOrder;
+import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
@@ -22,6 +23,9 @@ import java.util.stream.Collectors;
 public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
 
+    private final BookSearchRequestBuilder searchRequestBuilder;
+    private final BookQueryBuilder queryBuilder;
+
     @Override
     public BookPageResult search(BookSearchCond searchRequest, Pageable pageable) {
         if(pageable == null)
@@ -30,8 +34,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             throw new IllegalArgumentException("Pageable 검색 시 1만건 이하의 offset만 검색 가능");
 
         SearchResponse<BookDocument> resp = request(
-                createBookSearchQuery(searchRequest),
-                pageable
+                queryBuilder.buildBool(searchRequest), pageable
         );
 
         return createPageResult(resp, pageable);
@@ -59,28 +62,6 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         );
     }
 
-    private Function<Query.Builder, ObjectBuilder<Query>> createBookSearchQuery(BookSearchCond searchRequest) {
-        return q -> q.bool(
-                builder -> {
-
-                    if (searchRequest.hasBookIds())
-                        builder.filter(ids(searchRequest.getBookIds()));
-                    if (searchRequest.hasLibraryId())
-                        builder.filter(term("library_ids", searchRequest.getLibraryId().toString()));
-
-                    if (searchRequest.hasKeyword())
-                        builder.minimumShouldMatch("1")
-                                .should(
-                                        matchPhrase("title", searchRequest.getKeyword(), 1),
-                                        match("title.ngram", searchRequest.getKeyword()),
-                                        matchPhrase("author", searchRequest.getKeyword()),
-                                        term("publisher", searchRequest.getKeyword())
-                                );
-
-                    return builder;
-                });
-    }
-
     private Function<Query.Builder, ObjectBuilder<Query>> ids(List<Long> docIds) {
         return f -> f.ids(
                 fn -> fn.values(
@@ -91,52 +72,14 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         );
     }
 
-    private SearchResponse<BookDocument> request(Function<Query.Builder, ObjectBuilder<Query>> query, Pageable pageable) {
+    private SearchResponse<BookDocument> request(Query query, Pageable pageable) {
         try {
             return client.search(
-                    s -> s.index(Indices.BOOK_INDEX)
-                            .from((int) pageable.getOffset())
-                            .size(pageable.getPageSize())
-                            .query(query)
-                            .sort(
-                                    sort -> sort.field(
-                                            f -> f.field("loan_count")
-                                                    .order(SortOrder.Desc)
-                                    )
-                            ),
+                    searchRequestBuilder.build(query, pageable),
                     BookDocument.class
             );
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Query match(String fieldName, String keyword) {
-        return new Query.Builder()
-                .match(mp -> mp.field(fieldName)
-                        .query(f -> f.stringValue(keyword))
-                )
-                .build();
-    }
-
-    private Query matchPhrase(String fieldName, String keyword) {
-        return new Query.Builder()
-                .matchPhrase(mp -> mp.field(fieldName).query(keyword))
-                .build();
-    }
-
-    private Query matchPhrase(String fieldName, String keyword, int slopCnt) {
-        return new Query.Builder()
-                .matchPhrase(mp -> mp.field(fieldName).query(keyword).slop(slopCnt))
-                .build();
-    }
-
-    private Query term(String fieldName, String keyword) {
-        return new Query.Builder()
-                .term(
-                        mp -> mp.field(fieldName)
-                                .value(fv-> fv.stringValue(keyword))
-                )
-                .build();
     }
 }
