@@ -3,7 +3,7 @@ package com.bookspot.book.application;
 import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.BookSearchRepository;
-import com.bookspot.book.infra.search.cond.BookSearchCond;
+import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
@@ -36,11 +36,7 @@ public class BookService {
 
     public BookPreviewPageResponse findBooks(BookSearchRequest bookSearchRequest, Pageable pageable) {
         BookPageResult pageResult = bookSearchRepository.search(
-                BookSearchCond.builder()
-                        .keyword(bookSearchRequest.getTitle())
-                        .bookIds(bookSearchRequest.getBookIds())
-                        .libraryId(bookSearchRequest.getLibraryId())
-                        .build(),
+                BookDataMapper.transform(bookSearchRequest),
                 pageable
         );
 
@@ -56,7 +52,17 @@ public class BookService {
             BookSearchAfterRequest searchAfterCond,
             int pageSize
     ) {
-        return null;
+        BookSearchAfterResult result = bookSearchRepository.search(
+                BookDataMapper.transform(bookSearchRequest),
+                BookDataMapper.transform(searchAfterCond),
+                pageSize
+        );
+        return new BookPreviewSearchAfterResponse(
+                result.books().stream().map(BookDataMapper::transform).toList(),
+                result.lastLoanCount(),
+                result.lastBookId(),
+                result.totalElements()
+        );
     }
 
     public BookDetailResponse find(long id){

@@ -8,6 +8,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class CategoryResponse {
-    private final int id;
+    public static final CategoryResponse EMPTY_CATEGORY = new CategoryResponse(null, null);
+    private final Integer id;
     private final String name;
 }

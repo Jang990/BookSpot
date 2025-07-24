@@ -6,6 +6,6 @@ public record BookPreviewSearchAfterResponse(
         List<BookPreviewResponse> books,
         Integer lastLoanCount,
         Long lastBookId,
-        int totalElements
+        long totalElements
 ) {
 }
