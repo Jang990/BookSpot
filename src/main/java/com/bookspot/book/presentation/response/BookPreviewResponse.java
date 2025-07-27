@@ -1,13 +1,11 @@
-package com.bookspot.book.presentation;
+package com.bookspot.book.presentation.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 @AllArgsConstructor
-public class BookSummaryResponse {
+public class BookPreviewResponse {
     private final long id;
     private final String title;
     private String author;

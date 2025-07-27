@@ -1,16 +1,18 @@
 package com.bookspot.book.application;
 
 import com.bookspot.book.application.mapper.BookDataMapper;
+import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.BookSearchRepository;
-import com.bookspot.book.infra.search.BookSearchCond;
-import com.bookspot.book.presentation.BookDetailResponse;
-import com.bookspot.book.presentation.BookResponse;
-import com.bookspot.book.presentation.BookSearchRequest;
-import com.bookspot.book.presentation.BookSummaryResponse;
+import com.bookspot.book.infra.search.result.BookSearchAfterResult;
+import com.bookspot.book.presentation.request.BookSearchAfterRequest;
+import com.bookspot.book.presentation.response.BookDetailResponse;
+import com.bookspot.book.presentation.response.BookPreviewPageResponse;
+import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
+import com.bookspot.book.presentation.response.BookResponse;
+import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -32,16 +34,35 @@ public class BookService {
                 .toList();
     }
 
-    public Page<BookSummaryResponse> findBooks(BookSearchRequest bookSearchRequest, Pageable pageable) {
-        return bookSearchRepository.search(
-                        BookSearchCond.builder()
-                                .keyword(bookSearchRequest.getTitle())
-                                .bookIds(bookSearchRequest.getBookIds())
-                                .libraryId(bookSearchRequest.getLibraryId())
-                                .pageable(pageable)
-                                .build()
-                )
-                .map(BookDataMapper::transform);
+    public BookPreviewPageResponse findBooks(BookSearchRequest bookSearchRequest, Pageable pageable) {
+        BookPageResult pageResult = bookSearchRepository.search(
+                BookDataMapper.transform(bookSearchRequest),
+                pageable
+        );
+
+        return new BookPreviewPageResponse(
+                pageResult.books().map(BookDataMapper::transform),
+                pageResult.lastLoanCount(),
+                pageResult.lastBookId()
+        );
+    }
+
+    public BookPreviewSearchAfterResponse findBooks(
+            BookSearchRequest bookSearchRequest,
+            BookSearchAfterRequest searchAfterCond,
+            int pageSize
+    ) {
+        BookSearchAfterResult result = bookSearchRepository.search(
+                BookDataMapper.transform(bookSearchRequest),
+                BookDataMapper.transform(searchAfterCond),
+                pageSize
+        );
+        return new BookPreviewSearchAfterResponse(
+                result.books().stream().map(BookDataMapper::transform).toList(),
+                result.lastLoanCount(),
+                result.lastBookId(),
+                result.totalElements()
+        );
     }
 
     public BookDetailResponse find(long id){

@@ -1,9 +1,10 @@
 package com.bookspot.book.infra.search;
 
+import com.bookspot.book.infra.search.cond.BookSearchCond;
+import com.bookspot.book.infra.search.result.BookPageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -22,14 +23,13 @@ class BookOpenSearchRepositoryTest {
         33158 - (개싸움을 지적 토론의 장으로 만드는) 어른의 문답법
         85303 - 이기적 유전자:진화론의 새로운 패러다임 {1, 4, 5, ...}
          */
-        BookSearchCond request = new BookSearchCond(
-                List.of(22286L, 26663L, 33158L, 85303L),
-                "이기적 유전자", 5L,
-                PageRequest.of(0, 10)
-        );
+        BookSearchCond request = BookSearchCond.builder()
+                .bookIds(List.of(22286L, 26663L, 33158L, 85303L))
+                .keyword("이기적 유전자")
+                .build();
 
-        Page<BookDocument> result = repository.search(request);
-        for (BookDocument bookDocument : result) {
+        BookPageResult result = repository.search(request, PageRequest.of(0, 10));
+        for (BookDocument bookDocument : result.books()) {
             System.out.println(bookDocument.getTitle() + " " + bookDocument.getLoanCount());
         }
     }
