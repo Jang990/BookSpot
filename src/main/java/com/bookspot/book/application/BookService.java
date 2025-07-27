@@ -1,5 +1,6 @@
 package com.bookspot.book.application;
 
+import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.BookSearchRepository;
@@ -34,9 +35,9 @@ public class BookService {
                 .toList();
     }
 
-    public BookPreviewPageResponse findBooks(BookSearchRequest bookSearchRequest, Pageable pageable) {
+    public BookPreviewPageResponse findBooks(BookSearchDto bookSearchDto, Pageable pageable) {
         BookPageResult pageResult = bookSearchRepository.search(
-                BookDataMapper.transform(bookSearchRequest),
+                BookDataMapper.transform(bookSearchDto),
                 pageable
         );
 
@@ -48,12 +49,12 @@ public class BookService {
     }
 
     public BookPreviewSearchAfterResponse findBooks(
-            BookSearchRequest bookSearchRequest,
+            BookSearchDto bookSearchDto,
             BookSearchAfterRequest searchAfterCond,
             int pageSize
     ) {
         BookSearchAfterResult result = bookSearchRepository.search(
-                BookDataMapper.transform(bookSearchRequest),
+                BookDataMapper.transform(bookSearchDto),
                 BookDataMapper.transform(searchAfterCond),
                 pageSize
         );

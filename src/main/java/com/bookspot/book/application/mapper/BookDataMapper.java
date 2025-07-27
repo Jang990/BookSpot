@@ -1,5 +1,6 @@
 package com.bookspot.book.application.mapper;
 
+import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.infra.search.BookDocument;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
@@ -36,11 +37,11 @@ public class BookDataMapper {
         return leafCategory;
     }
 
-    public static BookSearchCond transform(BookSearchRequest bookSearchRequest) {
+    public static BookSearchCond transform(BookSearchDto bookSearchDto) {
         return BookSearchCond.builder()
-                .keyword(bookSearchRequest.getTitle())
-                .bookIds(bookSearchRequest.getBookIds())
-                .libraryId(bookSearchRequest.getLibraryId())
+                .keyword(bookSearchDto.getTitle())
+                .bookIds(bookSearchDto.getBookIds())
+                .libraryId(bookSearchDto.getLibraryId())
                 .build();
     }
 

@@ -2,18 +2,16 @@ package com.bookspot.book.presentation;
 
 import com.bookspot.book.application.BookService;
 import com.bookspot.book.presentation.consts.BookBindingError;
-import com.bookspot.book.presentation.consts.BookRequestCond;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
-import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
+import com.bookspot.book.presentation.util.SearchDtoMapper;
 import com.bookspot.book.presentation.util.SearchRequestValidator;
 import com.bookspot.global.log.BasicLog;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -39,7 +37,10 @@ public class BookController {
         SearchRequestValidator.validatePageable(pageable, bindingResult);
 
         return ResponseEntity.ok(
-                bookService.findBooks(request, pageable)
+                bookService.findBooks(
+                        SearchDtoMapper.transform(request),
+                        pageable
+                )
         );
     }
 
@@ -57,7 +58,7 @@ public class BookController {
 
         return ResponseEntity.ok(
                 bookService.findBooks(
-                        request,
+                        SearchDtoMapper.transform(request),
                         searchAfterRequest,
                         size
                 )
