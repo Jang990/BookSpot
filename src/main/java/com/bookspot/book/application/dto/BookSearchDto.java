@@ -15,5 +15,5 @@ public class BookSearchDto {
     private String title;
     private List<Long> bookIds;
     private Long libraryId;
-    private Long categoryId;
+    private Integer categoryId;
 }
