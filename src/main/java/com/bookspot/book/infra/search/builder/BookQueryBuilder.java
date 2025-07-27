@@ -1,6 +1,7 @@
 package com.bookspot.book.infra.search.builder;
 
 import com.bookspot.book.infra.search.cond.BookSearchCond;
+import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.util.ObjectBuilder;
@@ -10,7 +11,10 @@ import java.util.List;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class BookQueryBuilder {
+    private final BookCategoryNameBuilder bookCategoryNameBuilder;
+
     public Query buildBool(BookSearchCond searchRequest) {
         BoolQuery.Builder builder = new BoolQuery.Builder();
 
@@ -18,6 +22,8 @@ public class BookQueryBuilder {
             builder.filter(ids(searchRequest.getBookIds()));
         if (searchRequest.hasLibraryId())
             builder.filter(term("library_ids", searchRequest.getLibraryId().toString()));
+        if(searchRequest.hasCategoryFilter())
+            builder.filter(term("book_categories", bookCategoryNameBuilder.build(searchRequest.getCategoryFilter())));
 
         if (searchRequest.hasKeyword())
             builder.minimumShouldMatch("1")

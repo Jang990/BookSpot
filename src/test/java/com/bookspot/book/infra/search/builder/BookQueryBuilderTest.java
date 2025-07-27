@@ -1,6 +1,7 @@
 package com.bookspot.book.infra.search.builder;
 
 import com.bookspot.book.infra.search.cond.BookSearchCond;
+import com.bookspot.category.application.BookCategoryDto;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
@@ -10,7 +11,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 class BookQueryBuilderTest {
-    private BookQueryBuilder bookQueryBuilder = new BookQueryBuilder();
+    private BookQueryBuilder bookQueryBuilder = new BookQueryBuilder(new BookCategoryNameBuilder());
 
     @Test
     void 정상처리() {
@@ -18,17 +19,22 @@ class BookQueryBuilderTest {
                 .bookIds(List.of(1L, 2L, 3L))
                 .keyword("객체")
                 .libraryId(1L)
+                .categoryFilter(new BookCategoryDto(412, "대수학"))
                 .build();
         BoolQuery result = bookQueryBuilder.buildBool(searchCond).bool();
 
-        assertThat(result.filter()).hasSize(2);
+        assertThat(result.filter()).hasSize(3);
         assertIdFilter(
                 result.filter().get(0),
                 new String[] {"1", "2", "3"}
         );
-        assertLibraryTermFilter(
+        assertTermFilter(
                 result.filter().get(1),
                 "library_ids", "1"
+        );
+        assertTermFilter(
+                result.filter().get(2),
+                "book_categories", "412.대수학"
         );
 
         // should 검증
@@ -55,16 +61,16 @@ class BookQueryBuilderTest {
                 .containsExactlyInAnyOrder(expectedIds);
     }
 
-    private void assertLibraryTermFilter(
+    private void assertTermFilter(
             Query termFilter,
             String expectedFiledName,
-            String expectedLibraryIds
+            String expectedValue
     ) {
         assertThat(termFilter.term().field())
                 .isEqualTo(expectedFiledName);
 
         assertThat(termFilter.term().value().stringValue())
-                .isEqualTo(expectedLibraryIds);
+                .isEqualTo(expectedValue);
     }
 
 }
