@@ -9,15 +9,7 @@ public class SearchDtoMapper {
                 .title(request.getTitle())
                 .bookIds(request.getBookIds())
                 .libraryId(request.getLibraryId())
-                .build();
-    }
-
-    public static BookSearchDto transform(BookSearchRequest request, int categoryId) {
-        return BookSearchDto.builder()
-                .title(request.getTitle())
-                .bookIds(request.getBookIds())
-                .libraryId(request.getLibraryId())
-                .categoryId(categoryId)
+                .categoryId(request.getCategoryId())
                 .build();
     }
 }
