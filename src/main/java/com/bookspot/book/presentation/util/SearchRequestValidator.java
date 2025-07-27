@@ -12,13 +12,17 @@ public class SearchRequestValidator {
     public static void validatePageable(
             Pageable pageable, BindingResult bindingResult
     ) throws BindException {
-        if (pageable.getPageNumber() > BookRequestCond.MAX_SEARCH_PAGE_NUMBER) {
-            bindingResult.addError(BookBindingError.TOO_LARGE_PAGE_NUMBER.error());
+        int pageNumber = pageable.getPageNumber();
+        if (pageNumber < BookRequestCond.MIN_PAGE_NUMBER
+                || BookRequestCond.MAX_PAGE_NUMBER < pageNumber) {
+            bindingResult.addError(BookBindingError.OUT_OF_PAGE_NUMBER.error());
             throw new BindException(bindingResult);
         }
 
-        if (pageable.getPageSize() > BookRequestCond.MAX_SEARCH_PAGE_SIZE) {
-            bindingResult.addError(BookBindingError.TOO_LARGE_PAGE_SIZE.error());
+        int pageSize = pageable.getPageSize();
+        if (pageSize < BookRequestCond.MIN_PAGE_SIZE
+                || BookRequestCond.MAX_PAGE_SIZE < pageSize) {
+            bindingResult.addError(BookBindingError.OUT_OF_PAGE_SIZE.error());
             throw new BindException(bindingResult);
         }
     }
