@@ -1,6 +1,9 @@
 package com.bookspot.category.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.Optional;
 
-public interface BookCategoryRepository extends JpaRepository<BookCategory, Integer> {
+public interface BookCategoryRepository {
+    List<BookCategory> findAll();
+    Optional<BookCategory> findById(int id);
 }
