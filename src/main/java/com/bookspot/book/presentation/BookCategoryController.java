@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class BookCategoryController {
     private final BookService bookService;
-    @GetMapping(value = "/api/libraries/{categoryId}/books", params = {
+    @GetMapping(value = "/api/categories/{categoryId}/books", params = {
             BookSearchAfterRequest.IGNORE_PARAM_LAST_LOAN_COUNT,
             BookSearchAfterRequest.IGNORE_PARAM_LAST_BOOK_ID
     })
@@ -44,7 +44,7 @@ public class BookCategoryController {
         );
     }
 
-    @GetMapping(value = "/api/libraries/{categoryId}/books", params = {
+    @GetMapping(value = "/api/categories/{categoryId}/books", params = {
             BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT,
             BookSearchAfterRequest.PARAM_LAST_BOOK_ID
     })
