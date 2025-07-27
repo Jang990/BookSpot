@@ -20,6 +20,24 @@ class BookControllerTest_TermSearch {
     @MockBean BookService bookService;
 
     @Test
+    void categoryId는_0에서_999_사이의_숫자() throws Exception {
+        mvc.perform(get("/api/books?categoryId=-1"))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(get("/api/books?categoryId=1000"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void libraryId는_1이상의_숫자() throws Exception {
+        mvc.perform(get("/api/books?libraryId=0"))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(get("/api/books?libraryId=-1"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void 페이지_크기는_1에서_50을_초과할_수_없다() throws Exception {
         mvc.perform(get("/api/books?size=51&title=abc"))
                 .andExpect(status().isBadRequest());
@@ -47,7 +65,9 @@ class BookControllerTest_TermSearch {
             "/api/books?bookIds=1&bookIds=2&bookIds=3",
             "/api/books?title=ABC&bookIds=1,2,3",
             "/api/books?title=ABC&bookIds=1,2,3&libraryId=1",
-            "/api/books?lastLoanCount=123&lastBookId=123"
+            "/api/books?lastLoanCount=123&lastBookId=123",
+            "/api/books?categoryId=123",
+            "/api/books?libraryId=123456"
     })
     void 정상처리_API(String testApi) throws Exception {
         mvc.perform(get(testApi))
