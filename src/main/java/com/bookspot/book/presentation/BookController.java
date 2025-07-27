@@ -9,6 +9,7 @@ import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
+import com.bookspot.book.presentation.util.SearchRequestValidator;
 import com.bookspot.global.log.BasicLog;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,11 @@ public class BookController {
             Pageable pageable,
             BindingResult bindingResult
     ) throws BindException {
-        validateRequest(request, pageable, bindingResult);
+        if(bindingResult.hasErrors())
+            throw new BindException(bindingResult);
+
+        validateRequest(request, bindingResult);
+        SearchRequestValidator.validatePageable(pageable, bindingResult);
 
         return ResponseEntity.ok(
                 bookService.findBooks(request, pageable)
@@ -67,20 +72,7 @@ public class BookController {
         throw new BindException(bindingResult);
     }
 
-    private void validateRequest(BookSearchRequest request, Pageable pageable, BindingResult bindingResult) throws BindException {
-        if(bindingResult.hasErrors())
-            throw new BindException(bindingResult);
-
-        if (pageable.getPageNumber() > BookRequestCond.MAX_SEARCH_PAGE_NUMBER) {
-            bindingResult.addError(BookBindingError.TOO_LARGE_PAGE_NUMBER.error());
-            throw new BindException(bindingResult);
-        }
-
-        if (pageable.getPageSize() > BookRequestCond.MAX_SEARCH_PAGE_SIZE) {
-            bindingResult.addError(BookBindingError.TOO_LARGE_PAGE_SIZE.error());
-            throw new BindException(bindingResult);
-        }
-
+    private void validateRequest(BookSearchRequest request, BindingResult bindingResult) throws BindException {
         if (request.isCriteriaMissing()) {
             bindingResult.addError(BookBindingError.SEARCH_CRITERIA_MISSING.error());
             throw new BindException(bindingResult);
