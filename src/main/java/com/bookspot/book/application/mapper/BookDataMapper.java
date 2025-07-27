@@ -1,5 +1,6 @@
 package com.bookspot.book.application.mapper;
 
+import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.infra.search.BookDocument;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
@@ -7,6 +8,9 @@ import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
+import com.bookspot.category.application.BookCategoryDto;
+import com.bookspot.category.domain.BookCategory;
+import com.bookspot.category.domain.BookCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,11 +40,20 @@ public class BookDataMapper {
         return leafCategory;
     }
 
-    public static BookSearchCond transform(BookSearchRequest bookSearchRequest) {
+    public static BookSearchCond transform(BookCategoryRepository bookCategoryRepository, BookSearchDto bookSearchDto) {
+        BookCategoryDto categoryDto = null;
+        if (bookSearchDto.getCategoryId() != null) {
+            categoryDto = new BookCategoryDto(
+                    bookCategoryRepository.findById(bookSearchDto.getCategoryId())
+                    .orElseThrow(IllegalArgumentException::new)
+            );
+        }
+
         return BookSearchCond.builder()
-                .keyword(bookSearchRequest.getTitle())
-                .bookIds(bookSearchRequest.getBookIds())
-                .libraryId(bookSearchRequest.getLibraryId())
+                .keyword(bookSearchDto.getTitle())
+                .bookIds(bookSearchDto.getBookIds())
+                .libraryId(bookSearchDto.getLibraryId())
+                .categoryFilter(categoryDto)
                 .build();
     }
 

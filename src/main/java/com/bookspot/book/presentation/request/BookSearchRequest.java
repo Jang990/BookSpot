@@ -13,20 +13,4 @@ public class BookSearchRequest {
     private String title;
     private List<Long> bookIds;
     private Long libraryId;
-
-    public boolean hasBookIds() {
-        return bookIds != null && !bookIds.isEmpty();
-    }
-
-    public boolean hasTitle() {
-        return title != null && !title.isBlank();
-    }
-
-    public boolean hasLibraryId() {
-        return libraryId != null;
-    }
-
-    public boolean isCriteriaMissing() {
-        return !hasTitle() && !hasBookIds() && !hasLibraryId();
-    }
 }
