@@ -39,7 +39,6 @@ public class BookController {
         if(bindingResult.hasErrors())
             throw new BindException(bindingResult);
 
-        validateRequest(request, bindingResult);
         SearchRequestValidator.validatePageable(pageable, bindingResult);
 
         return ResponseEntity.ok(
@@ -70,13 +69,6 @@ public class BookController {
         BindingResult bindingResult = new BeanPropertyBindingResult(null, "bookSearch");
         bindingResult.addError(BookBindingError.SEARCH_CRITERIA_INVALID.error());
         throw new BindException(bindingResult);
-    }
-
-    private void validateRequest(BookSearchRequest request, BindingResult bindingResult) throws BindException {
-        if (request.isCriteriaMissing()) {
-            bindingResult.addError(BookBindingError.SEARCH_CRITERIA_MISSING.error());
-            throw new BindException(bindingResult);
-        }
     }
 
     @GetMapping("/api/books/{bookId}")
