@@ -16,8 +16,9 @@ public class SearchRequestValidator {
             throw new BindException(bindingResult);
 
         int pageNumber = pageable.getPageNumber();
-        if (pageNumber < BookRequestCond.MIN_PAGE_NUMBER
-                || BookRequestCond.MAX_PAGE_NUMBER < pageNumber) {
+        // pageable은 디폴트 값을 채워줌 size는 20 number는 0
+        if (/*pageNumber < BookRequestCond.MIN_PAGE_NUMBER
+                || */BookRequestCond.MAX_PAGE_NUMBER < pageNumber) {
             bindingResult.addError(BookBindingError.OUT_OF_PAGE_NUMBER.error());
             throw new BindException(bindingResult);
         }
@@ -28,8 +29,8 @@ public class SearchRequestValidator {
     public static void validatePageSize(int pageSize, BindingResult bindingResult) throws BindException {
         if(bindingResult.hasErrors())
             throw new BindException(bindingResult);
-        if (pageSize < BookRequestCond.MIN_PAGE_SIZE
-                || BookRequestCond.MAX_PAGE_SIZE < pageSize) {
+        if (/*pageSize < BookRequestCond.MIN_PAGE_SIZE
+                || */BookRequestCond.MAX_PAGE_SIZE < pageSize) {
             bindingResult.addError(BookBindingError.OUT_OF_PAGE_SIZE.error());
             throw new BindException(bindingResult);
         }

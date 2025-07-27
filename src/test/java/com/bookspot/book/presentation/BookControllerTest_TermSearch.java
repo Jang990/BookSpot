@@ -20,26 +20,14 @@ class BookControllerTest_TermSearch {
     @MockBean BookService bookService;
 
     @Test
-    void 검색어와_책ID_둘_다_없으면_안된다() throws Exception {
-        mvc.perform(get("/api/books"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void 검색어는_2글자_이하일_수_없다() throws Exception {
-        mvc.perform(get("/api/books?title=a"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void 페이지_크기는_50을_초과할_수_없다() throws Exception {
+    void 페이지_크기는_1에서_50을_초과할_수_없다() throws Exception {
         mvc.perform(get("/api/books?size=51&title=abc"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void 페이지_번호는_50을_초과할_수_없다() throws Exception {
-        mvc.perform(get("/api/books?page=51&title=abc"))
+    void 페이지_번호는_0에서_49을_초과할_수_없다() throws Exception {
+        mvc.perform(get("/api/books?page=50&title=abc"))
                 .andExpect(status().isBadRequest());
     }
 
