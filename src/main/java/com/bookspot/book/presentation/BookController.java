@@ -53,6 +53,8 @@ public class BookController {
             @RequestParam(defaultValue = "12") int size,
             BindingResult bindingResult
     ) throws BindException {
+        SearchRequestValidator.validatePageSize(size, bindingResult);
+
         return ResponseEntity.ok(
                 bookService.findBooks(
                         request,
