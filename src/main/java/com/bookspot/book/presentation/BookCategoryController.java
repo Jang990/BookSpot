@@ -7,6 +7,7 @@ import com.bookspot.book.presentation.response.BookPreviewPageResponse;
 import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
 import com.bookspot.book.presentation.util.SearchDtoMapper;
 import com.bookspot.book.presentation.util.SearchRequestValidator;
+import com.bookspot.category.presentation.CategoryRequestValidator;
 import com.bookspot.global.log.BasicLog;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class BookCategoryController {
             Pageable pageable,
             BindingResult bindingResult
     ) throws BindException {
+        CategoryRequestValidator.validateCategoryId(categoryId, bindingResult);
         SearchRequestValidator.validatePageable(pageable, bindingResult);
 
         return ResponseEntity.ok(
@@ -55,6 +57,7 @@ public class BookCategoryController {
             @RequestParam(defaultValue = "12") int size,
             BindingResult bindingResult
     ) throws BindException {
+        CategoryRequestValidator.validateCategoryId(categoryId, bindingResult);
         SearchRequestValidator.validatePageSize(size, bindingResult);
 
         return ResponseEntity.ok(
