@@ -36,9 +36,6 @@ public class BookController {
             Pageable pageable,
             BindingResult bindingResult
     ) throws BindException {
-        if(bindingResult.hasErrors())
-            throw new BindException(bindingResult);
-
         SearchRequestValidator.validatePageable(pageable, bindingResult);
 
         return ResponseEntity.ok(
@@ -53,7 +50,8 @@ public class BookController {
     public ResponseEntity<BookPreviewSearchAfterResponse> findBook(
             @Valid BookSearchRequest request,
             @Valid BookSearchAfterRequest searchAfterRequest,
-            @RequestParam(defaultValue = "12") int size
+            @RequestParam(defaultValue = "12") int size,
+            BindingResult bindingResult
     ) throws BindException {
         return ResponseEntity.ok(
                 bookService.findBooks(

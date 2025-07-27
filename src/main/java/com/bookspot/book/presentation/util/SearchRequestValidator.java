@@ -12,6 +12,9 @@ public class SearchRequestValidator {
     public static void validatePageable(
             Pageable pageable, BindingResult bindingResult
     ) throws BindException {
+        if(bindingResult.hasErrors())
+            throw new BindException(bindingResult);
+
         int pageNumber = pageable.getPageNumber();
         if (pageNumber < BookRequestCond.MIN_PAGE_NUMBER
                 || BookRequestCond.MAX_PAGE_NUMBER < pageNumber) {
@@ -19,7 +22,12 @@ public class SearchRequestValidator {
             throw new BindException(bindingResult);
         }
 
-        int pageSize = pageable.getPageSize();
+        validatePageSize(pageable.getPageSize(), bindingResult);
+    }
+
+    public static void validatePageSize(int pageSize, BindingResult bindingResult) throws BindException {
+        if(bindingResult.hasErrors())
+            throw new BindException(bindingResult);
         if (pageSize < BookRequestCond.MIN_PAGE_SIZE
                 || BookRequestCond.MAX_PAGE_SIZE < pageSize) {
             bindingResult.addError(BookBindingError.OUT_OF_PAGE_SIZE.error());
