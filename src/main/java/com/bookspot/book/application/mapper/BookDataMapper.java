@@ -8,6 +8,9 @@ import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
+import com.bookspot.category.application.BookCategoryDto;
+import com.bookspot.category.domain.BookCategory;
+import com.bookspot.category.domain.BookCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,11 +40,20 @@ public class BookDataMapper {
         return leafCategory;
     }
 
-    public static BookSearchCond transform(BookSearchDto bookSearchDto) {
+    public static BookSearchCond transform(BookCategoryRepository bookCategoryRepository, BookSearchDto bookSearchDto) {
+        BookCategoryDto categoryDto = null;
+        if (bookSearchDto.getCategoryId() != null) {
+            categoryDto = new BookCategoryDto(
+                    bookCategoryRepository.findById(bookSearchDto.getCategoryId())
+                    .orElseThrow(IllegalArgumentException::new)
+            );
+        }
+
         return BookSearchCond.builder()
                 .keyword(bookSearchDto.getTitle())
                 .bookIds(bookSearchDto.getBookIds())
                 .libraryId(bookSearchDto.getLibraryId())
+                .categoryFilter(categoryDto)
                 .build();
     }
 

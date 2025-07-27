@@ -10,9 +10,9 @@ import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
 import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
 import com.bookspot.book.presentation.response.BookResponse;
-import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
+import com.bookspot.category.domain.BookCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,7 @@ public class BookService {
 
     private final BookRepository repository;
     private final BookSearchRepository bookSearchRepository;
+    private final BookCategoryRepository bookCategoryRepository;
 
     public List<BookResponse> findAll(List<Long> bookIds) {
         List<Book> books = repository.findAllById(bookIds);
@@ -37,7 +38,7 @@ public class BookService {
 
     public BookPreviewPageResponse findBooks(BookSearchDto bookSearchDto, Pageable pageable) {
         BookPageResult pageResult = bookSearchRepository.search(
-                BookDataMapper.transform(bookSearchDto),
+                BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
                 pageable
         );
 
@@ -54,10 +55,11 @@ public class BookService {
             int pageSize
     ) {
         BookSearchAfterResult result = bookSearchRepository.search(
-                BookDataMapper.transform(bookSearchDto),
+                BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
                 BookDataMapper.transform(searchAfterCond),
                 pageSize
         );
+
         return new BookPreviewSearchAfterResponse(
                 result.books().stream().map(BookDataMapper::transform).toList(),
                 result.lastLoanCount(),
