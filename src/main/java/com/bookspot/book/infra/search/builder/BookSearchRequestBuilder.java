@@ -39,7 +39,8 @@ public class BookSearchRequestBuilder {
         SearchRequest.Builder builder = new SearchRequest.Builder();
         builder.index(Indices.BOOK_INDEX);
         builder.query(query);
-        builder.minScore(MIN_SCORE);
+        if (searchAfter.hasScoreSortOption())
+            builder.minScore(MIN_SCORE);
 
         builder.size(searchAfter.getPageSize());
         builder.searchAfter(searchAfter.getSearchAfter());

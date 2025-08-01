@@ -32,4 +32,8 @@ public class OpenSearchAfter {
             );
         }
     }
+
+    public boolean hasScoreSortOption() {
+        return sortOptions == BookSortOptions.SORT_WITH_SCORE;
+    }
 }
