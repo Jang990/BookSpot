@@ -17,13 +17,14 @@ import java.util.List;
 
 @Service
 public class BookSearchRequestBuilder {
+    private static final double MIN_SCORE = 50d;
     public SearchRequest build(Query query, OpenSearchPageable pageable) {
         SearchRequest.Builder builder = new SearchRequest.Builder();
         builder.index(Indices.BOOK_INDEX);
         builder.query(query);
 
         if(pageable.hasScoreSortOption())
-            builder.minScore(50d);
+            builder.minScore(MIN_SCORE);
         builder.from(pageable.getOffset());
         builder.size(pageable.getPageSize());
         builder.sort(pageable.getSortOptions());
@@ -38,6 +39,7 @@ public class BookSearchRequestBuilder {
         SearchRequest.Builder builder = new SearchRequest.Builder();
         builder.index(Indices.BOOK_INDEX);
         builder.query(query);
+        builder.minScore(MIN_SCORE);
 
         builder.size(searchAfter.getPageSize());
         builder.searchAfter(searchAfter.getSearchAfter());
