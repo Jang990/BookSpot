@@ -64,6 +64,14 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void search_After기반의_방식에서_lastScore에_문자가_포함돼_있으면_안된다() throws Exception {
+        mvc.perform(get("/api/books?lastLoanCount=111&lastBookId=111&lastScore=abc"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/books?lastLoanCount=111&lastBookId=111&lastScore=12.345ac56"))
+                .andExpect(status().isBadRequest());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",

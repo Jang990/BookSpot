@@ -45,9 +45,24 @@ public class SearchRequestValidator {
     ) throws BindException {
         if(bindingResult.hasErrors())
             throw new BindException(bindingResult);
+
         if (searchAfterRequest.getLastScore() != null && request.getTitle() == null) {
             bindingResult.addError(BookBindingError.SEARCH_AFTER_INVALID_SCORE_PAIR.error());
             throw new BindException(bindingResult);
         }
+
+        if (searchAfterRequest.getLastScore() != null && isNotNumeric(searchAfterRequest.getLastScore())) {
+            bindingResult.addError(BookBindingError.SEARCH_AFTER_INVALID_SCORE.error());
+            throw new BindException(bindingResult);
+        }
+    }
+
+    public static boolean isNotNumeric(String strNum) {
+        try {
+            double num = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return true;
+        }
+        return false;
     }
 }
