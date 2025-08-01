@@ -37,7 +37,8 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         try {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
-                            queryBuilder.buildBool(searchRequest), openSearchPageable
+                            queryBuilder.buildBool(searchRequest),
+                            openSearchPageable
                     ),
                     BookDocument.class
             );
@@ -89,13 +90,15 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         List<BookDocument> list = resp.hits().hits().stream()
                 .map(Hit::source)
                 .collect(Collectors.toList());
+
+        long total = resp.hits().total().value();
         if(list.isEmpty())
             return new BookSearchAfterResult(
                     list,
                     null,
                     null,
                     null,
-                    resp.hits().total().value()
+                    total
             );
 
 
@@ -104,7 +107,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 resp.hits().hits().getLast().score(),
                 list.getLast().getLoanCount(),
                 list.getLast().getId(),
-                resp.hits().total().value()
+                total
         );
     }
 
