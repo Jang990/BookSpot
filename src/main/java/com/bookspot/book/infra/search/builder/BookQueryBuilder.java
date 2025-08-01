@@ -28,10 +28,17 @@ public class BookQueryBuilder {
         if (searchRequest.hasKeyword())
             builder.minimumShouldMatch("1")
                     .should(
-                            matchPhrase("title", searchRequest.getKeyword(), 1),
-                            match("title.ngram", searchRequest.getKeyword()),
-                            matchPhrase("author", searchRequest.getKeyword()),
-                            term("publisher", searchRequest.getKeyword())
+                            multiMatch(
+                                    List.of(
+                                            "title^5",
+                                            "title.ngram^6",
+                                            "title.ws^8",
+                                            "title.keyword^10",
+                                            "author^6",
+                                            "publisher^8"
+                                    ),
+                                    searchRequest.getKeyword()
+                            )
                     );
 
         return new Query.Builder()
@@ -54,6 +61,15 @@ public class BookQueryBuilder {
                 .term(
                         mp -> mp.field(fieldName)
                                 .value(fv-> fv.stringValue(keyword))
+                )
+                .build();
+    }
+
+    private Query multiMatch(List<String> fields, String keyword) {
+        return new Query.Builder()
+                .multiMatch(
+                        mmq -> mmq.fields(fields)
+                                .query(keyword)
                 )
                 .build();
     }
