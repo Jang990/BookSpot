@@ -58,6 +58,12 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void search_After기반의_방식에서_score_기반_정렬이_필요하다면_검색어는_필수() throws Exception {
+        mvc.perform(get("/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567"))
+                .andExpect(status().isBadRequest());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",
@@ -67,7 +73,8 @@ class BookControllerTest_TermSearch {
             "/api/books?title=ABC&bookIds=1,2,3&libraryId=1",
             "/api/books?lastLoanCount=123&lastBookId=123",
             "/api/books?categoryId=123",
-            "/api/books?libraryId=123456"
+            "/api/books?libraryId=123456",
+            "/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567&title=한강"
     })
     void 정상처리_API(String testApi) throws Exception {
         mvc.perform(get(testApi))

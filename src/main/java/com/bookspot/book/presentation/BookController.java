@@ -55,6 +55,7 @@ public class BookController {
             BindingResult bindingResult
     ) throws BindException {
         SearchRequestValidator.validatePageSize(size, bindingResult);
+        SearchRequestValidator.validateSortByScore(request, searchAfterRequest, bindingResult);
 
         return ResponseEntity.ok(
                 bookService.findBooks(

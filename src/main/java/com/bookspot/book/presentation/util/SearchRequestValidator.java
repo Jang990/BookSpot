@@ -2,6 +2,8 @@ package com.bookspot.book.presentation.util;
 
 import com.bookspot.book.presentation.consts.BookBindingError;
 import com.bookspot.book.presentation.consts.BookRequestCond;
+import com.bookspot.book.presentation.request.BookSearchAfterRequest;
+import com.bookspot.book.presentation.request.BookSearchRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
@@ -36,4 +38,16 @@ public class SearchRequestValidator {
         }
     }
 
+    public static void validateSortByScore(
+            BookSearchRequest request,
+            BookSearchAfterRequest searchAfterRequest,
+            BindingResult bindingResult
+    ) throws BindException {
+        if(bindingResult.hasErrors())
+            throw new BindException(bindingResult);
+        if (searchAfterRequest.getLastScore() != null && request.getTitle() == null) {
+            bindingResult.addError(BookBindingError.SEARCH_AFTER_INVALID_SCORE_PAIR.error());
+            throw new BindException(bindingResult);
+        }
+    }
 }
