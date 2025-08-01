@@ -4,6 +4,7 @@ import com.bookspot.book.infra.search.builder.BookQueryBuilder;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
+import com.bookspot.book.infra.search.pagination.OpenSearchAfter;
 import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
@@ -51,6 +52,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             BookSearchCond searchRequest,
             Pageable pageable
     ) {
+        // TODO: infra 로직은 아닌 것 같음.
         OpenSearchPageable result;
         if(searchRequest.hasKeyword())
             result = OpenSearchPageable.withScore(pageable);
@@ -72,8 +74,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             queryBuilder.buildBool(searchCond),
-                            searchAfterCond,
-                            pageSize
+                            new OpenSearchAfter(pageSize, searchAfterCond)
                     ),
                     BookDocument.class
             );
