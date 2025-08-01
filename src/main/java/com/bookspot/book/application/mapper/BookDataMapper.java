@@ -67,7 +67,7 @@ public class BookDataMapper {
 
     public static SearchAfterCond transform(BookSearchAfterRequest searchAfterCond) {
         return new SearchAfterCond(
-                Double.parseDouble(searchAfterCond.getLastScore()),
+                searchAfterCond.getLastScore(),
                 searchAfterCond.getLastLoanCount(),
                 searchAfterCond.getLastBookId()
         );

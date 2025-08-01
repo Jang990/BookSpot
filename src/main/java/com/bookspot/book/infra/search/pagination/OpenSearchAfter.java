@@ -27,7 +27,7 @@ public class OpenSearchAfter {
             this.sortOptions = BookSortOptions.SORT_WITH_SCORE;
             this.searchAfter = List.of(
                     String.valueOf(searchAfterCond.lastLoanCount()),
-                    String.valueOf(searchAfterCond.lastScore()),
+                    searchAfterCond.lastScore(),
                     String.valueOf(searchAfterCond.lastBookId())
             );
         }
