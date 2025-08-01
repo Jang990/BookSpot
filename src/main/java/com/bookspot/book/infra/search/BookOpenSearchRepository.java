@@ -90,8 +90,10 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 .map(Hit::source)
                 .collect(Collectors.toList());
 
+
         return new BookSearchAfterResult(
                 list,
+                resp.hits().hits().getLast().score(),
                 list.getLast().getLoanCount(),
                 list.getLast().getId(),
                 resp.hits().total().value()
@@ -111,11 +113,13 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             return new BookPageResult(
                     bookDocuments,
                     null,
+                    null,
                     null
             );
 
         return new BookPageResult(
                 bookDocuments,
+                resp.hits().hits().getLast().score(),
                 list.getLast().getLoanCount(),
                 list.getLast().getId()
         );

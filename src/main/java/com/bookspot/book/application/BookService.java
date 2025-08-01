@@ -44,6 +44,7 @@ public class BookService {
 
         return new BookPreviewPageResponse(
                 pageResult.books().map(BookDataMapper::transform),
+                pageResult.lastScore(),
                 pageResult.lastLoanCount(),
                 pageResult.lastBookId()
         );
@@ -62,6 +63,7 @@ public class BookService {
 
         return new BookPreviewSearchAfterResponse(
                 result.books().stream().map(BookDataMapper::transform).toList(),
+                result.lastScore(),
                 result.lastLoanCount(),
                 result.lastBookId(),
                 result.totalElements()
