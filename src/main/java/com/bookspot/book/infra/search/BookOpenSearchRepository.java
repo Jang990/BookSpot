@@ -89,6 +89,14 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         List<BookDocument> list = resp.hits().hits().stream()
                 .map(Hit::source)
                 .collect(Collectors.toList());
+        if(list.isEmpty())
+            return new BookSearchAfterResult(
+                    list,
+                    null,
+                    null,
+                    null,
+                    resp.hits().total().value()
+            );
 
 
         return new BookSearchAfterResult(
