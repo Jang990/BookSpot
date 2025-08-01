@@ -102,9 +102,10 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             );
 
 
+        Double score = resp.hits().hits().getLast().score();
         return new BookSearchAfterResult(
                 list,
-                resp.hits().hits().getLast().score(),
+                score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
                 list.getLast().getId(),
                 total
@@ -128,9 +129,10 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                     null
             );
 
+        Double score = resp.hits().hits().getLast().score();
         return new BookPageResult(
                 bookDocuments,
-                resp.hits().hits().getLast().score(),
+                score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
                 list.getLast().getId()
         );

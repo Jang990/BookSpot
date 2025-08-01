@@ -4,7 +4,7 @@ import java.util.List;
 
 public record BookPreviewSearchAfterResponse(
         List<BookPreviewResponse> books,
-        Double lastScore,
+        String lastScore,
         Integer lastLoanCount,
         Long lastBookId,
         long totalElements
