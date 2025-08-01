@@ -38,22 +38,23 @@ class BookQueryBuilderTest {
         );
 
         // should 검증
-        assertThat(result.should()).hasSize(4);
+        assertThat(result.should()).hasSize(1);
         assertThat(result.minimumShouldMatch()).isEqualTo("1");
 
         List<Query> shoulds = result.should();
 
-        assertThat(shoulds.get(0).matchPhrase().field()).isEqualTo("title");
-        assertThat(shoulds.get(0).matchPhrase().query()).isEqualTo("객체");
+        assertThat(shoulds.get(0).multiMatch().fields()).isEqualTo(
+                List.of(
+                        "title^5",
+                        "title.ngram^6",
+                        "title.ws^8",
+                        "title.keyword^10",
+                        "author^6",
+                        "publisher^8"
+                )
+        );
+        assertThat(shoulds.get(0).multiMatch().query()).isEqualTo("객체");
 
-        assertThat(shoulds.get(1).match().field()).isEqualTo("title.ngram");
-        assertThat(shoulds.get(1).match().query().stringValue()).isEqualTo("객체");
-
-        assertThat(shoulds.get(2).matchPhrase().field()).isEqualTo("author");
-        assertThat(shoulds.get(2).matchPhrase().query()).isEqualTo("객체");
-
-        assertThat(shoulds.get(3).term().field()).isEqualTo("publisher");
-        assertThat(shoulds.get(3).term().value().stringValue()).isEqualTo("객체");
     }
 
     private void assertIdFilter(Query idFilter, String[] expectedIds) {
