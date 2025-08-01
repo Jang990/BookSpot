@@ -6,6 +6,8 @@ import org.springframework.validation.ObjectError;
 public enum BookBindingError {
 //    SEARCH_CRITERIA_MISSING(new ObjectError("", new String[]{"book.search.criteria.missing"}, null, null)),
     SEARCH_CRITERIA_INVALID(new ObjectError("", new String[]{"book.search.criteria.invalid"}, new Object[]{BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT, BookSearchAfterRequest.PARAM_LAST_BOOK_ID}, null)),
+    SEARCH_AFTER_INVALID_SCORE(new ObjectError("", new String[]{"book.search.after.score.invalid"}, null, null)),
+    SEARCH_AFTER_INVALID_SCORE_PAIR(new ObjectError("", new String[]{"book.search.after.score.invalid.Pair"}, null, null)),
     OUT_OF_PAGE_SIZE(new ObjectError("", new String[]{"book.search.page.size.outOfRange"}, new Object[]{BookRequestCond.MIN_PAGE_SIZE,BookRequestCond.MAX_PAGE_SIZE}, null)),
     OUT_OF_PAGE_NUMBER(new ObjectError("", new String[]{"book.search.page.number.outOfRange"}, new Object[]{BookRequestCond.MIN_PAGE_NUMBER,BookRequestCond.MAX_PAGE_NUMBER}, null));
 

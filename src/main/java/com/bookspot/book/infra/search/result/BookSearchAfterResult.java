@@ -6,6 +6,7 @@ import java.util.List;
 
 public record BookSearchAfterResult(
         List<BookDocument> books,
+        String lastScore,
         Integer lastLoanCount,
         Long lastBookId,
         long totalElements

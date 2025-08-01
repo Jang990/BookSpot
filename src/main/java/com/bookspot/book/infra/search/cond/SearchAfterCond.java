@@ -1,4 +1,4 @@
 package com.bookspot.book.infra.search.cond;
 
-public record SearchAfterCond(long lastLoanCount,long lastBookId) {
+public record SearchAfterCond(String lastScore, long lastLoanCount,long lastBookId) {
 }

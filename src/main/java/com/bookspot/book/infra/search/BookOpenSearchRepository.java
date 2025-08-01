@@ -4,6 +4,8 @@ import com.bookspot.book.infra.search.builder.BookQueryBuilder;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
+import com.bookspot.book.infra.search.pagination.OpenSearchAfter;
+import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import lombok.RequiredArgsConstructor;
@@ -30,14 +32,13 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     public BookPageResult search(BookSearchCond searchRequest, Pageable pageable) {
         if(searchRequest == null || pageable == null)
             throw new IllegalArgumentException("필수 조건 누락");
-        if(pageable.getOffset() + pageable.getPageSize() >= 10_000)
-            throw new IllegalArgumentException("Pageable 검색 시 1만건 이하의 offset만 검색 가능");
-
+        OpenSearchPageable openSearchPageable = createOpenSearchPageable(searchRequest, pageable);
 
         try {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
-                            queryBuilder.buildBool(searchRequest), pageable
+                            queryBuilder.buildBool(searchRequest),
+                            openSearchPageable
                     ),
                     BookDocument.class
             );
@@ -46,6 +47,19 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private OpenSearchPageable createOpenSearchPageable(
+            BookSearchCond searchRequest,
+            Pageable pageable
+    ) {
+        // TODO: infra 로직은 아닌 것 같음.
+        OpenSearchPageable result;
+        if(searchRequest.hasKeyword())
+            result = OpenSearchPageable.withScore(pageable);
+        else
+            result = OpenSearchPageable.onlyLoanCount(pageable);
+        return result;
     }
 
     @Override
@@ -61,8 +75,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             queryBuilder.buildBool(searchCond),
-                            searchAfterCond,
-                            pageSize
+                            new OpenSearchAfter(pageSize, searchAfterCond)
                     ),
                     BookDocument.class
             );
@@ -78,11 +91,24 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 .map(Hit::source)
                 .collect(Collectors.toList());
 
+        long total = resp.hits().total().value();
+        if(list.isEmpty())
+            return new BookSearchAfterResult(
+                    list,
+                    null,
+                    null,
+                    null,
+                    total
+            );
+
+
+        Double score = resp.hits().hits().getLast().score();
         return new BookSearchAfterResult(
                 list,
+                score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
                 list.getLast().getId(),
-                resp.hits().total().value()
+                total
         );
     }
 
@@ -99,11 +125,14 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             return new BookPageResult(
                     bookDocuments,
                     null,
+                    null,
                     null
             );
 
+        Double score = resp.hits().hits().getLast().score();
         return new BookPageResult(
                 bookDocuments,
+                score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
                 list.getLast().getId()
         );
