@@ -1,6 +1,8 @@
 package com.bookspot.book.infra.search.builder;
 
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
+import com.bookspot.book.infra.search.pagination.BookSortOptions;
+import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.global.consts.Indices;
 import org.opensearch.client.opensearch._types.FieldSort;
 import org.opensearch.client.opensearch._types.SortOptions;
@@ -14,18 +16,16 @@ import java.util.List;
 
 @Service
 public class BookSearchRequestBuilder {
-    public SearchRequest build(Query query, Pageable pageable) {
+    public SearchRequest build(Query query, OpenSearchPageable pageable) {
         SearchRequest.Builder builder = new SearchRequest.Builder();
         builder.index(Indices.BOOK_INDEX);
-        builder.from((int) pageable.getOffset());
-        builder.size(pageable.getPageSize());
         builder.query(query);
-        builder.sort(
-                List.of(
-                        buildSort("loan_count", SortOrder.Desc)
-//                        buildSort("book_id", SortOrder.Asc)
-                )
-        );
+
+        if(pageable.hasScoreSortOption())
+            builder.minScore(50d);
+        builder.from(pageable.getOffset());
+        builder.size(pageable.getPageSize());
+        builder.sort(pageable.getSortOptions());
 
         return builder.build();
     }
@@ -47,25 +47,8 @@ public class BookSearchRequestBuilder {
                 )
         );
 
-        builder.sort(
-                List.of(
-                        buildSort("loan_count", SortOrder.Desc),
-                        buildSort("book_id", SortOrder.Asc)
-                )
-        );
+        builder.sort(BookSortOptions.SORT_WITH_SCORE);
 
         return builder.build();
-    }
-
-    private SortOptions buildSort(String fieldName, SortOrder order) {
-        FieldSort.Builder sortBuilder = new FieldSort.Builder();
-
-        FieldSort sortOption = sortBuilder.field(fieldName)
-                .order(order)
-                .build();
-
-        return new SortOptions.Builder()
-                .field(sortOption)
-                .build();
     }
 }
