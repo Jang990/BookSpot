@@ -72,6 +72,12 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void 카테고리_레벨이_부정확하면_오류() throws Exception {
+        mvc.perform(get("/api/books?categoryId=123&categoryLevel=ABC"))
+                .andExpect(status().isBadRequest());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",
