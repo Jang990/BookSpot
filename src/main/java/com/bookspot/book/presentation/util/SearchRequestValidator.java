@@ -4,6 +4,7 @@ import com.bookspot.book.presentation.consts.BookBindingError;
 import com.bookspot.book.presentation.consts.BookRequestCond;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
+import com.bookspot.book.presentation.request.CategoryLevel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
@@ -11,6 +12,23 @@ import org.springframework.validation.BindingResult;
 
 @Service
 public class SearchRequestValidator {
+    public static void validateCategoryCond(
+            Integer categoryId,
+            CategoryLevel categoryLevel,
+            BindingResult bindingResult
+    ) throws BindException {
+        if(bindingResult.hasErrors())
+            throw new BindException(bindingResult);
+
+        if(categoryId == null && categoryLevel == null)
+            return;
+        if(categoryId != null && categoryLevel != null)
+            return;
+
+        bindingResult.addError(BookBindingError.SEARCH_CATEGORY_INVALID.error());
+        throw new BindException(bindingResult);
+    }
+
     public static void validatePageable(
             Pageable pageable, BindingResult bindingResult
     ) throws BindException {
