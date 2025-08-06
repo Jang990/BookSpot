@@ -26,11 +26,15 @@ public class BookDocument {
     @JsonProperty("library_ids")
     private List<Long> libraryIds;
     @JsonProperty("book_categories")
-    private List<String> bookCategories;
+    private BookCategories bookCategories;
     @JsonProperty("created_at")
     private String createdAt;
 
     public LocalDate getCreatedAt() {
         return LocalDate.parse(createdAt);
+    }
+
+    public String getMainCategory() {
+        return bookCategories.getLeafCategory();
     }
 }
