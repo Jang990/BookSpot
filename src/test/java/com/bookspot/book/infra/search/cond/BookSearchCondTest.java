@@ -1,18 +1,14 @@
-package com.bookspot.book.infra.search.builder;
+package com.bookspot.book.infra.search.cond;
 
-import com.bookspot.book.infra.search.cond.BookCategoryCond;
-import com.bookspot.book.infra.search.cond.BookSearchCond;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class BookQueryBuilderTest {
-    private BookQueryBuilder bookQueryBuilder = new BookQueryBuilder(new BookCategoryNameBuilder());
-
+class BookSearchCondTest {
     @Test
     void 정상처리() {
         BookSearchCond searchCond = BookSearchCond.builder()
@@ -21,7 +17,8 @@ class BookQueryBuilderTest {
                 .libraryId(1L)
                 .categoryCond(BookCategoryCond.mid(412, "대수학"))
                 .build();
-        BoolQuery result = bookQueryBuilder.buildBool(searchCond).bool();
+
+        BoolQuery result = searchCond.toBoolQuery().bool();
 
         assertThat(result.filter()).hasSize(3);
         assertIdFilter(

@@ -1,6 +1,5 @@
 package com.bookspot.book.infra.search;
 
-import com.bookspot.book.infra.search.builder.BookQueryBuilder;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
@@ -26,7 +25,6 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     private final OpenSearchClient client;
 
     private final BookSearchRequestBuilder searchRequestBuilder;
-    private final BookQueryBuilder queryBuilder;
 
     @Override
     public BookPageResult search(BookSearchCond searchRequest, Pageable pageable) {
@@ -37,7 +35,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         try {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
-                            queryBuilder.buildBool(searchRequest),
+                            searchRequest.toBoolQuery(),
                             openSearchPageable
                     ),
                     BookDocument.class
@@ -74,7 +72,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         try {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
-                            queryBuilder.buildBool(searchCond),
+                            searchCond.toBoolQuery(),
                             new OpenSearchAfter(pageSize, searchAfterCond)
                     ),
                     BookDocument.class

@@ -43,7 +43,7 @@ public class BookCategoryCond {
     }
 
 
-    private static String buildValue(int categoryId, String categoryName) {
+    protected static String buildValue(int categoryId, String categoryName) {
         return VALUE_FORMAT.formatted(categoryId, categoryName);
     }
 }
