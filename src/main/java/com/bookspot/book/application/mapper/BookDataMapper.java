@@ -2,13 +2,13 @@ package com.bookspot.book.application.mapper;
 
 import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.infra.search.BookDocument;
+import com.bookspot.book.infra.search.cond.BookCategoryCond;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
-import com.bookspot.book.presentation.request.BookSearchRequest;
+import com.bookspot.book.presentation.request.CategoryLevel;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
-import com.bookspot.category.application.BookCategoryDto;
 import com.bookspot.category.domain.BookCategory;
 import com.bookspot.category.domain.BookCategoryRepository;
 import org.springframework.stereotype.Service;
@@ -41,11 +41,13 @@ public class BookDataMapper {
     }
 
     public static BookSearchCond transform(BookCategoryRepository bookCategoryRepository, BookSearchDto bookSearchDto) {
-        BookCategoryDto categoryDto = null;
+        BookCategoryCond categoryCond = null;
         if (bookSearchDto.getCategoryId() != null) {
-            categoryDto = new BookCategoryDto(
-                    bookCategoryRepository.findById(bookSearchDto.getCategoryId())
-                    .orElseThrow(IllegalArgumentException::new)
+            BookCategory bookCategory = bookCategoryRepository.findById(bookSearchDto.getCategoryId())
+                    .orElseThrow(IllegalArgumentException::new);
+            categoryCond = createCategoryCond(
+                    bookSearchDto.getCategoryLevel(),
+                    bookCategory
             );
         }
 
@@ -53,8 +55,19 @@ public class BookDataMapper {
                 .keyword(bookSearchDto.getTitle())
                 .bookIds(bookSearchDto.getBookIds())
                 .libraryId(bookSearchDto.getLibraryId())
-                .categoryFilter(categoryDto)
+                .categoryCond(categoryCond)
                 .build();
+    }
+
+    private static BookCategoryCond createCategoryCond(
+            CategoryLevel categoryLevel,
+            BookCategory bookCategory
+    ) {
+        return switch (categoryLevel) {
+            case LEAF -> BookCategoryCond.leaf(bookCategory.getId(), bookCategory.getName());
+            case MID -> BookCategoryCond.mid(bookCategory.getId(), bookCategory.getName());
+            case TOP -> BookCategoryCond.top(bookCategory.getId(), bookCategory.getName());
+        };
     }
 
     private static CategoryResponse transform(String category) {

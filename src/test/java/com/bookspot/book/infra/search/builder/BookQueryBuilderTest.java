@@ -1,7 +1,7 @@
 package com.bookspot.book.infra.search.builder;
 
+import com.bookspot.book.infra.search.cond.BookCategoryCond;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
-import com.bookspot.category.application.BookCategoryDto;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
@@ -19,7 +19,7 @@ class BookQueryBuilderTest {
                 .bookIds(List.of(1L, 2L, 3L))
                 .keyword("객체")
                 .libraryId(1L)
-                .categoryFilter(new BookCategoryDto(412, "대수학"))
+                .categoryCond(BookCategoryCond.mid(412, "대수학"))
                 .build();
         BoolQuery result = bookQueryBuilder.buildBool(searchCond).bool();
 
@@ -34,7 +34,7 @@ class BookQueryBuilderTest {
         );
         assertTermFilter(
                 result.filter().get(2),
-                "book_categories", "412.대수학"
+                "book_categories.mid_category", "412.대수학"
         );
 
         // should 검증

@@ -23,7 +23,12 @@ public class BookQueryBuilder {
         if (searchRequest.hasLibraryId())
             builder.filter(term("library_ids", searchRequest.getLibraryId().toString()));
         if(searchRequest.hasCategoryFilter())
-            builder.filter(term("book_categories", bookCategoryNameBuilder.build(searchRequest.getCategoryFilter())));
+            builder.filter(
+                    term(
+                            searchRequest.getCategoryCond().getCategoryField(),
+                            searchRequest.getCategoryCond().getCategoryValue()
+                    )
+            );
 
         if (searchRequest.hasKeyword())
             builder.minimumShouldMatch("1")
