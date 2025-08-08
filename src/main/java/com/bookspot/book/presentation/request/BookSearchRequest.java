@@ -24,4 +24,6 @@ public class BookSearchRequest {
             max = CategoryRequestCond.MAX_CATEGORY_ID
     )
     private Integer categoryId;
+
+    private CategoryLevel categoryLevel;
 }

@@ -72,6 +72,25 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void 카테고리_레벨이_부정확하면_오류() throws Exception {
+        mvc.perform(get("/api/books?categoryId=123&categoryLevel=ABC"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void 카테고리_레벨_or_카테고리_아이디_둘_중_하나만_있으면_오류() throws Exception {
+        mvc.perform(get("/api/books?categoryId=123"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/books?categoryLevel=TOP"))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(get("/api/books?lastLoanCount=123&lastBookId=123&categoryId=123"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/books?lastLoanCount=123&lastBookId=123&categoryLevel=TOP"))
+                .andExpect(status().isBadRequest());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",
@@ -80,9 +99,13 @@ class BookControllerTest_TermSearch {
             "/api/books?title=ABC&bookIds=1,2,3",
             "/api/books?title=ABC&bookIds=1,2,3&libraryId=1",
             "/api/books?lastLoanCount=123&lastBookId=123",
-            "/api/books?categoryId=123",
             "/api/books?libraryId=123456",
-            "/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567&title=한강"
+            "/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567&title=한강",
+
+            "/api/books?categoryId=123&categoryLevel=TOP",
+            "/api/books?categoryId=123&categoryLevel=MID",
+            "/api/books?categoryId=123&categoryLevel=LEAF",
+            "/api/books?lastLoanCount=123&lastBookId=123&categoryId=123&categoryLevel=TOP",
     })
     void 정상처리_API(String testApi) throws Exception {
         mvc.perform(get(testApi))

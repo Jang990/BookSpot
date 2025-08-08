@@ -35,6 +35,11 @@ public class BookController {
             BindingResult bindingResult
     ) throws BindException {
         SearchRequestValidator.validatePageable(pageable, bindingResult);
+        SearchRequestValidator.validateCategoryCond(
+                request.getCategoryId(),
+                request.getCategoryLevel(),
+                bindingResult
+        );
 
         return ResponseEntity.ok(
                 bookService.findBooks(
@@ -56,6 +61,11 @@ public class BookController {
     ) throws BindException {
         SearchRequestValidator.validatePageSize(size, bindingResult);
         SearchRequestValidator.validateSortByScore(request, searchAfterRequest, bindingResult);
+        SearchRequestValidator.validateCategoryCond(
+                request.getCategoryId(),
+                request.getCategoryLevel(),
+                bindingResult
+        );
 
         return ResponseEntity.ok(
                 bookService.findBooks(

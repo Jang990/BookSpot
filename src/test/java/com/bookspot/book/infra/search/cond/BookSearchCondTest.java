@@ -1,27 +1,24 @@
-package com.bookspot.book.infra.search.builder;
+package com.bookspot.book.infra.search.cond;
 
-import com.bookspot.book.infra.search.cond.BookSearchCond;
-import com.bookspot.category.application.BookCategoryDto;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class BookQueryBuilderTest {
-    private BookQueryBuilder bookQueryBuilder = new BookQueryBuilder(new BookCategoryNameBuilder());
-
+class BookSearchCondTest {
     @Test
     void 정상처리() {
         BookSearchCond searchCond = BookSearchCond.builder()
                 .bookIds(List.of(1L, 2L, 3L))
                 .keyword("객체")
                 .libraryId(1L)
-                .categoryFilter(new BookCategoryDto(412, "대수학"))
+                .categoryCond(BookCategoryCond.mid(412, "대수학"))
                 .build();
-        BoolQuery result = bookQueryBuilder.buildBool(searchCond).bool();
+
+        BoolQuery result = searchCond.toBoolQuery().bool();
 
         assertThat(result.filter()).hasSize(3);
         assertIdFilter(
@@ -34,7 +31,7 @@ class BookQueryBuilderTest {
         );
         assertTermFilter(
                 result.filter().get(2),
-                "book_categories", "412.대수학"
+                "book_categories.mid_category", "412.대수학"
         );
 
         // should 검증

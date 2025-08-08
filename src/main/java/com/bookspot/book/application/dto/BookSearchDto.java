@@ -1,5 +1,6 @@
 package com.bookspot.book.application.dto;
 
+import com.bookspot.book.presentation.request.CategoryLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,4 +17,5 @@ public class BookSearchDto {
     private List<Long> bookIds;
     private Long libraryId;
     private Integer categoryId;
+    private CategoryLevel categoryLevel;
 }

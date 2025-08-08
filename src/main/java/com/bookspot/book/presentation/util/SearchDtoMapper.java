@@ -10,6 +10,7 @@ public class SearchDtoMapper {
                 .bookIds(request.getBookIds())
                 .libraryId(request.getLibraryId())
                 .categoryId(request.getCategoryId())
+                .categoryLevel(request.getCategoryLevel())
                 .build();
     }
 }
