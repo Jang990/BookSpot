@@ -3,6 +3,7 @@ package com.bookspot.book.infra.search.cond;
 import lombok.Builder;
 import lombok.Getter;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
+import org.opensearch.client.opensearch._types.query_dsl.Operator;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.util.ObjectBuilder;
 import org.springframework.util.StringUtils;
@@ -61,7 +62,8 @@ public class BookSearchCond {
                                             "author^6",
                                             "publisher^8"
                                     ),
-                                    keyword
+                                    keyword,
+                                    Operator.And
                             )
                     );
 
@@ -89,11 +91,12 @@ public class BookSearchCond {
                 .build();
     }
 
-    private Query multiMatch(List<String> fields, String keyword) {
+    private Query multiMatch(List<String> fields, String keyword, Operator operator) {
         return new Query.Builder()
                 .multiMatch(
                         mmq -> mmq.fields(fields)
                                 .query(keyword)
+                                .operator(operator)
                 )
                 .build();
     }
