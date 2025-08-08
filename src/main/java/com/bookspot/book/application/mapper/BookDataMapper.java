@@ -26,7 +26,9 @@ public class BookDataMapper {
                 book.getPublicationYear(),
                 book.getPublisher(),
                 book.getLoanCount(),
-                transform(book.getMainCategory()),
+                book.hasCategory() ?
+                        transform(book.getMainCategory())
+                        : CategoryResponse.EMPTY_CATEGORY,
                 book.getCreatedAt().toString()
         );
     }

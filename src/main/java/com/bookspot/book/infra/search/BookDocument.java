@@ -34,7 +34,14 @@ public class BookDocument {
         return LocalDate.parse(createdAt);
     }
 
+    public boolean hasCategory() {
+        return bookCategories != null;
+    }
+
     public String getMainCategory() {
-        return bookCategories.getLeafCategory();
+        if(hasCategory())
+            return bookCategories.getLeafCategory();
+        else
+            return null;
     }
 }
