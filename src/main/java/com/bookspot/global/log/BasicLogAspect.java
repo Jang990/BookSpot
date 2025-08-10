@@ -37,7 +37,7 @@ public class BasicLogAspect {
             end = System.nanoTime();
             long runningTimeNano = end - start;
             double runningTimeMillis = runningTimeNano / NANOSECONDS_TO_MILLISECONDS;
-            log.info("[{}] {} - {} => Time: {} ms | Params : {}", logId, classDotMethod, args, runningTimeMillis, Arrays.toString(args));
+            log.info("[{}] {} => Time: {} ms | Params : {}", logId, classDotMethod, runningTimeMillis, Arrays.toString(args));
         }
     }
 
