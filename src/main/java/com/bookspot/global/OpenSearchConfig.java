@@ -9,6 +9,7 @@ import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.opensearch.client.RestClient;
 import org.opensearch.client.json.jackson.JacksonJsonpMapper;
 import org.opensearch.client.opensearch.OpenSearchClient;
+import org.opensearch.client.transport.OpenSearchTransport;
 import org.opensearch.client.transport.rest_client.RestClientTransport;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,31 +34,32 @@ public class OpenSearchConfig {
 
     @Bean
     public OpenSearchClient openSearchClient() {
+        return new OpenSearchClient(
+                openSearchTransport()
+        );
+    }
+
+    @Bean(destroyMethod = "close")
+    public OpenSearchTransport openSearchTransport() {
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(
                 AuthScope.ANY,
                 new UsernamePasswordCredentials(username, password)
         );
 
-        return new OpenSearchClient(
-                new RestClientTransport(
-                        RestClient.builder(HttpHost.create(serverUrl))
-                                .setHttpClientConfigCallback(
-                                        httpClientBuilder -> httpClientBuilder
-                                                .setDefaultCredentialsProvider(credentialsProvider)
-                                                .setDefaultIOReactorConfig(
-                                                        IOReactorConfig.custom()
-                                                                .setIoThreadCount(
-                                                                        5
-                                                                        /*TaskExecutorConfig.MULTI_POOL_SIZE*/
-                                                                )
-                                                                .build()
-                                                )
+        final RestClient restClient = RestClient.builder(HttpHost.create(serverUrl))
+                .setHttpClientConfigCallback(
+                        httpClientBuilder -> httpClientBuilder
+                                .setDefaultCredentialsProvider(credentialsProvider)
+                                .setDefaultIOReactorConfig(
+                                        IOReactorConfig.custom()
+                                                .setIoThreadCount(5)
+                                                .build()
                                 )
-                                .build(),
-                        new JacksonJsonpMapper(objectMapper())
                 )
-        );
+                .build();
+
+        return new RestClientTransport(restClient, new JacksonJsonpMapper(objectMapper()));
     }
 
 }
