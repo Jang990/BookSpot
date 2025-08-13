@@ -56,7 +56,7 @@ public class BookSearchCond {
                             multiMatch(
                                     List.of(
                                             "title^5",
-                                            "title.ngram^6",
+//                                            "title.ngram^6",
                                             "title.ws^8",
                                             "title.keyword^10",
                                             "author^6",
