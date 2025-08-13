@@ -48,6 +48,11 @@ public class OpenSearchConfig {
         );
 
         final RestClient restClient = RestClient.builder(HttpHost.create(serverUrl))
+                .setRequestConfigCallback(
+                        req -> req.setConnectTimeout(2_000)        // 서버 TCP 연결까지 최대 2초
+                                .setSocketTimeout(5_000)         // 데이터 응답 대기 최대 5초
+                                .setConnectionRequestTimeout(2_000) // 커넥션 풀에서 가져올 때 최대 2초
+                )
                 .setHttpClientConfigCallback(
                         httpClientBuilder -> httpClientBuilder
                                 .setDefaultCredentialsProvider(credentialsProvider)
