@@ -3,7 +3,7 @@ package com.bookspot.book.application;
 import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.infra.search.result.BookPageResult;
-import com.bookspot.book.infra.search.BookSearchRepository;
+import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
