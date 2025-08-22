@@ -1,7 +1,7 @@
 package com.bookspot.book.application.mapper;
 
 import com.bookspot.book.application.dto.BookSearchDto;
-import com.bookspot.book.infra.search.BookDocument;
+import com.bookspot.book.infra.BookDocument;
 import com.bookspot.book.infra.search.cond.BookCategoryCond;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;

@@ -1,6 +1,5 @@
-package com.bookspot.book.infra.search;
+package com.bookspot.book.infra;
 
-import com.bookspot.book.infra.BookCommonFields;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Getter;

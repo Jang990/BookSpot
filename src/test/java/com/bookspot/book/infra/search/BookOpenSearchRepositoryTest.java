@@ -1,5 +1,6 @@
 package com.bookspot.book.infra.search;
 
+import com.bookspot.book.infra.BookDocument;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import org.springframework.beans.factory.annotation.Autowired;

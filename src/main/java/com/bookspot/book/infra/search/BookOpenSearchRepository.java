@@ -1,5 +1,6 @@
 package com.bookspot.book.infra.search;
 
+import com.bookspot.book.infra.BookDocument;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
