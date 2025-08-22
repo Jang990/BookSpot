@@ -1,11 +1,13 @@
 package com.bookspot.book.presentation;
 
+import com.bookspot.book.application.BookRankingService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,6 +21,9 @@ class BookRankingControllerTest {
     @Autowired
     MockMvc mvc;
 
+    @MockBean
+    BookRankingService bookRankingService;
+
     private static final String baseUrl = "/api/books/rankings?";
 
     @Test
@@ -29,12 +34,12 @@ class BookRankingControllerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            baseUrl,
-            baseUrl + "gender=MALE&age=AGE_12_12",
-            baseUrl + "age=AGE_20_29"
+            baseUrl + "period=MONTHLY",
+            baseUrl + "period=MONTHLY&gender=MALE",
+            baseUrl + "period=MONTHLY&age=AGE_20_29"
     })
     void 기간_조건만_있다면_다른_조건은_디폴트값으로_처리(String url) throws Exception {
-        mvc.perform(get(url)).andExpect(status().isBadRequest());
+        mvc.perform(get(url)).andExpect(status().isOk());
     }
 
     @Test

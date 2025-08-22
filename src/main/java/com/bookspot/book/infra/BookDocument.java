@@ -19,15 +19,4 @@ public class BookDocument extends BookCommonFields {
     public LocalDate getCreatedAtDate() {
         return LocalDate.parse(getCreatedAt());
     }
-
-    public boolean hasCategory() {
-        return getBookCategories() != null;
-    }
-
-    public String getMainCategory() {
-        if(hasCategory())
-            return getBookCategories().getLeafCategory();
-        else
-            return null;
-    }
 }

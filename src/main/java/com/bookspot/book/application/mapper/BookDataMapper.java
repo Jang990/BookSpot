@@ -2,12 +2,14 @@ package com.bookspot.book.application.mapper;
 
 import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.infra.BookDocument;
+import com.bookspot.book.infra.BookRankingDocument;
 import com.bookspot.book.infra.search.cond.BookCategoryCond;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.CategoryLevel;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
+import com.bookspot.book.presentation.response.BookRankPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
 import com.bookspot.category.domain.BookCategory;
 import com.bookspot.category.domain.BookCategoryRepository;
@@ -33,13 +35,17 @@ public class BookDataMapper {
         );
     }
 
-    private static CategoryResponse getLeafCategory(List<String> bookCategories) {
-        List<CategoryResponse> categories = bookCategories.stream()
-                .map(BookDataMapper::transform)
-                .toList();
-
-        CategoryResponse leafCategory = categories.isEmpty() ? CategoryResponse.EMPTY_CATEGORY : categories.getLast();
-        return leafCategory;
+    public static BookRankPreviewResponse transform(BookRankingDocument book) {
+        return new BookRankPreviewResponse(
+                book.getBookId(), book.getTitle(),
+                book.getAuthor(), book.getIsbn13(),
+                book.getPublicationYear(), book.getPublisher(),
+                book.hasCategory() ?
+                        BookDataMapper.transform(book.getMainCategory())
+                        : CategoryResponse.EMPTY_CATEGORY,
+                book.getCreatedAt(), book.getRank(),
+                book.getLoanIncrease()
+        );
     }
 
     public static BookSearchCond transform(BookCategoryRepository bookCategoryRepository, BookSearchDto bookSearchDto) {
@@ -72,7 +78,7 @@ public class BookDataMapper {
         };
     }
 
-    private static CategoryResponse transform(String category) {
+    public static CategoryResponse transform(String category) {
         int dotIdx = category.indexOf(".");
         return new CategoryResponse(
                 Integer.parseInt(category.substring(0, dotIdx)),

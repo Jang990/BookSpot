@@ -1,5 +1,6 @@
 package com.bookspot.book.presentation;
 
+import com.bookspot.book.application.BookRankingService;
 import com.bookspot.book.infra.RankingAge;
 import com.bookspot.book.infra.RankingGender;
 import com.bookspot.book.infra.RankingPeriod;
@@ -18,10 +19,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class BookRankingController {
+    private final BookRankingService bookRankingService;
+
     @GetMapping("/api/books/rankings")
     public ResponseEntity<BookTop50RankingResponse> findRankedBooks(
             @Valid BookRankingRequest rankingRequest
     ) {
-        return ResponseEntity.ok(new BookTop50RankingResponse(List.of()));
+        return ResponseEntity.ok(
+                bookRankingService.findBooks(rankingRequest)
+        );
     }
 }

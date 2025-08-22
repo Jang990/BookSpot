@@ -23,4 +23,15 @@ public class BookCommonFields {
     private Integer subjectCode; // 주제분류번호
     @JsonProperty("book_categories")
     private BookCategories bookCategories;
+
+    public boolean hasCategory() {
+        return getBookCategories() != null;
+    }
+
+    public String getMainCategory() {
+        if(hasCategory())
+            return getBookCategories().getLeafCategory();
+        else
+            return null;
+    }
 }
