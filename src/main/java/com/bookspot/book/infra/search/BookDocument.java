@@ -1,5 +1,6 @@
 package com.bookspot.book.infra.search;
 
+import com.bookspot.book.infra.BookCommonFields;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,37 +11,23 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookDocument {
-    @JsonProperty("book_id")
-    private Long id;
-    private String title;
-    private String isbn13;
-    @JsonProperty("subject_code")
-    private int subjectCode;
-    private String author;
-    @JsonProperty("publication_year")
-    private Integer publicationYear;
-    private String publisher;
+public class BookDocument extends BookCommonFields {
     @JsonProperty("loan_count")
     private int loanCount;
     @JsonProperty("library_ids")
     private List<Long> libraryIds;
-    @JsonProperty("book_categories")
-    private BookCategories bookCategories;
-    @JsonProperty("created_at")
-    private String createdAt;
 
-    public LocalDate getCreatedAt() {
-        return LocalDate.parse(createdAt);
+    public LocalDate getCreatedAtDate() {
+        return LocalDate.parse(getCreatedAt());
     }
 
     public boolean hasCategory() {
-        return bookCategories != null;
+        return getBookCategories() != null;
     }
 
     public String getMainCategory() {
         if(hasCategory())
-            return bookCategories.getLeafCategory();
+            return getBookCategories().getLeafCategory();
         else
             return null;
     }

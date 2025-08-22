@@ -105,7 +105,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 list,
                 score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
-                list.getLast().getId(),
+                list.getLast().getBookId(),
                 total
         );
     }
@@ -132,7 +132,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 bookDocuments,
                 score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
-                list.getLast().getId()
+                list.getLast().getBookId()
         );
     }
 }

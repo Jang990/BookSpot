@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookCommonFields {
     @JsonProperty("book_id")
-    private String bookId;
+    private Long bookId;
     private String isbn13;          // isbn
     private String title;           // 도서명
     private String author;          // 저자

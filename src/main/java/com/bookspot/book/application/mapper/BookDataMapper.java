@@ -19,7 +19,7 @@ import java.util.List;
 public class BookDataMapper {
     public static BookPreviewResponse transform(BookDocument book) {
         return new BookPreviewResponse(
-                book.getId(),
+                book.getBookId(),
                 book.getTitle(),
                 book.getAuthor(),
                 book.getIsbn13(),
@@ -29,7 +29,7 @@ public class BookDataMapper {
                 book.hasCategory() ?
                         transform(book.getMainCategory())
                         : CategoryResponse.EMPTY_CATEGORY,
-                book.getCreatedAt().toString()
+                book.getCreatedAtDate().toString()
         );
     }
 
