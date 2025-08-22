@@ -29,6 +29,10 @@ public class OpenSearchPageable {
         return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
     }
 
+    public static OpenSearchPageable withRank(Pageable pageable) {
+        return new OpenSearchPageable(pageable, BookSortOptions.RANKING_SORT);
+    }
+
     public boolean hasScoreSortOption() {
         return sortOptions == BookSortOptions.SORT_WITH_SCORE;
     }

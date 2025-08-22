@@ -17,6 +17,11 @@ public class BookSortOptions {
             buildSort("book_id", SortOrder.Asc)
     );
 
+    public static final List<SortOptions> RANKING_SORT = List.of(
+            buildSort("rank", SortOrder.Asc),
+            buildSort("book_id", SortOrder.Asc)
+    );
+
     private static SortOptions buildSort(String fieldName, SortOrder order) {
         FieldSort.Builder sortBuilder = new FieldSort.Builder();
 
