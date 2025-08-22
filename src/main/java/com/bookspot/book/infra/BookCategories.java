@@ -1,4 +1,4 @@
-package com.bookspot.book.infra.search;
+package com.bookspot.book.infra;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.bookspot.book.infra.search;
+package com.bookspot.book.infra;
 
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;

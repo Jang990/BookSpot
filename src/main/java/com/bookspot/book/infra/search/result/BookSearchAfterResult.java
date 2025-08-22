@@ -1,6 +1,6 @@
 package com.bookspot.book.infra.search.result;
 
-import com.bookspot.book.infra.search.BookDocument;
+import com.bookspot.book.infra.BookDocument;
 
 import java.util.List;
 

@@ -1,5 +1,7 @@
 package com.bookspot.book.infra.search;
 
+import com.bookspot.book.infra.BookDocument;
+import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
@@ -105,7 +107,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 list,
                 score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
-                list.getLast().getId(),
+                list.getLast().getBookId(),
                 total
         );
     }
@@ -132,7 +134,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
                 bookDocuments,
                 score == null ? null : score.toString(),
                 list.getLast().getLoanCount(),
-                list.getLast().getId()
+                list.getLast().getBookId()
         );
     }
 }
