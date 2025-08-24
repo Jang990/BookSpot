@@ -11,6 +11,6 @@ public class StockSearchRequest {
     @NotEmpty
     private List<Long> libraryIds;
 
-    @Size(max = 10)
+    @Size(max = 20)
     private List<Long> bookIds;
 }
