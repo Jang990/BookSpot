@@ -37,3 +37,4 @@ out/
 .vscode/
 
 /src/main/resources/application-prod.yml
+/src/main/resources/apis.yml
