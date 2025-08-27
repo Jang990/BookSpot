@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class NaruLoanableApiUrlBuilder {
+public class NaruLoanStateApiUrlBuilder {
     private final NaruApiUrlHolder apiUrlHolder;
 
     protected String build(LoanableSearchCond loanableSearchCond) {

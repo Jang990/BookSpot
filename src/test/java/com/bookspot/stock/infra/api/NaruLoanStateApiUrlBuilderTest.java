@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class NaruLoanableApiUrlBuilderTest {
+class NaruLoanStateApiUrlBuilderTest {
     @Mock
     NaruApiUrlHolder apiUrlHolder;
 
     @InjectMocks
-    NaruLoanableApiUrlBuilder apiUrlBuilder;
+    NaruLoanStateApiUrlBuilder apiUrlBuilder;
 
     @Test
     void test() {

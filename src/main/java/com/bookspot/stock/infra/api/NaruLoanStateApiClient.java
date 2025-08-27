@@ -8,7 +8,7 @@ import org.springframework.util.StringUtils;
 @Component
 @RequiredArgsConstructor
 public class NaruLoanStateApiClient {
-    private final NaruLoanableApiUrlBuilder apiUrlBuilder;
+    private final NaruLoanStateApiUrlBuilder apiUrlBuilder;
     private final ApiRequester apiRequester;
 
     private static final String YES = "Y";

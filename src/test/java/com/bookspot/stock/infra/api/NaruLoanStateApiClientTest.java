@@ -22,7 +22,7 @@ class NaruLoanStateApiClientTest {
     public void beforeEach() {
         when(apiUrlHolder.getLoanableApi()).thenReturn(testUrl);
         requester = new NaruLoanStateApiClient(
-                new NaruLoanableApiUrlBuilder(apiUrlHolder),
+                new NaruLoanStateApiUrlBuilder(apiUrlHolder),
                 new ApiRequester()
         );
     }
