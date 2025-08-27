@@ -1,6 +1,8 @@
 package com.bookspot.stock.infra.api;
 
 import com.bookspot.global.ApiRequester;
+import com.bookspot.stock.domain.service.loanable.LoanableResult;
+import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

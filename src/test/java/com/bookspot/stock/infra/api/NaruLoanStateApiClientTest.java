@@ -2,6 +2,8 @@ package com.bookspot.stock.infra.api;
 
 import com.bookspot.global.ApiRequester;
 import com.bookspot.global.NaruApiUrlHolder;
+import com.bookspot.stock.domain.service.loanable.LoanableResult;
+import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
