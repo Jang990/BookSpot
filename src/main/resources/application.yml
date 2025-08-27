@@ -10,6 +10,8 @@ front:
   serverUrl: http://localhost:3000
 
 spring:
+  config.import:
+    - classpath:apis.yml
   messages:
     basename: messages,errors
   application:
