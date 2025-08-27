@@ -30,4 +30,6 @@ public class Library {
     
     private LocalDate updatedAt;
     private LocalDate stockUpdatedAt;
+
+    private String libraryCode;
 }
