@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class NaruLoanableApiUrlBuilder {
     private final NaruApiUrlHolder apiUrlHolder;
 
-    public String build(LoanableSearchCond loanableSearchCond) {
+    protected String build(LoanableSearchCond loanableSearchCond) {
         return apiUrlHolder.getLoanableApi()
                 + "&isbn13=" + loanableSearchCond.isbn13()
                 + "&libCode=" + loanableSearchCond.libraryCode();
