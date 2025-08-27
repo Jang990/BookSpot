@@ -1,6 +1,6 @@
 package com.bookspot.stock.infra.api;
 
-import com.bookspot.global.ApiRequester;
+import com.bookspot.global.api.ApiRequester;
 import com.bookspot.global.NaruApiUrlHolder;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
 import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
