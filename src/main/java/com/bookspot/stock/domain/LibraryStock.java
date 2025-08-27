@@ -1,10 +1,16 @@
 package com.bookspot.stock.domain;
 
 import com.bookspot.book.domain.Book;
+import com.bookspot.global.DateHolder;
+import com.bookspot.global.Events;
 import com.bookspot.library.domain.Library;
+import com.bookspot.stock.domain.event.StockRefreshedEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,4 +26,23 @@ public class LibraryStock {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
+
+    private LocalDate createdAt;
+
+    @LastModifiedDate
+    private LocalDate updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    private LoanState loanState;
+
+    public void refresh(DateHolder dateHolder) {
+        if(isAlreadyRefreshed(dateHolder))
+            return;
+        Events.raise(new StockRefreshedEvent(this.id));
+    }
+
+    private boolean isAlreadyRefreshed(DateHolder dateHolder) {
+        LocalDate now = dateHolder.now();
+        return updatedAt.equals(now) || updatedAt.isAfter(now);
+    }
 }
