@@ -5,6 +5,7 @@ import com.bookspot.library.domain.Library;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 
@@ -24,6 +25,8 @@ public class LibraryStock {
     private Book book;
 
     private LocalDate createdAt;
+
+    @LastModifiedDate
     private LocalDate updatedAt;
 
     @Enumerated(EnumType.STRING)
