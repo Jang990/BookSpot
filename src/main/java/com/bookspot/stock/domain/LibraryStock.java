@@ -7,11 +7,13 @@ import com.bookspot.library.domain.Library;
 import com.bookspot.stock.domain.event.StockRefreshedEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LibraryStock {
