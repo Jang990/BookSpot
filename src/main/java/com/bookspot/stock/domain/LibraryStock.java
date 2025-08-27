@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LibraryStock {
@@ -20,4 +22,10 @@ public class LibraryStock {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
+
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    private LoanState loanState;
 }
