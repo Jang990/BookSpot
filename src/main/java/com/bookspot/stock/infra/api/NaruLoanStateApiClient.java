@@ -1,6 +1,7 @@
 package com.bookspot.stock.infra.api;
 
 import com.bookspot.global.ApiRequester;
+import com.bookspot.stock.domain.service.loanable.LoanStateApiClient;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
 import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
 import lombok.RequiredArgsConstructor;
@@ -9,13 +10,14 @@ import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
-public class NaruLoanStateApiClient {
+public class NaruLoanStateApiClient implements LoanStateApiClient {
     private final NaruLoanStateApiUrlBuilder apiUrlBuilder;
     private final ApiRequester apiRequester;
 
     private static final String YES = "Y";
     private static final String NO = "N";
 
+    @Override
     public LoanableResult request(LoanableSearchCond searchCond) {
         String apiUrl = apiUrlBuilder.build(searchCond);
         LoanableResponse.Response response = apiRequester.get(apiUrl, LoanableResponse.class)
