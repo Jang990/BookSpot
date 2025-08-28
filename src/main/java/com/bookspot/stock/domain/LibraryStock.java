@@ -42,7 +42,7 @@ public class LibraryStock {
 //        Events.raise(new StockRefreshedEvent(this.id));
     }
 
-    private boolean isAlreadyRefreshed(DateHolder dateHolder) {
+    public boolean isAlreadyRefreshed(DateHolder dateHolder) {
         LocalDate now = dateHolder.now();
         return updatedAt.equals(now) || updatedAt.isAfter(now);
     }
@@ -70,4 +70,9 @@ public class LibraryStock {
 
         Events.raise(new LoanStateErrorEvent(library.getId(), book.getId()));
     }*/
+
+    public boolean matches(Book book, Library library) {
+        return book.getId().equals(getBook().getId())
+                && library.getId().equals(getLibrary().getId());
+    }
 }
