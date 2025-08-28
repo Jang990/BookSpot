@@ -10,10 +10,7 @@ import com.bookspot.stock.domain.event.StockRefreshedEvent;
 import com.bookspot.stock.domain.service.loanable.LoanStateApiClient;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
 import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
-import com.bookspot.stock.domain.service.loanable.exception.ApiClientException;
-import com.bookspot.stock.domain.service.loanable.exception.ClientException;
-import com.bookspot.stock.domain.service.loanable.exception.ServerException;
-import com.bookspot.stock.domain.service.loanable.exception.TooManyRequestsException;
+import com.bookspot.stock.domain.service.loanable.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -53,14 +50,8 @@ public class StockRefreshedEventHandler {
             );
 
             libraryStock.updateLoanState(result);
-        } catch (ApiClientException e) {
-            if (e instanceof TooManyRequestsException || e instanceof ServerException) {
-                log.info("재시도 가능성이 있는 API 클라이언트 오류 발생", e);
-            }
-            else{
-                log.error("재시도 불가능한 치명적인 API 클라이언트 오류 발생", e);
-            }
-
+        } catch (LoanStateApiException e) {
+            log.warn("API 요청기에서 예외 발생", e);
             libraryStock.raiseErrorEvent(e);
         }
     }
