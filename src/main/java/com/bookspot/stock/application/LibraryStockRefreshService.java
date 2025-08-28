@@ -25,10 +25,10 @@ public class LibraryStockRefreshService {
         LibraryStock stock = libraryStockRepository.findById(stockId)
                 .orElseThrow(IllegalArgumentException::new);
         if(stock.isAlreadyRefreshed(dateHolder))
-            return new StockLoanStateResponse(
+            return LibraryStockDataMapper.transform(
                     stock.getId(),
                     stock.getUpdatedAt(),
-                    LibraryStockDataMapper.transform(stock.getLoanState())
+                    stock.getLoanState()
             );
 
         // TODO: 락을 다루는 일이기 떄문에 batch 처리와 충돌이 있을 수 있음. 관리 필요. 그래도 only 레코드 락이라...
@@ -42,10 +42,8 @@ public class LibraryStockRefreshService {
                 stockWithBookAndLibrary.getLibrary()
         );
 
-        return new StockLoanStateResponse(
-                stock.getId(),
-                now,
-                LibraryStockDataMapper.transform(result)
+        return LibraryStockDataMapper.transform(
+                stock.getId(), now, result
         );
     }
 }
