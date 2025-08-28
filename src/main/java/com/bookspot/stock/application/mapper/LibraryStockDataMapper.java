@@ -5,11 +5,25 @@ import com.bookspot.stock.domain.LoanState;
 import com.bookspot.stock.presentation.response.LoanStateResponseEnum;
 import com.bookspot.stock.presentation.response.StockLoanStateResponse;
 
+import java.time.LocalDate;
+
 public class LibraryStockDataMapper {
+    public static StockLoanStateResponse transform(
+            long stockId,
+            LocalDate stateUpdatedAt,
+            LoanState loanState
+    ) {
+        return new StockLoanStateResponse(
+                stockId,
+                stateUpdatedAt.toString(),
+                transform(loanState)
+        );
+    }
+
     public static StockLoanStateResponse transform(LibraryStock stock) {
         return new StockLoanStateResponse(
                 stock.getId(),
-                stock.getUpdatedAt(),
+                stock.getUpdatedAt().toString(),
                 transform(stock.getLoanState())
         );
     }
