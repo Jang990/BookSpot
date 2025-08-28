@@ -30,13 +30,13 @@ public class NaruLoanStateApiClient implements LoanStateApiClient {
         LoanableResponse.Response response = fetch(apiUrl);
 
         if(response == null)
-            throw new IllegalStateException("파싱 불가 오류");
+            throw new ApiClientException("파싱 불가 오류", HttpStatus.BAD_REQUEST);
 
         if(StringUtils.hasText(response.getError()))
-            throw new IllegalStateException(response.getError());
+            throw new ApiClientException(response.getError(), HttpStatus.BAD_REQUEST);
 
         if(response.getResult() == null)
-            throw new IllegalStateException("파싱 불가 오류");
+            throw new ApiClientException("파싱 불가 오류", HttpStatus.BAD_REQUEST);
 
         String hasBookStr = response.getResult().getHasBook();
         String loanAvailableStr = response.getResult().getLoanAvailable();

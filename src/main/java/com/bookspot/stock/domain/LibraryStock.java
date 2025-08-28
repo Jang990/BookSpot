@@ -5,9 +5,13 @@ import com.bookspot.global.DateHolder;
 import com.bookspot.global.Events;
 import com.bookspot.library.domain.Library;
 import com.bookspot.stock.domain.event.LoanStateErrorEvent;
+import com.bookspot.stock.domain.event.LoanStateRetryableErrorEvent;
 import com.bookspot.stock.domain.event.LoanStateUpdatedEvent;
 import com.bookspot.stock.domain.event.StockRefreshedEvent;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
+import com.bookspot.stock.domain.service.loanable.exception.ApiClientException;
+import com.bookspot.stock.domain.service.loanable.exception.ServerException;
+import com.bookspot.stock.domain.service.loanable.exception.TooManyRequestsException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -64,5 +68,14 @@ public class LibraryStock {
             loanState = LoanState.ON_LOAN;
 
         Events.raise(new LoanStateUpdatedEvent(library.getId(), book.getId()));
+    }
+
+    public void raiseErrorEvent(ApiClientException e) {
+        if (e instanceof TooManyRequestsException || e instanceof ServerException) {
+            Events.raise(new LoanStateRetryableErrorEvent(library.getId(), book.getId()));
+            return;
+        }
+
+        Events.raise(new LoanStateErrorEvent(library.getId(), book.getId()));
     }
 }
