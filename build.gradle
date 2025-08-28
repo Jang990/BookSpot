@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.5'
@@ -48,4 +50,13 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// 1. 현재 시간을 yyyyMMdd-HHmmss 형식의 문자열로 생성
+def buildTime = new Date()
+def formattedTime = new SimpleDateFormat("yyyyMMdd-HHmmss").format(buildTime)
+
+// 2. bootJar 태스크의 결과물 파일명을 변경
+bootJar {
+	archiveFileName = "${rootProject.name}-${version}-${formattedTime}.jar"
 }
