@@ -19,6 +19,6 @@ public class StockLoanStateController {
     public ResponseEntity<StockLoanStateResponse> refresh(
             @PathVariable("stockId") long stockId
     ) {
-        return ResponseEntity.ok(refreshService.findCurrentLoanState(stockId));
+        return ResponseEntity.ok(refreshService.refreshLoanState(stockId));
     }
 }

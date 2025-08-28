@@ -21,7 +21,7 @@ public class LibraryStockRefreshService {
     private final LibraryStockRepository libraryStockRepository;
     private final DateHolder dateHolder;
 
-    public StockLoanStateResponse findCurrentLoanState(long stockId) {
+    public StockLoanStateResponse refreshLoanState(long stockId) {
         LibraryStock stock = libraryStockRepository.findById(stockId)
                 .orElseThrow(IllegalArgumentException::new);
         if(stock.isAlreadyRefreshed(dateHolder))
