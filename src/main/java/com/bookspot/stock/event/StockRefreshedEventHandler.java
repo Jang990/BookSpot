@@ -20,6 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+/*
+사용하지 않음. 하지만 추후 비동기 처리로 성능 개선 가능.
+지금은 기능 추가가 급해서 동기처리로 변경됨.
+ */
+@Deprecated
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -52,7 +57,7 @@ public class StockRefreshedEventHandler {
             libraryStock.updateLoanState(result);
         } catch (LoanStateApiException e) {
             log.warn("API 요청기에서 예외 발생", e);
-            libraryStock.raiseErrorEvent(e);
+//            libraryStock.raiseErrorEvent(e);
         }
     }
 }
