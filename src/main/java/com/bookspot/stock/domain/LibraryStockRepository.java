@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface LibraryStockRepository extends JpaRepository<LibraryStock, Long> {
     boolean existsByLibraryIdAndBookId(Long libraryId, Long bookId);
 
+    // DB innodb_lock_wait_timeout 파라미터 변경 필요
     @Query("""
             select ls
             from LibraryStock ls
