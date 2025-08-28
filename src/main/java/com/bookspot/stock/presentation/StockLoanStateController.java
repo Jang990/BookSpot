@@ -2,6 +2,7 @@ package com.bookspot.stock.presentation;
 
 import com.bookspot.global.log.BasicLog;
 import com.bookspot.stock.application.LibraryStockRefreshService;
+import com.bookspot.stock.application.LibraryStockService;
 import com.bookspot.stock.presentation.request.StockLoanStateSearchRequest;
 import com.bookspot.stock.presentation.response.StockLoanStateResponse;
 import com.bookspot.stock.presentation.response.StockLoanStateResponseList;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class StockLoanStateController {
     private final LibraryStockRefreshService refreshService;
+    private final LibraryStockService libraryStockService;
 
     @PostMapping("/api/stocks/{stockId}/loan/refresh")
     public ResponseEntity<StockLoanStateResponse> refresh(
@@ -30,6 +32,10 @@ public class StockLoanStateController {
     public ResponseEntity<StockLoanStateResponseList> findCurrentLoanState(
             @Valid StockLoanStateSearchRequest request
     ) {
-        return null;
+        return ResponseEntity.ok(
+                libraryStockService.findCurrentLoanState(
+                        request.getStockIds()
+                )
+        );
     }
 }
