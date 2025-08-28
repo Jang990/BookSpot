@@ -1,8 +1,9 @@
-package com.bookspot.global;
+package com.bookspot.global.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -20,6 +21,9 @@ public class ApiRequester {
         return client.get()
                 .uri(url)
                 .retrieve()
+                .onStatus(
+                        status -> !status.is2xxSuccessful(),
+                        response -> Mono.error(new RequestException(response.statusCode())))
                 .bodyToMono(responseType)
                 .block();
     }

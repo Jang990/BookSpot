@@ -1,9 +1,10 @@
 package com.bookspot.stock.infra.api;
 
-import com.bookspot.global.ApiRequester;
+import com.bookspot.global.api.ApiRequester;
 import com.bookspot.global.NaruApiUrlHolder;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
 import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
+import com.bookspot.stock.domain.service.loanable.exception.LoanStateApiException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -50,7 +51,7 @@ class NaruLoanStateApiClientTest {
 
 //    @Test
     void 잘못된_ISBN13() {
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(LoanStateApiException.class, () -> {
             requester.request(
                     new LoanableSearchCond(
                             "123003", ""
@@ -61,7 +62,7 @@ class NaruLoanStateApiClientTest {
 
 //    @Test
     void 잘못된_도서관_코드() {
-        assertThrows(IllegalStateException.class, () -> {
+        assertThrows(LoanStateApiException.class, () -> {
             requester.request(
                     new LoanableSearchCond(
                             "", "9788932473901"
