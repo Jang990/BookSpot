@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,4 +27,14 @@ public interface LibraryStockRepository extends JpaRepository<LibraryStock, Long
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "10_000")})
     Optional<LibraryStock> findStock(@Param("id") Long id);
+
+    @Query("""
+            select ls
+            from LibraryStock ls
+            where ls.library.id = :libraryId AND ls.book.id in (:bookIds)
+            """)
+    List<LibraryStock> findLibraryStocks(
+            @Param("libraryId") Long libraryId,
+            @Param("bookIds") List<Long> bookIds
+    );
 }
