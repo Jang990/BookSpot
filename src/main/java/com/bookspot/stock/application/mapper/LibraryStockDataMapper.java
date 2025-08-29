@@ -10,11 +10,13 @@ import java.time.LocalDate;
 public class LibraryStockDataMapper {
     public static StockLoanStateResponse transform(
             long stockId,
+            long bookId,
+            long libraryId,
             LocalDate stateUpdatedAt,
             LoanState loanState
     ) {
         return new StockLoanStateResponse(
-                stockId,
+                stockId, bookId, libraryId,
                 stateUpdatedAt.toString(),
                 transform(loanState)
         );
@@ -23,6 +25,8 @@ public class LibraryStockDataMapper {
     public static StockLoanStateResponse transform(LibraryStock stock) {
         return new StockLoanStateResponse(
                 stock.getId(),
+                stock.getLibrary().getId(),
+                stock.getBook().getId(),
                 stock.getUpdatedAt().toString(),
                 transform(stock.getLoanState())
         );

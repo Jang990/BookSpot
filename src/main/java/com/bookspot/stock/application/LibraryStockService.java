@@ -28,10 +28,10 @@ public class LibraryStockService {
         return result;
     }
 
-    public StockLoanStateResponseList findCurrentLoanState(List<Long> stockIds) {
-        List<LibraryStock> stocks = repository.findAllById(stockIds);
-        if(stocks.size() != stockIds.size())
-            throw new IllegalArgumentException("확인할 수 없는 stockId");
+    public StockLoanStateResponseList findLibraryBookStock(long libraryId, List<Long> bookIds) {
+        List<LibraryStock> stocks = repository.findLibraryStocks(libraryId, bookIds);
+        if(stocks.size() != bookIds.size())
+            throw new IllegalArgumentException("도서관에 존재하지 않는 bookIds가 포함됨");
 
         return new StockLoanStateResponseList(
                 stocks.stream()

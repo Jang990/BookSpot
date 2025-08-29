@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class StockLoanStateSearchRequest {
     @Size(min = 1, max = 20)
-    private List<Long> stockIds;
+    private List<Long> bookIds;
 }
