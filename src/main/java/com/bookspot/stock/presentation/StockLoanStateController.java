@@ -28,13 +28,14 @@ public class StockLoanStateController {
         return ResponseEntity.ok(refreshService.refreshLoanState(stockId));
     }
 
-    @GetMapping("/api/stocks/loan")
+    @GetMapping("/api/libraries/{libraryId}/stocks/loan")
     public ResponseEntity<StockLoanStateResponseList> findCurrentLoanState(
+            @PathVariable("libraryId") long libraryId,
             @Valid StockLoanStateSearchRequest request
     ) {
         return ResponseEntity.ok(
-                libraryStockService.findCurrentLoanState(
-                        request.getStockIds()
+                libraryStockService.findLibraryBookStock(
+                        libraryId, request.getBookIds()
                 )
         );
     }
