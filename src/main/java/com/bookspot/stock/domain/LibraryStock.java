@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -30,10 +30,10 @@ public class LibraryStock {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
     private LoanState loanState;
@@ -45,7 +45,7 @@ public class LibraryStock {
     }
 
     public boolean isAlreadyRefreshed(DateHolder dateHolder) {
-        LocalDate now = dateHolder.now();
+        LocalDateTime now = dateHolder.now();
         return updatedAt.equals(now) || updatedAt.isAfter(now);
     }
 

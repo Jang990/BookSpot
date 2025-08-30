@@ -21,6 +21,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,7 +61,7 @@ class LibraryStockTest {
 
     @ParameterizedTest
     @MethodSource("args")
-    void stock_refresh_동작테스트(LocalDate updatedAt, LocalDate today, int expectedEventCount) {
+    void stock_refresh_동작테스트(LocalDateTime updatedAt, LocalDateTime today, int expectedEventCount) {
         LibraryStock stock = new LibraryStock();
         ReflectionTestUtils.setField(stock, "id", 1L);
         ReflectionTestUtils.setField(stock, "updatedAt", updatedAt);
@@ -101,8 +102,8 @@ class LibraryStockTest {
 //        mockedEvents.verify(() -> Events.raise(any(LoanStateErrorEvent.class)));
     }
 
-    private static LocalDate _2025_08_(int day) {
-        return LocalDate.of(2025, 8, day);
+    private static LocalDateTime _2025_08_(int day) {
+        return LocalDateTime.of(2025, 8, day, 0, 0);
     }
 
 }
