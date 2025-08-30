@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -30,8 +31,9 @@ public class LibraryStock {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
+    @Column(name = "updated_at_time")
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
