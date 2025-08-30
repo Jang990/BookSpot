@@ -16,7 +16,7 @@ public class LibraryStockDataMapper {
             LoanState loanState
     ) {
         return new StockLoanStateResponse(
-                stockId, bookId, libraryId,
+                stockId, libraryId, bookId,
                 stateUpdatedAt.toString(),
                 transform(loanState)
         );
