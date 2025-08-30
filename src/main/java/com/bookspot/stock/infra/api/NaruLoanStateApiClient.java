@@ -42,10 +42,15 @@ public class NaruLoanStateApiClient implements LoanStateApiClient {
         String hasBookStr = response.getResult().getHasBook();
         String loanAvailableStr = response.getResult().getLoanAvailable();
 
-        return new LoanableResult(
+        LoanableResult loanableResult = new LoanableResult(
                 yesOrNo(hasBookStr),
                 yesOrNo(loanAvailableStr)
         );
+        if(loanableResult.hasBook())
+            log.info("정보나루 API 활용 : {} => {}", searchCond, loanableResult);
+        else
+            log.warn("정보나루 API : 도서관에 책이 존재 X. {} => {}", searchCond, loanableResult);
+        return loanableResult;
     }
 
     private LoanableResponse.Response fetch(String apiUrl) {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -33,7 +34,7 @@ public class LibraryStockRefreshService {
         LibraryStock stockWithBookAndLibrary = libraryStockRepository.findStock(stockId)
                 .orElseThrow(IllegalArgumentException::new);
 
-        LocalDate now = dateHolder.now();
+        LocalDateTime now = dateHolder.now();
         LoanState result = loanStateRefreshService.refresh(
                 stockWithBookAndLibrary,
                 stockWithBookAndLibrary.getBook(),

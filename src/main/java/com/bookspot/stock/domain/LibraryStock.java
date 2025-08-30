@@ -9,12 +9,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class LibraryStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +33,9 @@ public class LibraryStock {
 
     private LocalDate createdAt;
 
+    @Column(name = "updated_at_time")
     @LastModifiedDate
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
     private LoanState loanState;
@@ -43,7 +47,7 @@ public class LibraryStock {
     }
 
     public boolean isAlreadyRefreshed(DateHolder dateHolder) {
-        LocalDate now = dateHolder.now();
+        LocalDateTime now = dateHolder.now();
         return updatedAt.equals(now) || updatedAt.isAfter(now);
     }
 

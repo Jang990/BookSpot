@@ -2,11 +2,11 @@ package com.bookspot.global;
 
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 public class DateHolder {
-    public LocalDate now() {
-        return LocalDate.now();
+    public LocalDateTime now() {
+        return LocalDateTime.now();
     }
 }
