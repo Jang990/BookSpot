@@ -25,7 +25,7 @@ public interface LibraryStockRepository extends JpaRepository<LibraryStock, Long
             where ls.id = :id
             """)
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "10_000")})
+    @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "10000")})
     Optional<LibraryStock> findStock(@Param("id") Long id);
 
     @Query("""
