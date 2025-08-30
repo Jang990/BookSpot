@@ -46,7 +46,10 @@ public class NaruLoanStateApiClient implements LoanStateApiClient {
                 yesOrNo(hasBookStr),
                 yesOrNo(loanAvailableStr)
         );
-        log.info("정보나루 API 활용 : {} => {}", searchCond, loanableResult);
+        if(loanableResult.hasBook())
+            log.info("정보나루 API 활용 : {} => {}", searchCond, loanableResult);
+        else
+            log.warn("정보나루 API : 도서관에 책이 존재 X. {} => {}", searchCond, loanableResult);
         return loanableResult;
     }
 
