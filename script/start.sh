@@ -9,6 +9,9 @@ source ${ABSDIR}/profile.sh # import 구문
 REPOSITORY=/home/ec2-user/app/project
 PROJECT_NAME=bookspot
 
+echo "> 기존 Build 파일 삭제"
+rm -f $REPOSITORY/*.jar
+
 echo "> Build 파일 복사"
 echo "> cp $REPOSITORY/zip/*.jar $REPOSITORY/"
 
