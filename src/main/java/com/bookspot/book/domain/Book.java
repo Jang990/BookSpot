@@ -24,12 +24,5 @@ public class Book {
     private Integer publicationYear;
     private String publisher;
     private int loanCount;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
+    private int monthlyLoanIncrease;
 }

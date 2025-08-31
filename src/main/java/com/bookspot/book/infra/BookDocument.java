@@ -15,6 +15,8 @@ public class BookDocument extends BookCommonFields {
     private int loanCount;
     @JsonProperty("library_ids")
     private List<Long> libraryIds;
+    @JsonProperty("monthly_loan_increase")
+    private int monthlyLoanIncrease;
 
     public LocalDate getCreatedAtDate() {
         return LocalDate.parse(getCreatedAt());

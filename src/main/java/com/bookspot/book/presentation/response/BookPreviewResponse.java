@@ -13,6 +13,7 @@ public class BookPreviewResponse {
     private Integer publicationYear;
     private String publisher;
     private int loanCount;
+    private int monthlyLoanIncrease;
     private CategoryResponse category;
     private String createdAt;
 }
