@@ -1,6 +1,9 @@
 package com.bookspot.users.presentation;
 
+import com.bookspot.users.infra.GoogleTokenVerifier;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@RequiredArgsConstructor
 public class UserAuthController {
+    private final GoogleTokenVerifier googleTokenVerifier;
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         /*
@@ -25,7 +31,11 @@ public class UserAuthController {
 
     @PostMapping("/google")
     public ResponseEntity<LoginResponse> googleLogin(@RequestBody GoogleLoginRequest requestDto) {
+        GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(requestDto.idToken());
         String hardcodedJwt = "jwt토큰";
+
+//        System.out.println(result.getEmail());
+//        System.out.println(result.getUnknownKeys()); // {name=, picture=..., given_name=, family_name=}
 
         // 응답 객체 생성
         LoginResponse response = new LoginResponse(hardcodedJwt, "ROLE_USER");
