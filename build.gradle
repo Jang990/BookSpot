@@ -36,6 +36,11 @@ dependencies {
 	implementation 'org.hibernate:hibernate-spatial:6.4.0.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
+	// jwt
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5', 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 	// OpenSearch
 	implementation("org.opensearch.client:opensearch-rest-client:2.11.0")
 	implementation("org.opensearch.client:opensearch-java:2.11.0")
