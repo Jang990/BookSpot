@@ -1,6 +1,6 @@
 package com.bookspot.stock.presentation;
 
-import com.bookspot.global.SecurityConfig;
+import com.bookspot.global.auth.SecurityConfig;
 import com.bookspot.stock.application.query.StockQueryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

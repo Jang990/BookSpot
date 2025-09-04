@@ -1,7 +1,7 @@
 package com.bookspot.book.presentation;
 
 import com.bookspot.book.application.BookService;
-import com.bookspot.global.SecurityConfig;
+import com.bookspot.global.auth.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
