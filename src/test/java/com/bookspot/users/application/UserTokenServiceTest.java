@@ -29,7 +29,7 @@ class UserTokenServiceTest {
         UserDto sampleUser = new UserDto(1L, "test@example.com", "nickname", "USER");
         when(googleTokenVerifier.verifyToken(idToken)).thenReturn(mockGooglePayload);
         when(userService.createOrFindUser(any(), any(), any())).thenReturn(sampleUser);
-        when(jwtProvider.createToken(any(), any())).thenReturn("jwt-token");
+        when(jwtProvider.createToken(any())).thenReturn("jwt-token");
 
 
         UserTokenResponse result = userTokenService.createToken(idToken);

@@ -20,8 +20,7 @@ public class UserTokenService {
         GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(idToken);
         UserDto user = userService.createOrFindUser(result.getEmail(), PROVIDER_TYPE_GOOGLE, result.getSubject());
 
-        // TODO: 토큰에 userId, role만 넣어주기. 이외의 정보는 불필요
-        String token = jwtProvider.createToken(result.getEmail(), PROVIDER_TYPE_GOOGLE);
+        String token = jwtProvider.createToken(user);
 
         return new UserTokenResponse(user.nickname(), token, user.role());
     }
