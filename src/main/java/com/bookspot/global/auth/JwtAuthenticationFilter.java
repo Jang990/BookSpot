@@ -7,9 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -21,16 +26,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         String token = resolveToken(request);
-        System.out.println("토큰 확인 ===> " + token);
-        if (token == null) {
+        if (token == null || !jwtProvider.validateToken(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        System.out.println("유효 토큰? ===>" + jwtProvider.validateToken(token));
         Claims claims = jwtProvider.getClaims(token);
-        System.out.println("이메일 정보 ===> " + claims.get(JwtProvider.EMAIL_KEY));
-        System.out.println("제공자 정보 ===> " + claims.get(JwtProvider.PROVIDER_KEY));
+        String email = claims.get(JwtProvider.EMAIL_KEY, String.class);
+        String provider = claims.get(JwtProvider.PROVIDER_KEY, String.class);
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        // TODO: 단순 구현. UserDetails 구현체 필요
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(email + "_" + provider, null, authorities);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         filterChain.doFilter(request, response);
     }
 
