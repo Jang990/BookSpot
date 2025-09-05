@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,13 +33,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         Claims claims = jwtProvider.getClaims(token);
-        String email = claims.get(JwtProvider.EMAIL_KEY, String.class);
-        String provider = claims.get(JwtProvider.PROVIDER_KEY, String.class);
+        String userId = claims.getSubject();
+        String role = claims.get(JwtProvider.ROLE_KEY, String.class);
         List<GrantedAuthority> authorities = new ArrayList<>();
+        if (role != null) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
 
         // TODO: 단순 구현. UserDetails 구현체 필요
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(email + "_" + provider, null, authorities);
+                new UsernamePasswordAuthenticationToken(userId, null, authorities);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

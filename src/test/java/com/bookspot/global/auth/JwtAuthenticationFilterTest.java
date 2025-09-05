@@ -1,6 +1,7 @@
 package com.bookspot.global.auth;
 
 import com.bookspot.global.DateHolder;
+import com.bookspot.users.application.UserDto;
 import jakarta.servlet.ServletException;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
@@ -39,7 +41,8 @@ class JwtAuthenticationFilterTest {
 
     @Test
     void 토큰이_있다면_시큐리티_홀더에_토큰정보가_저장됨() throws ServletException, IOException {
-        String validToken = jwtProvider.createToken("test@example.com", "google");
+        UserDto user = dummyUser(123L, "user");
+        String validToken = jwtProvider.createToken(user);
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -49,7 +52,13 @@ class JwtAuthenticationFilterTest {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertNotNull(authentication);
-        assertEquals("test@example.com_google", authentication.getPrincipal());
+        assertEquals("123", authentication.getPrincipal());
+        assertEquals(
+                "ROLE_USER",
+                authentication.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .toList().getFirst()
+        );
     }
 
     @Test
@@ -63,5 +72,7 @@ class JwtAuthenticationFilterTest {
         assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
 
-
+    private UserDto dummyUser(long userId, String role) {
+        return new UserDto(userId, "dummy", "dummy", role);
+    }
 }
