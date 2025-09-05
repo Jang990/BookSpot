@@ -1,5 +1,6 @@
 package com.bookspot.global.auth;
 
+import com.bookspot.global.DateHolder;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,15 +13,17 @@ import java.util.Date;
 
 @Component
 public class JwtProvider {
+    protected static final long validityMs = 1000 * 60 * 60; // 1시간
     private final Key key;
-    private final long validityMs = 1000 * 60 * 60; // 1시간
+    private final DateHolder dateHolder;
 
-    public JwtProvider(@Value("${jwt.secret}") String secret) {
+    public JwtProvider(@Value("${jwt.secret}") String secret, DateHolder dateHolder) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.dateHolder = dateHolder;
     }
 
     public String createToken(String email, String provider) {
-        Date now = new Date();
+        Date now = dateHolder.nowDate();
         Date expiry = new Date(now.getTime() + validityMs);
 
         return Jwts.builder()
