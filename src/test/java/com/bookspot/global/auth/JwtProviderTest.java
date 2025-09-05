@@ -1,6 +1,7 @@
 package com.bookspot.global.auth;
 
 import com.bookspot.global.DateHolder;
+import com.bookspot.users.application.UserDto;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class JwtProviderTest {
 
     @Test
     void 성공적인_토큰_검증() {
-        String token = createValidToken("test@example.com", "google");
+        String token = createValidToken(1L, "user");
         assertTrue(jwtProvider.validateToken(token));
     }
 
@@ -42,22 +43,23 @@ class JwtProviderTest {
         Date past = new Date(System.currentTimeMillis() - JwtProvider.validityMs * 2);
         when(dateHolder.nowDate()).thenReturn(past);
 
-        String token = jwtProvider.createToken("test2@example.com", "googleasd");
+        UserDto dummyUser = new UserDto(1L, "dummy-email", "dummy-nickname", "user");
+        String token = jwtProvider.createToken(dummyUser);
         assertFalse(jwtProvider.validateToken(token));
     }
 
     @Test
-    void 토큰_상세정보_조회_가능() {
-        String token = createValidToken("ABC@example.com", "google");
+    void 토큰_상세정보_조회_가능__ROLE은_대문자에_prefix가_붙음() {
+        String token = createValidToken(123L, "user");
 
         Claims claims = jwtProvider.getClaims(token);
 
-        assertEquals("ABC@example.com", claims.get(JwtProvider.EMAIL_KEY));
-        assertEquals("google", claims.get(JwtProvider.PROVIDER_KEY));
+        assertEquals("123", claims.getSubject());
+        assertEquals("ROLE_USER", claims.get(JwtProvider.ROLE_KEY));
     }
 
-    private String createValidToken(String email, String provider) {
+    private String createValidToken(long userId, String role) {
         when(dateHolder.nowDate()).thenReturn(new Date());
-        return jwtProvider.createToken(email, provider);
+        return jwtProvider.createToken(new UserDto(userId, "dummy-email", "dummy-nickname", role));
     }
 }
