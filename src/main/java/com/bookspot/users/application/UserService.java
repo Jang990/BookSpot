@@ -21,6 +21,7 @@ public class UserService {
                 ));
 
         return new UserDto(
+                users.getId(),
                 users.getEmail(),
                 users.getNickname(),
                 users.getRole()
