@@ -1,4 +1,4 @@
-package com.bookspot.users.infra;
+package com.bookspot.global.auth;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
