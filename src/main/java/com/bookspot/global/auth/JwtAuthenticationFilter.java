@@ -1,5 +1,6 @@
 package com.bookspot.global.auth;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         System.out.println("유효 토큰? ===>" + jwtProvider.validateToken(token));
+        Claims claims = jwtProvider.getClaims(token);
+        System.out.println("이메일 정보 ===> " + claims.get(JwtProvider.EMAIL_KEY));
+        System.out.println("제공자 정보 ===> " + claims.get(JwtProvider.PROVIDER_KEY));
         filterChain.doFilter(request, response);
     }
 

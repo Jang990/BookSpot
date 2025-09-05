@@ -1,6 +1,7 @@
 package com.bookspot.global.auth;
 
 import com.bookspot.global.DateHolder;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,6 +14,9 @@ import java.util.Date;
 
 @Component
 public class JwtProvider {
+    protected static final String EMAIL_KEY = "email";
+    protected static final String PROVIDER_KEY = "provider";
+
     protected static final long validityMs = 1000 * 60 * 60; // 1시간
     private final Key key;
     private final DateHolder dateHolder;
@@ -28,8 +32,8 @@ public class JwtProvider {
 
         return Jwts.builder()
 //                .setSubject(userId) // TODO: DB 연동 후.
-                .claim("email", email)
-                .claim("provider", provider)
+                .claim(EMAIL_KEY, email)
+                .claim(PROVIDER_KEY, provider)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -44,6 +48,14 @@ public class JwtProvider {
             // 만료, 빈 토큰, 서명 검증 실패, 잘못된 토큰 구조
             return false;
         }
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 }
