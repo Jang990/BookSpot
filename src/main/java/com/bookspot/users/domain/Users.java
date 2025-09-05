@@ -2,8 +2,11 @@ package com.bookspot.users.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(
         name = "users",
@@ -32,4 +35,35 @@ public class Users {
 
     @Column(nullable = false)
     private String providerId;
+
+    private Users(
+            String email,
+            String nickname,
+            UsersRole role,
+            OAuthProvider provider,
+            String providerId
+    ) {
+        this.email = email;
+        this.nickname = nickname;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+
+    public static Users createUser(
+            String providerId,
+            OAuthProvider oAuthProvider,
+            String email
+    ) {
+        String nickname = email;
+        return new Users(
+                email, nickname,
+                UsersRole.USER,
+                oAuthProvider, providerId
+        );
+    }
+
+    public String getRole() {
+        return role.toString();
+    }
 }
