@@ -40,7 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authorities.add(new SimpleGrantedAuthority(role));
         }
 
-        // TODO: 단순 구현. UserDetails 구현체 필요
+        /*
+        TODO: 이 코드는 "권한 상승 -> 기존 토큰으로 요청" 이 상황에서 이전 권한으로 요청이 진행되는 오류가 발생한다.
+             db 최신 데이터가 아닌 jwt토큰 데이터만 다루기 때문이다.
+             나중에 "jwt 내부 데이터가 동적으로 변경된다는 요구사항이 있다면
+             UsersRepository를 사용해서 최신 데이터를 불러오고 UserDetails를 사용하는 방식으로 구현해야 한다.
+         */
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userId, null, authorities);
 
