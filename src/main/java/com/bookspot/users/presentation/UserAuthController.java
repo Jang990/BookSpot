@@ -1,9 +1,8 @@
 package com.bookspot.users.presentation;
 
-import com.bookspot.users.infra.GoogleTokenVerifier;
-import com.bookspot.global.auth.JwtProvider;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.bookspot.users.application.UserTokenService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class UserAuthController {
-    private final GoogleTokenVerifier googleTokenVerifier;
-    private final JwtProvider jwtProvider;
+    private final UserTokenService userTokenService;
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
@@ -32,23 +30,8 @@ public class UserAuthController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<LoginResponse> googleLogin(@RequestBody GoogleLoginRequest requestDto) {
-        GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(requestDto.idToken());
-//        System.out.println(result.getEmail());
-//        System.out.println(result.getUnknownKeys()); // {name=, picture=..., given_name=, family_name=}
-
-        String token = jwtProvider.createToken(result.getEmail(), "google");
-
-        // 응답 객체 생성
-        LoginResponse response = new LoginResponse(token, "ROLE_USER");
-
-        // 성공 응답 반환
-        return ResponseEntity.ok(response);
+    public ResponseEntity<UserTokenResponse> googleLogin(@Valid @RequestBody LoginRequest requestDto) {
+        return ResponseEntity.ok(userTokenService.createToken(requestDto.idToken()));
     }
-
-
-    public record GoogleLoginRequest(String idToken) { }
-
-    public record LoginResponse(String accessToken, String role) {}
 
 }
