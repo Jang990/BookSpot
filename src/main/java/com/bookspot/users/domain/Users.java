@@ -17,18 +17,19 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String email;
+
+    @Column(nullable = false)
+    private String nickname;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UsersRole role;
+
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private OAuthProvider provider;
 
     @Column(nullable = false)
     private String providerId;
-
-    private String email;
-    private String name;
-    private String profileImage;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UsersRole role;
 }
