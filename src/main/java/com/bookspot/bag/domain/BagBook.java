@@ -1,6 +1,7 @@
-package com.bookspot.users.domain;
+package com.bookspot.bag.domain;
 
 import com.bookspot.book.domain.Book;
+import com.bookspot.users.domain.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
