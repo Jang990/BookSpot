@@ -36,6 +36,8 @@ public class Users {
     @Column(nullable = false)
     private String providerId;
 
+    private int bookBagSize;
+
     private Users(
             String email,
             String nickname,
@@ -48,6 +50,7 @@ public class Users {
         this.role = role;
         this.provider = provider;
         this.providerId = providerId;
+        this.bookBagSize = 0;
     }
 
     public static Users createUser(
