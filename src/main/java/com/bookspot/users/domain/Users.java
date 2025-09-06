@@ -1,5 +1,7 @@
 package com.bookspot.users.domain;
 
+import com.bookspot.global.Events;
+import com.bookspot.users.domain.event.BookAddedToBagEvent;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -36,7 +38,7 @@ public class Users {
     @Column(nullable = false)
     private String providerId;
 
-    private int bookBagSize;
+    private int bookBagSize = 0;
 
     private Users(
             String email,
@@ -50,7 +52,6 @@ public class Users {
         this.role = role;
         this.provider = provider;
         this.providerId = providerId;
-        this.bookBagSize = 0;
     }
 
     public static Users createUser(
@@ -68,5 +69,13 @@ public class Users {
 
     public String getRole() {
         return role.toString();
+    }
+
+    public void addBookToBag(long bookId) {
+        if(id == null)
+            throw new IllegalStateException("저장되지 않은 사용자는 책 가방을 이용할 수 없음");
+        if(bookBagSize >= UsersConst.MAX_BAG_SIZE)
+            throw new IllegalStateException("책 가방 최대 사이즈를 초과함");
+        Events.raise(new BookAddedToBagEvent(id, bookId));
     }
 }
