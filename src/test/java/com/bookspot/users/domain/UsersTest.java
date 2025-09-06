@@ -21,4 +21,12 @@ class UsersTest {
         assertThrows(IllegalStateException.class, () -> users.addBookToBag(1L));
     }
 
+    @Test
+    void 책가방에_책을_추가하면_책가방_사이즈가_증가함() {
+        Users users = new Users();
+        ReflectionTestUtils.setField(users, "id", 123L);
+        users.addBookToBag(1L);
+        assertEquals(1, users.getBookBagSize());
+    }
+
 }

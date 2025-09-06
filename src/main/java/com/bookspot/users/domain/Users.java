@@ -77,5 +77,6 @@ public class Users {
         if(bookBagSize >= UsersConst.MAX_BAG_SIZE)
             throw new IllegalStateException("책 가방 최대 사이즈를 초과함");
         Events.raise(new BookAddedToBagEvent(id, bookId));
+        bookBagSize++;
     }
 }
