@@ -30,4 +30,9 @@ public class BagBook {
 
     @CreatedDate
     public LocalDateTime createdAt;
+
+    protected BagBook(Book book, Users users) {
+        this.book = book;
+        this.users = users;
+    }
 }
