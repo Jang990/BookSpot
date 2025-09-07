@@ -29,12 +29,20 @@ public class UserBagController {
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/api/users/bag/books/{bookId}")
-    public ResponseEntity<Void> deleteBookToBag(
+    public ResponseEntity<Void> deleteBookFromBag(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("bookId") long bookId
     ) {
         long userId = Long.parseLong(userIdStr);
         userBagService.deleteBook(userId, bookId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/api/users/bag/books")
+    public ResponseEntity<Void> clearBagBook(@AuthenticationPrincipal String userIdStr) {
+        long userId = Long.parseLong(userIdStr);
+        userBagService.clearBag(userId);
         return ResponseEntity.noContent().build();
     }
 

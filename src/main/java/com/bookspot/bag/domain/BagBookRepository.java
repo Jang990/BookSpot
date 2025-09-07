@@ -24,4 +24,8 @@ public interface BagBookRepository extends JpaRepository<BagBook, Long> {
             @Param("bookId") long bookId
     );
 
+    @Modifying
+    @Query("delete from BagBook b where b.users.id = :userId")
+    int deleteByUsersId(@Param("userId") long userId);
+
 }

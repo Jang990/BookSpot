@@ -32,4 +32,11 @@ public class UserBagService {
 
         users.deleteBookFromBag(book);
     }
+
+    public void clearBag(long userId) {
+        Users users = usersRepository.findByIdWithLock(userId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        users.clearBag();
+    }
 }

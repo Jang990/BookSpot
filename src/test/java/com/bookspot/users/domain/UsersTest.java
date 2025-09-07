@@ -18,6 +18,7 @@ class UsersTest {
         // when, then
         assertThrows(IllegalStateException.class, () -> users.addBookToBag(book));
         assertThrows(IllegalStateException.class, () -> users.deleteBookFromBag(book));
+        assertThrows(IllegalStateException.class, () -> users.clearBag());
     }
 
     @Test
@@ -73,6 +74,31 @@ class UsersTest {
 
         // then
         assertEquals(1, users.getBookBagSize());
+    }
+
+    @Test
+    void 책가방_크기가_0이라면_clear_할_수_없음() {
+        // given
+        Users users = new Users();
+        ReflectionTestUtils.setField(users, "id", 123L);
+        ReflectionTestUtils.setField(users, "bookBagSize", 0);
+
+        // when, then
+        assertThrows(IllegalStateException.class, users::clearBag);
+    }
+
+    @Test
+    void clearBag을_호출하면_bagSize가_0으로_초기화됨() {
+        // given
+        Users users = new Users();
+        ReflectionTestUtils.setField(users, "id", 123L);
+        ReflectionTestUtils.setField(users, "bookBagSize", 2);
+
+        // when
+        users.clearBag();
+
+        // then
+        assertEquals(0, users.getBookBagSize());
     }
 
 }

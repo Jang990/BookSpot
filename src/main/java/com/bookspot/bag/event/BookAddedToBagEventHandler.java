@@ -8,6 +8,7 @@ import com.bookspot.book.domain.BookRepository;
 import com.bookspot.users.domain.Users;
 import com.bookspot.users.domain.UsersRepository;
 import com.bookspot.users.domain.event.BookAddedToBagEvent;
+import com.bookspot.users.domain.event.BookBagClearedEvent;
 import com.bookspot.users.domain.event.BookDeletedFromBagEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -37,5 +38,12 @@ public class BookAddedToBagEventHandler {
         int result = bagBookRepository.deleteByUsersIdAndBookId(event.userId(), event.bookId());
         if(result == 0)
             throw new IllegalArgumentException("책가방에 존재하지 않는 책을 제거할 수 없음");
+    }
+
+    @EventListener(BookBagClearedEvent.class)
+    public void handle(BookBagClearedEvent event) {
+        int result = bagBookRepository.deleteByUsersId(event.userId());
+        if(result == 0)
+            throw new IllegalArgumentException("책가방에 이미 비어져 있음");
     }
 }
