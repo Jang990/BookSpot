@@ -3,6 +3,7 @@ package com.bookspot.global.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -12,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtProvider jwtProvider;
@@ -25,7 +27,11 @@ public class SecurityConfig {
                 // 세션 안씀
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 일단 전부 받음
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .authorizeHttpRequests(
+                        authorize -> authorize
+                                .requestMatchers("/api/users/**").authenticated()
+                                .anyRequest().permitAll()
+                )
                 // 시큐리티 기본 로그인 필터를 jwt필터로 변경
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtProvider),
