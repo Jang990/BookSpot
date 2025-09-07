@@ -34,9 +34,9 @@ class UserTokenServiceTest {
 
         UserTokenResponse result = userTokenService.createToken(idToken);
 
-        assertEquals("nickname",result.nickname());
-        assertEquals("jwt-token", result.accessToken());
-        assertEquals("USER",result.role());
+        assertEquals("nickname",result.getNickname());
+        assertEquals("jwt-token", result.getAccessToken());
+        assertEquals("USER",result.getRole());
     }
 
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 public class JwtProvider {
     protected static final String ROLE_KEY = "role";
 
-    protected static final long validityMs = 1000 * 60 * 60; // 1시간
+    public static final long validityMs = 1000 * 60 * 60; // 1시간
     private final Key key;
     private final DateHolder dateHolder;
 
