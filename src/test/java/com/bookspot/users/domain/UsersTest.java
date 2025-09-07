@@ -17,6 +17,7 @@ class UsersTest {
 
         // when, then
         assertThrows(IllegalStateException.class, () -> users.addBookToBag(book));
+        assertThrows(IllegalStateException.class, () -> users.deleteBookFromBag(book));
     }
 
     @Test
@@ -41,6 +42,34 @@ class UsersTest {
 
         // when
         users.addBookToBag(book);
+
+        // then
+        assertEquals(1, users.getBookBagSize());
+    }
+
+    @Test
+    void 책가방_크기가_0이라면_책을_제거할_수_없음() {
+        // given
+        Book book = mock(Book.class);
+        Users users = new Users();
+        ReflectionTestUtils.setField(users, "id", 123L);
+        ReflectionTestUtils.setField(users, "bookBagSize", 0);
+
+        // when, then
+        assertThrows(IllegalStateException.class, () -> users.deleteBookFromBag(book));
+    }
+
+    @Test
+    void 책가방에_책을_제거하면_책가방_사이즈가_감소함() {
+        // given
+        Book book = mock(Book.class);
+        when(book.getId()).thenReturn(1L);
+        Users users = new Users();
+        ReflectionTestUtils.setField(users, "id", 123L);
+        ReflectionTestUtils.setField(users, "bookBagSize", 2);
+
+        // when
+        users.deleteBookFromBag(book);
 
         // then
         assertEquals(1, users.getBookBagSize());

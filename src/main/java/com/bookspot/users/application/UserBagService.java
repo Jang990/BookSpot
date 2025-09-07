@@ -23,4 +23,13 @@ public class UserBagService {
 
         users.addBookToBag(book);
     }
+
+    public void deleteBook(long userId, long bookId) {
+        Users users = usersRepository.findByIdWithLock(userId)
+                .orElseThrow(IllegalArgumentException::new);
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(IllegalArgumentException::new);
+
+        users.deleteBookFromBag(book);
+    }
 }
