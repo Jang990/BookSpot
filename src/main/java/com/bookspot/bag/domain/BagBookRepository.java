@@ -8,8 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BagBookRepository extends JpaRepository<BagBook, Long> {
+
+    List<BagBook> findByUsersId(long userId);
+
     boolean existsByUsersAndBook(Users users, Book book);
 
     @Modifying
@@ -18,4 +23,5 @@ public interface BagBookRepository extends JpaRepository<BagBook, Long> {
             @Param("userId") long userId,
             @Param("bookId") long bookId
     );
+
 }

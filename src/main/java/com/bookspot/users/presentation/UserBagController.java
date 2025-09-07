@@ -1,5 +1,6 @@
 package com.bookspot.users.presentation;
 
+import com.bookspot.bag.application.BagBookService;
 import com.bookspot.users.application.UserBagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserBagController {
     private final UserBagService userBagService;
+    private final BagBookService bagBookService;
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/api/users/bag/books/{bookId}")
@@ -36,4 +38,12 @@ public class UserBagController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/api/users/bag/books/ids")
+    public ResponseEntity<BagBookIdsResponse> getUserBagBookIds(@AuthenticationPrincipal String userIdStr) {
+        long userId = Long.parseLong(userIdStr);
+        return ResponseEntity.ok(
+                new BagBookIdsResponse(bagBookService.findBookIds(userId))
+        );
+    }
 }
