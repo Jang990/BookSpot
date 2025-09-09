@@ -1,5 +1,6 @@
 package com.bookspot.global.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,16 @@ public class SecurityConfig {
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtProvider),
                         UsernamePasswordAuthenticationFilter.class
+                )
+                .exceptionHandling(handler -> handler
+                        // 1. 인증되지 않은 사용자가 보호된 리소스에 접근했을 때
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증되지 않은 사용자입니다.")
+                        )
+                        // 2. 인증은 됐지만, 권한이 없는 리소스에 접근했을 때
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 권한이 없습니다.")
+                        )
                 )
                 .build();
     }
