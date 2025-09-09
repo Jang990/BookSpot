@@ -1,6 +1,7 @@
 package com.bookspot.users.application;
 
 import com.bookspot.global.auth.JwtProvider;
+import com.bookspot.global.auth.dto.GeneratedToken;
 import com.bookspot.users.infra.GoogleTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,7 +32,7 @@ class UserTokenServiceTest {
         UserDto sampleUser = new UserDto(1L, "test@example.com", "nickname", "USER");
         when(googleTokenVerifier.verifyToken(idToken)).thenReturn(mockGooglePayload);
         when(userService.createOrFindUser(any(), any(), any())).thenReturn(sampleUser);
-        when(jwtProvider.createToken(any())).thenReturn("jwt-token");
+        when(jwtProvider.createToken(any())).thenReturn(new GeneratedToken("jwt-token", new Date()));
 
 
         UserTokenResponse result = userTokenService.createToken(idToken);

@@ -1,6 +1,7 @@
 package com.bookspot.global.auth;
 
 import com.bookspot.global.DateHolder;
+import com.bookspot.global.auth.dto.GeneratedToken;
 import com.bookspot.users.application.UserDto;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ class JwtProviderTest {
     private DateHolder dateHolder;
 
     private JwtProvider jwtProvider;
+    private final Date baseDate = new Date();
 
     @BeforeEach
     void setUp() {
@@ -29,8 +31,12 @@ class JwtProviderTest {
 
     @Test
     void 성공적인_토큰_검증() {
-        String token = createValidToken(1L, "user");
-        assertTrue(jwtProvider.validateToken(token));
+        GeneratedToken token = createValidToken(1L, "user");
+        assertTrue(jwtProvider.validateToken(token.accessToken()));
+        assertEquals(
+                baseDate.getTime() + JwtProvider.validityMs,
+                token.expiredAt().getTime()
+        );
     }
 
     @Test
@@ -40,17 +46,17 @@ class JwtProviderTest {
 
     @Test
     void 만료된_토큰_검증() {
-        Date past = new Date(System.currentTimeMillis() - JwtProvider.validityMs * 2);
+        Date past = new Date(baseDate.getTime() - JwtProvider.validityMs * 2);
         when(dateHolder.nowDate()).thenReturn(past);
 
         UserDto dummyUser = new UserDto(1L, "dummy-email", "dummy-nickname", "user");
-        String token = jwtProvider.createToken(dummyUser);
+        String token = jwtProvider.createToken(dummyUser).accessToken();
         assertFalse(jwtProvider.validateToken(token));
     }
 
     @Test
     void 토큰_상세정보_조회_가능__ROLE은_대문자에_prefix가_붙음() {
-        String token = createValidToken(123L, "user");
+        String token = createValidToken(123L, "user").accessToken();
 
         Claims claims = jwtProvider.getClaims(token);
 
@@ -58,8 +64,8 @@ class JwtProviderTest {
         assertEquals("ROLE_USER", claims.get(JwtProvider.ROLE_KEY));
     }
 
-    private String createValidToken(long userId, String role) {
-        when(dateHolder.nowDate()).thenReturn(new Date());
+    private GeneratedToken createValidToken(long userId, String role) {
+        when(dateHolder.nowDate()).thenReturn(baseDate);
         return jwtProvider.createToken(new UserDto(userId, "dummy-email", "dummy-nickname", role));
     }
 }

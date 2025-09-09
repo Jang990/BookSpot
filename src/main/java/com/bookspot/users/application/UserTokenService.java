@@ -20,7 +20,7 @@ public class UserTokenService {
         GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(idToken);
         UserDto user = userService.createOrFindUser(result.getEmail(), PROVIDER_TYPE_GOOGLE, result.getSubject());
 
-        String token = jwtProvider.createToken(user);
+        String token = jwtProvider.createToken(user).accessToken();
 
         return new UserTokenResponse(user.nickname(), token, user.role());
     }
