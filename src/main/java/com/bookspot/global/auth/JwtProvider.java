@@ -19,7 +19,7 @@ public class JwtProvider {
     protected static final String ROLE_KEY = "role";
 
     public static final long ONE_HOUR_MS = 1000 * 60 * 60;
-    public static final long VALIDITY_MS = ONE_HOUR_MS; // 1시간
+    public static final long VALIDITY_MS = ONE_HOUR_MS * 72;
     private final Key key;
     private final DateHolder dateHolder;
 
