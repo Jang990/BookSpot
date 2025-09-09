@@ -50,9 +50,6 @@ fi
 
 echo "> $JAR_NAME 를 profile=$IDLE_PROFILE 로 실행합니다."
 nohup java -jar \
-    -Dspring.config.location=classpath:/application-$IDLE_PROFILE.yml,\
-    /home/ec2-user/app/project/application-prod.yml,\
-    /home/ec2-user/app/project/apis.yml, \
-    /home/ec2-user/app/project/oauth.yml \
+    -Dspring.config.location=classpath:/application-$IDLE_PROFILE.yml,/home/ec2-user/app/project/application-prod.yml,/home/ec2-user/app/project/apis.yml,/home/ec2-user/app/project/oauth.yml \
     -Dspring.profiles.active=$IDLE_PROFILE \
     $JAR_NAME > ${LOG_FILE} 2>&1 &
