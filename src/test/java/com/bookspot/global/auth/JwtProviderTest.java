@@ -34,7 +34,7 @@ class JwtProviderTest {
         GeneratedToken token = createValidToken(1L, "user");
         assertTrue(jwtProvider.validateToken(token.accessToken()));
         assertEquals(
-                baseDate.getTime() + JwtProvider.validityMs,
+                baseDate.getTime() + JwtProvider.VALIDITY_MS,
                 token.expiredAt().getTime()
         );
     }
@@ -46,7 +46,7 @@ class JwtProviderTest {
 
     @Test
     void 만료된_토큰_검증() {
-        Date past = new Date(baseDate.getTime() - JwtProvider.validityMs * 2);
+        Date past = new Date(baseDate.getTime() - JwtProvider.VALIDITY_MS * 2);
         when(dateHolder.nowDate()).thenReturn(past);
 
         UserDto dummyUser = new UserDto(1L, "dummy-email", "dummy-nickname", "user");

@@ -18,7 +18,8 @@ import java.util.Date;
 public class JwtProvider {
     protected static final String ROLE_KEY = "role";
 
-    public static final long validityMs = 1000 * 60 * 60; // 1시간
+    public static final long ONE_HOUR_MS = 1000 * 60 * 60;
+    public static final long VALIDITY_MS = ONE_HOUR_MS; // 1시간
     private final Key key;
     private final DateHolder dateHolder;
 
@@ -29,7 +30,7 @@ public class JwtProvider {
 
     public GeneratedToken createToken(UserDto userDto) {
         Date now = dateHolder.nowDate();
-        Date expiry = new Date(now.getTime() + validityMs);
+        Date expiry = new Date(now.getTime() + VALIDITY_MS);
 
         String accessToken = Jwts.builder()
                 .setSubject(String.valueOf(userDto.id()))
