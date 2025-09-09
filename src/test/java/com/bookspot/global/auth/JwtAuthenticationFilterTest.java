@@ -42,7 +42,7 @@ class JwtAuthenticationFilterTest {
     @Test
     void 토큰이_있다면_시큐리티_홀더에_토큰정보가_저장됨() throws ServletException, IOException {
         UserDto user = dummyUser(123L, "user");
-        String validToken = jwtProvider.createToken(user);
+        String validToken = jwtProvider.createToken(user).accessToken();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();

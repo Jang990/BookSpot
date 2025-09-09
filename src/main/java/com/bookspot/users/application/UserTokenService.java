@@ -1,6 +1,7 @@
 package com.bookspot.users.application;
 
 import com.bookspot.global.auth.JwtProvider;
+import com.bookspot.global.auth.dto.GeneratedToken;
 import com.bookspot.users.infra.GoogleTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -20,8 +21,8 @@ public class UserTokenService {
         GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(idToken);
         UserDto user = userService.createOrFindUser(result.getEmail(), PROVIDER_TYPE_GOOGLE, result.getSubject());
 
-        String token = jwtProvider.createToken(user);
+        GeneratedToken token = jwtProvider.createToken(user);
 
-        return new UserTokenResponse(user.nickname(), token, user.role());
+        return new UserTokenResponse(user.nickname(), user.role(), token);
     }
 }

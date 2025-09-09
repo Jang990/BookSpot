@@ -1,6 +1,7 @@
 package com.bookspot.global.auth;
 
 import com.bookspot.global.DateHolder;
+import com.bookspot.global.auth.dto.GeneratedToken;
 import com.bookspot.users.application.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -26,17 +27,19 @@ public class JwtProvider {
         this.dateHolder = dateHolder;
     }
 
-    public String createToken(UserDto userDto) {
+    public GeneratedToken createToken(UserDto userDto) {
         Date now = dateHolder.nowDate();
         Date expiry = new Date(now.getTime() + validityMs);
 
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setSubject(String.valueOf(userDto.id()))
-                .claim(ROLE_KEY, "ROLE_"+userDto.role().toUpperCase())
+                .claim(ROLE_KEY, "ROLE_" + userDto.role().toUpperCase())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+        return new GeneratedToken(accessToken, expiry);
     }
 
     public boolean validateToken(String token) {
