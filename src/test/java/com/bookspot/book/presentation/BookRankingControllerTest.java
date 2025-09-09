@@ -1,5 +1,6 @@
 package com.bookspot.book.presentation;
 
+import com.bookspot.ControllerTestNoSecurity;
 import com.bookspot.book.application.BookRankingService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,16 +9,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("책 랭킹 검색")
 @WebMvcTest(BookRankingController.class)
-@MockBean(JpaMetamodelMappingContext.class)
+@ControllerTestNoSecurity
 class BookRankingControllerTest {
 
     @Autowired

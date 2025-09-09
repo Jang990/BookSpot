@@ -21,12 +21,14 @@ public class LibraryController {
     private final LibraryService libraryService;
 
     @GetMapping
-    public ResponseEntity<List<LibraryDistanceResponse>> findLibraries(
+    public ResponseEntity<NearByLibraryResponse> findLibraries(
             @Valid LibrarySearchRequest request) {
         return ResponseEntity.ok(
-                libraryService.findLibraries(
-                        new Location(request.getNwLat(), request.getNwLon()),
-                        new Location(request.getSeLat(), request.getSeLon())
+                new NearByLibraryResponse(
+                    libraryService.findLibraries(
+                            new Location(request.getNwLat(), request.getNwLon()),
+                            new Location(request.getSeLat(), request.getSeLon())
+                    )
                 )
         );
     }

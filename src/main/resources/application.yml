@@ -12,6 +12,7 @@ front:
 spring:
   config.import:
     - classpath:apis.yml
+    - classpath:oauth.yml
   messages:
     basename: messages,errors
   application:
