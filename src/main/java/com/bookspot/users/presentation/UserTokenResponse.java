@@ -1,10 +1,7 @@
 package com.bookspot.users.presentation;
 
-import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
 import lombok.Getter;
-
-import java.util.Date;
 
 @Getter
 public class UserTokenResponse {
