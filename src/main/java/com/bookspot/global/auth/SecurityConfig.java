@@ -30,7 +30,9 @@ public class SecurityConfig {
                 // 일단 전부 받음
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/api/users/**").authenticated()
+                                .requestMatchers(
+                                        "/api/users/**",
+                                        "/api/stocks/*/loan/refresh").authenticated()
                                 .anyRequest().permitAll()
                 )
                 // 시큐리티 기본 로그인 필터를 jwt필터로 변경
