@@ -32,4 +32,6 @@ public class Library {
     private LocalDate stockUpdatedAt;
 
     private String libraryCode;
+
+    private boolean supportsLoanStatus;
 }

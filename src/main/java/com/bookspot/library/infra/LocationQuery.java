@@ -16,7 +16,8 @@ public class LocationQuery {
                     rs.getString("address"),
                     rs.getString("home_page"),
                     rs.getString("closed_info"),
-                    rs.getString("operating_info")
+                    rs.getString("operating_info"),
+                    rs.getBoolean("supports_loan_status")
             );
 
     private final String LOCATION_FILED_NAME = "location";
@@ -29,7 +30,8 @@ public class LocationQuery {
                     address,
                     home_page,
                     closed_info,
-                    operating_info
+                    operating_info,
+                    supports_loan_status
                 FROM library
                 WHERE %s
                 """.formatted(
