@@ -2,6 +2,7 @@ package com.bookspot.users.presentation;
 
 import com.bookspot.bag.application.BagBookService;
 import com.bookspot.users.application.UserBagService;
+import com.bookspot.users.domain.UsersConst;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +19,7 @@ public class UserBagController {
 
     /**
      * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserBagFullException
      */
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/api/users/bag/books/{bookId}")
@@ -32,6 +34,7 @@ public class UserBagController {
 
     /**
      * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserBagEmptyException
      */
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/api/users/bag/books/{bookId}")
@@ -46,6 +49,7 @@ public class UserBagController {
 
     /**
      * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserBagEmptyException
      */
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/api/users/bag/books")
