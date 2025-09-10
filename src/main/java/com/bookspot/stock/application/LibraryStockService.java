@@ -3,6 +3,7 @@ package com.bookspot.stock.application;
 import com.bookspot.stock.application.mapper.LibraryStockDataMapper;
 import com.bookspot.stock.domain.LibraryStock;
 import com.bookspot.stock.domain.LibraryStockRepository;
+import com.bookspot.stock.domain.exception.LibraryStockNotFoundException;
 import com.bookspot.stock.presentation.response.StockLoanStateResponseList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class LibraryStockService {
     public StockLoanStateResponseList findLibraryBookStock(long libraryId, List<Long> bookIds) {
         List<LibraryStock> stocks = repository.findLibraryStocks(libraryId, bookIds);
         if(stocks.size() != bookIds.size())
-            throw new IllegalArgumentException("도서관에 존재하지 않는 bookIds가 포함됨");
+            throw new LibraryStockNotFoundException(libraryId, bookIds);
 
         return new StockLoanStateResponseList(
                 stocks.stream()

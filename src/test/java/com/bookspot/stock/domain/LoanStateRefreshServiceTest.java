@@ -3,6 +3,9 @@ package com.bookspot.stock.domain;
 import com.bookspot.book.domain.Book;
 import com.bookspot.global.DateHolder;
 import com.bookspot.library.domain.Library;
+import com.bookspot.stock.domain.exception.LibraryNotSupportsLoanStatusException;
+import com.bookspot.stock.domain.exception.LibraryStockAlreadyRefreshedException;
+import com.bookspot.stock.domain.exception.LibraryStockMismatchException;
 import com.bookspot.stock.domain.service.loanable.LoanStateApiClient;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
 import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
@@ -36,7 +39,7 @@ class LoanStateRefreshServiceTest {
         when(library.isSupportsLoanStatus()).thenReturn(false);
 
         // when, then
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(LibraryNotSupportsLoanStatusException.class, () ->
                 loanStateRefreshService.checkRefreshAllowed(library, stock));
     }
 
@@ -49,7 +52,7 @@ class LoanStateRefreshServiceTest {
         when(stock.isAlreadyRefreshed(dateHolder)).thenReturn(true);
 
         // when, then
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(LibraryStockAlreadyRefreshedException.class, () ->
                 loanStateRefreshService.checkRefreshAllowed(library, stock));
     }
 
@@ -76,7 +79,7 @@ class LoanStateRefreshServiceTest {
         when(stock.matches(any(), any())).thenReturn(false);
 
         // when / then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(LibraryStockMismatchException.class,
                 () -> loanStateRefreshService.refresh(stock, book, library));
     }
 
