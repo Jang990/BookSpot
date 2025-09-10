@@ -33,6 +33,9 @@ public class LibraryController {
         );
     }
 
+    /**
+     * @see com.bookspot.library.domain.exception.LibraryNotFoundException
+     */
     @GetMapping("/{libraryId}")
     public ResponseEntity<LibraryDistanceResponse> findLibraries(
             @PathVariable long libraryId
