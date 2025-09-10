@@ -3,6 +3,8 @@ package com.bookspot.bag.event;
 import com.bookspot.bag.domain.BagBook;
 import com.bookspot.bag.domain.BagBookCreator;
 import com.bookspot.bag.domain.BagBookRepository;
+import com.bookspot.bag.domain.exception.BookAlreadyRemovedFromBagException;
+import com.bookspot.bag.domain.exception.BookBagAlreadyEmptyException;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import com.bookspot.users.domain.Users;
@@ -26,8 +28,10 @@ public class BookAddedToBagEventHandler {
 
     @EventListener(BookAddedToBagEvent.class)
     public void handle(BookAddedToBagEvent event) {
-        Book book = bookRepository.findById(event.bookId()).orElseThrow(IllegalArgumentException::new);
-        Users users = usersRepository.findById(event.userId()).orElseThrow(IllegalArgumentException::new);
+        Book book = bookRepository.findById(event.bookId())
+                .orElseThrow(IllegalArgumentException::new);
+        Users users = usersRepository.findById(event.userId())
+                .orElseThrow(IllegalArgumentException::new);
 
         BagBook bagBook = bagBookCreator.create(users, book);
         bagBookRepository.save(bagBook);
@@ -37,13 +41,13 @@ public class BookAddedToBagEventHandler {
     public void handle(BookDeletedFromBagEvent event) {
         int result = bagBookRepository.deleteByUsersIdAndBookId(event.userId(), event.bookId());
         if(result == 0)
-            throw new IllegalArgumentException("책가방에 존재하지 않는 책을 제거할 수 없음");
+            throw new BookAlreadyRemovedFromBagException(event.userId(), event.bookId());
     }
 
     @EventListener(BookBagClearedEvent.class)
     public void handle(BookBagClearedEvent event) {
         int result = bagBookRepository.deleteByUsersId(event.userId());
         if(result == 0)
-            throw new IllegalArgumentException("책가방에 이미 비어져 있음");
+            throw new BookBagAlreadyEmptyException(event.userId());
     }
 }
