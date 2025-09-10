@@ -7,6 +7,7 @@ import com.bookspot.bag.domain.exception.BookAlreadyRemovedFromBagException;
 import com.bookspot.bag.domain.exception.BookBagAlreadyEmptyException;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
+import com.bookspot.book.domain.exception.BookNotFoundException;
 import com.bookspot.users.domain.Users;
 import com.bookspot.users.domain.UsersRepository;
 import com.bookspot.users.domain.event.BookAddedToBagEvent;
@@ -30,7 +31,7 @@ public class BookAddedToBagEventHandler {
     @EventListener(BookAddedToBagEvent.class)
     public void handle(BookAddedToBagEvent event) {
         Book book = bookRepository.findById(event.bookId())
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new BookNotFoundException(event.bookId()));
         Users users = usersRepository.findById(event.userId())
                 .orElseThrow(() -> new UserNotFoundException(event.userId()));
 

@@ -2,6 +2,7 @@ package com.bookspot.users.application;
 
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
+import com.bookspot.book.domain.exception.BookNotFoundException;
 import com.bookspot.users.domain.Users;
 import com.bookspot.users.domain.UsersRepository;
 import com.bookspot.users.domain.exception.UserNotFoundException;
@@ -20,7 +21,7 @@ public class UserBagService {
         Users users = usersRepository.findByIdWithLock(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new BookNotFoundException(bookId));
 
         users.addBookToBag(book);
     }
@@ -29,7 +30,7 @@ public class UserBagService {
         Users users = usersRepository.findByIdWithLock(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new BookNotFoundException(bookId));
 
         users.deleteBookFromBag(book);
     }
