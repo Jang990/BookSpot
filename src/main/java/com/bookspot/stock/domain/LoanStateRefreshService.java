@@ -3,6 +3,9 @@ package com.bookspot.stock.domain;
 import com.bookspot.book.domain.Book;
 import com.bookspot.global.DateHolder;
 import com.bookspot.library.domain.Library;
+import com.bookspot.stock.domain.exception.LibraryNotSupportsLoanStatusException;
+import com.bookspot.stock.domain.exception.LibraryStockAlreadyRefreshedException;
+import com.bookspot.stock.domain.exception.LibraryStockMismatchException;
 import com.bookspot.stock.domain.service.loanable.LoanStateApiClient;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
 import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
@@ -20,10 +23,10 @@ public class LoanStateRefreshService {
     private final DateHolder dateHolder;
 
     public void checkRefreshAllowed(Library library, LibraryStock stock) {
-        if(!library.isSupportsLoanStatus())
-            throw new IllegalArgumentException("도서관 대출 현황을 지원하지 않는 도서관입니다."); // 422
-        if(stock.isAlreadyRefreshed(dateHolder))
-            throw new IllegalArgumentException("이미 Refresh된 대출 현황입니다"); // 429
+        if (!library.isSupportsLoanStatus())
+            throw new LibraryNotSupportsLoanStatusException(library.getId());
+        if (stock.isAlreadyRefreshed(dateHolder))
+            throw new LibraryStockAlreadyRefreshedException(stock.getId());
     }
 
     public LoanState refresh(
@@ -32,7 +35,7 @@ public class LoanStateRefreshService {
             Library library
     ) {
         if(!stock.matches(book, library))
-            throw new IllegalArgumentException("요청된 book/library가 stock과 일치하지 않습니다");
+            throw new LibraryStockMismatchException(stock.getId(), book.getId(), library.getId());
 
         if(stock.isAlreadyRefreshed(dateHolder))
             return stock.getLoanState();
