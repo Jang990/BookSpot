@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
     private final BookService bookService;
 
+    /**
+     * @see com.bookspot.category.domain.exception.CategoryNotFoundException
+     */
     @GetMapping(value = "/api/books", params = {
             BookSearchAfterRequest.IGNORE_PARAM_LAST_LOAN_COUNT,
             BookSearchAfterRequest.IGNORE_PARAM_LAST_BOOK_ID
@@ -49,6 +52,9 @@ public class BookController {
         );
     }
 
+    /**
+     * @see com.bookspot.category.domain.exception.CategoryNotFoundException
+     */
     @GetMapping(value = "/api/books", params = {
             BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT,
             BookSearchAfterRequest.PARAM_LAST_BOOK_ID
