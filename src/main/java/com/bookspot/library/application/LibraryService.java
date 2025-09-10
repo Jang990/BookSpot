@@ -3,6 +3,7 @@ package com.bookspot.library.application;
 import com.bookspot.library.application.query.Location;
 import com.bookspot.library.domain.Library;
 import com.bookspot.library.domain.LibraryRepository;
+import com.bookspot.library.domain.exception.LibraryNotFoundException;
 import com.bookspot.library.infra.LibraryRepositoryForView;
 import com.bookspot.library.infra.LocationMBR;
 import com.bookspot.library.presentation.LibraryDistanceResponse;
@@ -28,7 +29,7 @@ public class LibraryService {
 
     public LibraryDistanceResponse findLibrary(long libraryId) {
         Library library = libraryRepository.findById(libraryId)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new LibraryNotFoundException(libraryId));
 
         return toResponse(library);
     }

@@ -1,6 +1,9 @@
 package com.bookspot.users.domain;
 
 import com.bookspot.book.domain.Book;
+import com.bookspot.users.domain.exception.UserBagEmptyException;
+import com.bookspot.users.domain.exception.UserBagFullException;
+import com.bookspot.users.domain.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -16,9 +19,9 @@ class UsersTest {
         Users users = new Users();
 
         // when, then
-        assertThrows(IllegalStateException.class, () -> users.addBookToBag(book));
-        assertThrows(IllegalStateException.class, () -> users.deleteBookFromBag(book));
-        assertThrows(IllegalStateException.class, () -> users.clearBag());
+        assertThrows(UserNotFoundException.class, () -> users.addBookToBag(book));
+        assertThrows(UserNotFoundException.class, () -> users.deleteBookFromBag(book));
+        assertThrows(UserNotFoundException.class, () -> users.clearBag());
     }
 
     @Test
@@ -30,7 +33,7 @@ class UsersTest {
         ReflectionTestUtils.setField(users, "bookBagSize", UsersConst.MAX_BAG_SIZE);
 
         // when, then
-        assertThrows(IllegalStateException.class, () -> users.addBookToBag(book));
+        assertThrows(UserBagFullException.class, () -> users.addBookToBag(book));
     }
 
     @Test
@@ -57,7 +60,7 @@ class UsersTest {
         ReflectionTestUtils.setField(users, "bookBagSize", 0);
 
         // when, then
-        assertThrows(IllegalStateException.class, () -> users.deleteBookFromBag(book));
+        assertThrows(UserBagEmptyException.class, () -> users.deleteBookFromBag(book));
     }
 
     @Test
@@ -84,7 +87,7 @@ class UsersTest {
         ReflectionTestUtils.setField(users, "bookBagSize", 0);
 
         // when, then
-        assertThrows(IllegalStateException.class, users::clearBag);
+        assertThrows(UserBagEmptyException.class, users::clearBag);
     }
 
     @Test

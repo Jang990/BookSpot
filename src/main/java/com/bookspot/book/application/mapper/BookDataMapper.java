@@ -13,6 +13,7 @@ import com.bookspot.book.presentation.response.BookRankPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
 import com.bookspot.category.domain.BookCategory;
 import com.bookspot.category.domain.BookCategoryRepository;
+import com.bookspot.category.domain.exception.CategoryNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class BookDataMapper {
         BookCategoryCond categoryCond = null;
         if (bookSearchDto.getCategoryId() != null) {
             BookCategory bookCategory = bookCategoryRepository.findById(bookSearchDto.getCategoryId())
-                    .orElseThrow(IllegalArgumentException::new);
+                    .orElseThrow(() -> new CategoryNotFoundException(bookSearchDto.getCategoryId()));
             categoryCond = createCategoryCond(
                     bookSearchDto.getCategoryLevel(),
                     bookCategory
