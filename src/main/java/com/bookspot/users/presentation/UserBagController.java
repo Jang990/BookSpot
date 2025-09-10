@@ -16,6 +16,11 @@ public class UserBagController {
     private final UserBagService userBagService;
     private final BagBookService bagBookService;
 
+    /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserBagFullException
+     * @see com.bookspot.book.domain.exception.BookNotFoundException
+     */
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/api/users/bag/books/{bookId}")
     public ResponseEntity<Void> addBookToBag(
@@ -27,6 +32,11 @@ public class UserBagController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserBagEmptyException
+     * @see com.bookspot.book.domain.exception.BookNotFoundException
+     */
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/api/users/bag/books/{bookId}")
     public ResponseEntity<Void> deleteBookFromBag(
@@ -38,6 +48,10 @@ public class UserBagController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserBagEmptyException
+     */
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/api/users/bag/books")
     public ResponseEntity<Void> clearBagBook(@AuthenticationPrincipal String userIdStr) {
