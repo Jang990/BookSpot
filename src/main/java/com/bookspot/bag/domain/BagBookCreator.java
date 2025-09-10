@@ -1,5 +1,6 @@
 package com.bookspot.bag.domain;
 
+import com.bookspot.bag.domain.exception.BookAlreadyInBagException;
 import com.bookspot.book.domain.Book;
 import com.bookspot.users.domain.Users;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ public class BagBookCreator {
 
     public BagBook create(Users users, Book book) {
         if(repository.existsByUsersAndBook(users, book))
-            throw new IllegalArgumentException("이미 책가방에 있는 책을 생성할 수 없습니다.");
+            throw new BookAlreadyInBagException(users.getId(), book.getId());
         return new BagBook(book, users);
     }
 }
