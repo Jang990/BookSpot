@@ -83,6 +83,9 @@ public class BookController {
         throw new BindException(bindingResult);
     }
 
+    /**
+     * @see com.bookspot.book.domain.exception.BookNotFoundException
+     */
     @GetMapping("/api/books/{bookId}")
     public ResponseEntity<BookDetailResponse> findBook(@PathVariable Long bookId) {
         return ResponseEntity.ok(bookService.find(bookId));
