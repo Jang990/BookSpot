@@ -2,6 +2,7 @@ package com.bookspot.book.application;
 
 import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.application.mapper.BookDataMapper;
+import com.bookspot.book.domain.exception.BookNotFoundException;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
@@ -30,7 +31,8 @@ public class BookService {
     public List<BookResponse> findAll(List<Long> bookIds) {
         List<Book> books = repository.findAllById(bookIds);
         if(books.size() != bookIds.size())
-            throw new IllegalArgumentException("찾을 수 없는 ID가 포함돼 있음");
+            throw new BookNotFoundException(bookIds);
+
         return books.stream()
                 .map(book -> new BookResponse(book.getId(), book.getTitle()))
                 .toList();
@@ -72,7 +74,8 @@ public class BookService {
 
     public BookDetailResponse find(long id){
         Book book = repository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new BookNotFoundException(id));
+
         return new BookDetailResponse(
                 book.getId(),
                 book.getTitle(),
