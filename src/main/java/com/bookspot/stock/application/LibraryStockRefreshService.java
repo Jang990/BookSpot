@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -25,10 +24,8 @@ public class LibraryStockRefreshService {
     public StockLoanStateResponse refreshLoanState(long stockId) {
         LibraryStock stock = libraryStockRepository.findById(stockId)
                 .orElseThrow(IllegalArgumentException::new);
-        if(stock.isAlreadyRefreshed(dateHolder))
-            return LibraryStockDataMapper.transform(
-                    stock
-            );
+
+        loanStateRefreshService.checkRefreshAllowed(stock.getLibrary(), stock);
 
         // TODO: 락을 다루는 일이기 떄문에 batch 처리와 충돌이 있을 수 있음. 관리 필요. 그래도 only 레코드 락이라...
         LibraryStock stockWithBookAndLibrary = libraryStockRepository.findStock(stockId)

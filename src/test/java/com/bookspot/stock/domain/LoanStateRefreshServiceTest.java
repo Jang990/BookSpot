@@ -6,6 +6,7 @@ import com.bookspot.library.domain.Library;
 import com.bookspot.stock.domain.service.loanable.LoanStateApiClient;
 import com.bookspot.stock.domain.service.loanable.LoanableResult;
 import com.bookspot.stock.domain.service.loanable.LoanableSearchCond;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,44 @@ class LoanStateRefreshServiceTest {
 
     @InjectMocks
     private LoanStateRefreshService loanStateRefreshService;
+
+    @Test
+    void Refresh_허용여부_파악_시_도서관이_대출_현황을_지원하지_않으면_예외처리() {
+        // given
+        Library library = mock(Library.class);
+        LibraryStock stock = mock(LibraryStock.class);
+        when(library.isSupportsLoanStatus()).thenReturn(false);
+
+        // when, then
+        assertThrows(IllegalArgumentException.class, () ->
+                loanStateRefreshService.checkRefreshAllowed(library, stock));
+    }
+
+    @Test
+    void Refresh_허용여부_파악_시_재고가_이미_Refresh됐다면_예외처리() {
+        // given
+        Library library = mock(Library.class);
+        LibraryStock stock = mock(LibraryStock.class);
+        when(library.isSupportsLoanStatus()).thenReturn(true);
+        when(stock.isAlreadyRefreshed(dateHolder)).thenReturn(true);
+
+        // when, then
+        assertThrows(IllegalArgumentException.class, () ->
+                loanStateRefreshService.checkRefreshAllowed(library, stock));
+    }
+
+    @Test
+    void Refresh_허용여부_파악_시_도서관이_대출현황을_지원하고_Refresh되지_않았다면_허용() {
+        // given
+        Library library = mock(Library.class);
+        LibraryStock stock = mock(LibraryStock.class);
+        when(library.isSupportsLoanStatus()).thenReturn(true);
+        when(stock.isAlreadyRefreshed(dateHolder)).thenReturn(false);
+
+        // when, then
+        loanStateRefreshService.checkRefreshAllowed(library, stock);
+    }
+
 
     @Test
     void refresh_요청된_book_library가_stock과_불일치하면_예외발생() {

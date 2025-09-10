@@ -19,6 +19,13 @@ public class LoanStateRefreshService {
     private final LoanStateApiClient loanStateApiClient;
     private final DateHolder dateHolder;
 
+    public void checkRefreshAllowed(Library library, LibraryStock stock) {
+        if(!library.isSupportsLoanStatus())
+            throw new IllegalArgumentException("도서관 대출 현황을 지원하지 않는 도서관입니다."); // 422
+        if(stock.isAlreadyRefreshed(dateHolder))
+            throw new IllegalArgumentException("이미 Refresh된 대출 현황입니다"); // 429
+    }
+
     public LoanState refresh(
             LibraryStock stock,
             Book book,
