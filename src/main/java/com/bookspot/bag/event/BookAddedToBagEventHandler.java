@@ -12,6 +12,7 @@ import com.bookspot.users.domain.UsersRepository;
 import com.bookspot.users.domain.event.BookAddedToBagEvent;
 import com.bookspot.users.domain.event.BookBagClearedEvent;
 import com.bookspot.users.domain.event.BookDeletedFromBagEvent;
+import com.bookspot.users.domain.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class BookAddedToBagEventHandler {
         Book book = bookRepository.findById(event.bookId())
                 .orElseThrow(IllegalArgumentException::new);
         Users users = usersRepository.findById(event.userId())
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new UserNotFoundException(event.userId()));
 
         BagBook bagBook = bagBookCreator.create(users, book);
         bagBookRepository.save(bagBook);
