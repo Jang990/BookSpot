@@ -31,6 +31,8 @@ public class LibraryStock {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    private String subjectCode;
+
     private LocalDate createdAt;
 
     @Column(name = "updated_at_time")
