@@ -39,11 +39,6 @@ public class LibraryStockRefreshService {
                 stockWithBookAndLibrary.getLibrary()
         );
 
-        return LibraryStockDataMapper.transform(
-                stock.getId(),
-                stock.getBook().getId(),
-                stock.getLibrary().getId(),
-                now, result
-        );
+        return LibraryStockDataMapper.transform(stock, now, result);
     }
 }

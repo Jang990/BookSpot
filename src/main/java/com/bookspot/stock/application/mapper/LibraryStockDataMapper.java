@@ -9,14 +9,15 @@ import java.time.LocalDateTime;
 
 public class LibraryStockDataMapper {
     public static StockLoanStateResponse transform(
-            long stockId,
-            long bookId,
-            long libraryId,
+            LibraryStock stock,
             LocalDateTime stateUpdatedAt,
             LoanState loanState
     ) {
         return new StockLoanStateResponse(
-                stockId, libraryId, bookId,
+                stock.getId(),
+                stock.getLibrary().getId(),
+                stock.getBook().getId(),
+                stock.getSubjectCode(),
                 stateUpdatedAt.toString(),
                 transform(loanState)
         );
@@ -27,6 +28,7 @@ public class LibraryStockDataMapper {
                 stock.getId(),
                 stock.getLibrary().getId(),
                 stock.getBook().getId(),
+                stock.getSubjectCode(),
                 stock.getUpdatedAt().toString(),
                 transform(stock.getLoanState())
         );
