@@ -1,7 +1,6 @@
 package com.bookspot.users.presentation;
 
 import com.bookspot.users.application.UserTokenService;
-import com.bookspot.users.infra.token.naver.NaverTokenVerifier;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserAuthController {
     private final UserTokenService userTokenService;
-    private final NaverTokenVerifier verifier;
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
@@ -38,7 +36,6 @@ public class UserAuthController {
 
     @PostMapping("naver")
     public ResponseEntity<UserTokenResponse> naverLogin(@Valid @RequestBody LoginRequest requestDto) {
-        verifier.verifyToken(requestDto.idToken());
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(userTokenService.createNaverToken(requestDto.idToken()));
     }
 }
