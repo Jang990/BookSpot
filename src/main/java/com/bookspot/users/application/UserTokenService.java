@@ -2,6 +2,7 @@ package com.bookspot.users.application;
 
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
+import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
 import com.bookspot.users.infra.token.naver.NaverTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
@@ -17,12 +18,9 @@ public class UserTokenService {
     private final JwtProvider jwtProvider;
     private final UserService userService;
 
-    private static final String PROVIDER_TYPE_GOOGLE = "google";
-    private static final String PROVIDER_TYPE_NAVER = "naver";
-
     public UserTokenResponse createToken(String idToken) {
         GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(idToken);
-        UserDto user = userService.createOrFindUser(result.getEmail(), PROVIDER_TYPE_GOOGLE, result.getSubject());
+        UserDto user = userService.createOrFindUser(result.getEmail(), OAuthProvider.GOOGLE, result.getSubject());
 
         GeneratedToken token = jwtProvider.createToken(user);
 
@@ -31,7 +29,7 @@ public class UserTokenService {
 
     public UserTokenResponse createNaverToken(String idToken) {
         NaverTokenVerifier.NaverTokenDetail result = naverTokenVerifier.verifyToken(idToken);
-        UserDto user = userService.createOrFindUser(result.email(), PROVIDER_TYPE_NAVER, result.subjectId());
+        UserDto user = userService.createOrFindUser(result.email(), OAuthProvider.NAVER, result.subjectId());
 
         GeneratedToken token = jwtProvider.createToken(user);
 

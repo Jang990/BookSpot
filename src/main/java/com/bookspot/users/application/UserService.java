@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UsersRepository usersRepository;
 
-    protected UserDto createOrFindUser(String email, String provider, String providerId) {
-        OAuthProvider oAuthProvider = OAuthProvider.fromString(provider);
+    protected UserDto createOrFindUser(String email, OAuthProvider oAuthProvider, String providerId) {
         Users users = usersRepository.findByProviderAndProviderId(oAuthProvider, providerId)
                 .orElseGet(() -> usersRepository.save(
                         Users.createUser(providerId, oAuthProvider, email)
