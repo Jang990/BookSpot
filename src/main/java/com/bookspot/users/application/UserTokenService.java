@@ -32,7 +32,7 @@ public class UserTokenService {
     }
 
     public UserTokenResponse createNaverToken(String idToken) {
-        NaverTokenVerifier.NaverTokenDetail result = naverTokenVerifier.verifyToken(idToken);
+        SocialTokenDetail result = naverTokenVerifier.verifyToken(idToken);
         UserDto user = userService.createOrFindUser(result.email(), OAuthProvider.NAVER, result.subjectId());
 
         GeneratedToken token = jwtProvider.createToken(user);
