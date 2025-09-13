@@ -3,9 +3,9 @@ package com.bookspot.users.application;
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
 import com.bookspot.users.domain.OAuthProvider;
+import com.bookspot.users.domain.SocialTokenDetail;
 import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ class UserTokenServiceTest {
     @Mock private JwtProvider jwtProvider;
     @Mock private UserService userService;
 
-    @Mock private GoogleIdToken.Payload mockGooglePayload;
+    @Mock private SocialTokenDetail mockGooglePayload;
 
     @InjectMocks private UserTokenService userTokenService;
 

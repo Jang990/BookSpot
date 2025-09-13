@@ -3,6 +3,7 @@ package com.bookspot.users.application;
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
 import com.bookspot.users.domain.OAuthProvider;
+import com.bookspot.users.domain.SocialTokenDetail;
 import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
 import com.bookspot.users.infra.token.naver.NaverTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
@@ -19,8 +20,8 @@ public class UserTokenService {
     private final UserService userService;
 
     public UserTokenResponse createToken(String idToken, OAuthProvider provider) {
-        GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(idToken);
-        UserDto user = userService.createOrFindUser(result.getEmail(), provider, result.getSubject());
+        SocialTokenDetail result = googleTokenVerifier.verifyToken(idToken);
+        UserDto user = userService.createOrFindUser(result.email(), provider, result.subjectId());
 
         GeneratedToken token = jwtProvider.createToken(user);
 
