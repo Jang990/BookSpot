@@ -2,6 +2,7 @@ package com.bookspot.users.application;
 
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
+import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -36,7 +37,7 @@ class UserTokenServiceTest {
         when(jwtProvider.createToken(any())).thenReturn(new GeneratedToken("jwt-token", expiredAt));
 
 
-        UserTokenResponse result = userTokenService.createToken(idToken);
+        UserTokenResponse result = userTokenService.createToken(idToken, OAuthProvider.GOOGLE);
 
         assertEquals("nickname",result.getNickname());
         assertEquals("jwt-token", result.getAccessToken());

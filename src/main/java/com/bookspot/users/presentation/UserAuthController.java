@@ -1,6 +1,7 @@
 package com.bookspot.users.presentation;
 
 import com.bookspot.users.application.UserTokenService;
+import com.bookspot.users.domain.OAuthProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class UserAuthController {
 
     @PostMapping("/google")
     public ResponseEntity<UserTokenResponse> googleLogin(@Valid @RequestBody LoginRequest requestDto) {
-        return ResponseEntity.ok(userTokenService.createToken(requestDto.idToken()));
+        return ResponseEntity.ok(userTokenService.createToken(requestDto.idToken(), OAuthProvider.GOOGLE));
     }
 
     @PostMapping("naver")

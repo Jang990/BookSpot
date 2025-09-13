@@ -18,9 +18,9 @@ public class UserTokenService {
     private final JwtProvider jwtProvider;
     private final UserService userService;
 
-    public UserTokenResponse createToken(String idToken) {
+    public UserTokenResponse createToken(String idToken, OAuthProvider provider) {
         GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(idToken);
-        UserDto user = userService.createOrFindUser(result.getEmail(), OAuthProvider.GOOGLE, result.getSubject());
+        UserDto user = userService.createOrFindUser(result.getEmail(), provider, result.getSubject());
 
         GeneratedToken token = jwtProvider.createToken(user);
 
