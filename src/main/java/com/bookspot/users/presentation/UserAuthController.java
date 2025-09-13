@@ -1,14 +1,12 @@
 package com.bookspot.users.presentation;
 
 import com.bookspot.users.application.UserTokenService;
+import com.bookspot.users.domain.OAuthProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -29,13 +27,25 @@ public class UserAuthController {
         return ResponseEntity.ok("성공적으로 로그아웃되었습니다.");
     }
 
-    @PostMapping("/google")
-    public ResponseEntity<UserTokenResponse> googleLogin(@Valid @RequestBody LoginRequest requestDto) {
-        return ResponseEntity.ok(userTokenService.createToken(requestDto.idToken()));
+    @PostMapping("google")
+    public ResponseEntity<UserTokenResponse> googleLogin(
+            @Valid @RequestBody LoginRequest requestDto
+    ) {
+        return ResponseEntity.ok(
+                userTokenService.createToken(
+                        requestDto.idToken(),
+                        OAuthProvider.GOOGLE
+                )
+        );
     }
 
     @PostMapping("naver")
     public ResponseEntity<UserTokenResponse> naverLogin(@Valid @RequestBody LoginRequest requestDto) {
-        return ResponseEntity.ok(userTokenService.createNaverToken(requestDto.idToken()));
+        return ResponseEntity.ok(
+                userTokenService.createToken(
+                        requestDto.idToken(),
+                        OAuthProvider.NAVER
+                )
+        );
     }
 }

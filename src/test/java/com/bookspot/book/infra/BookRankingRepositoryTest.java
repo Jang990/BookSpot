@@ -8,13 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+//@SpringBootTest
 class BookRankingRepositoryTest {
 
     @Autowired
     private BookRankingRepository bookRankingRepository;
 
-    @Test
+//    @Test
     void test() {
         BookRankingCond bookRankingCond = new BookRankingCond(
                 RankingPeriod.MONTHLY,

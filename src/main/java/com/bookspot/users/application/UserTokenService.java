@@ -2,36 +2,27 @@ package com.bookspot.users.application;
 
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
-import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
+import com.bookspot.users.application.helper.SocialTokenVerifierSelector;
+import com.bookspot.users.domain.OAuthProvider;
+import com.bookspot.users.domain.auth.SocialTokenDetail;
+import com.bookspot.users.domain.auth.SocialTokenVerifier;
 import com.bookspot.users.infra.token.naver.NaverTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserTokenService {
-    private final GoogleTokenVerifier googleTokenVerifier;
+    private final SocialTokenVerifierSelector socialTokenVerifierSelector;
     private final NaverTokenVerifier naverTokenVerifier;
     private final JwtProvider jwtProvider;
     private final UserService userService;
 
-    private static final String PROVIDER_TYPE_GOOGLE = "google";
-    private static final String PROVIDER_TYPE_NAVER = "naver";
-
-    public UserTokenResponse createToken(String idToken) {
-        GoogleIdToken.Payload result = googleTokenVerifier.verifyToken(idToken);
-        UserDto user = userService.createOrFindUser(result.getEmail(), PROVIDER_TYPE_GOOGLE, result.getSubject());
-
-        GeneratedToken token = jwtProvider.createToken(user);
-
-        return new UserTokenResponse(user.nickname(), user.role(), token);
-    }
-
-    public UserTokenResponse createNaverToken(String idToken) {
-        NaverTokenVerifier.NaverTokenDetail result = naverTokenVerifier.verifyToken(idToken);
-        UserDto user = userService.createOrFindUser(result.email(), PROVIDER_TYPE_NAVER, result.subjectId());
+    public UserTokenResponse createToken(String idToken, OAuthProvider provider) {
+        SocialTokenVerifier tokenVerifier = socialTokenVerifierSelector.select(provider);
+        SocialTokenDetail result = tokenVerifier.verifyToken(idToken);
+        UserDto user = userService.createOrFindUser(result.email(), provider, result.subjectId());
 
         GeneratedToken token = jwtProvider.createToken(user);
 

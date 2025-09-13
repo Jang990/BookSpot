@@ -1,6 +1,9 @@
 package com.bookspot.users.infra.token.google;
 
 import com.bookspot.global.auth.OAuthClientProperties;
+import com.bookspot.users.domain.OAuthProvider;
+import com.bookspot.users.domain.auth.SocialTokenDetail;
+import com.bookspot.users.domain.auth.SocialTokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -13,13 +16,19 @@ import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
-public class GoogleTokenVerifier {
+public class GoogleTokenVerifier implements SocialTokenVerifier {
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final NetHttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 
     private final OAuthClientProperties clientProperties;
 
-    public GoogleIdToken.Payload verifyToken(String idTokenString) {
+    @Override
+    public boolean supports(OAuthProvider provider) {
+        return provider == OAuthProvider.GOOGLE;
+    }
+
+    @Override
+    public SocialTokenDetail verifyToken(String idTokenString) {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(HTTP_TRANSPORT, JSON_FACTORY)
                 .setAudience(Collections.singletonList(clientProperties.getGoogleClientId()))
                 .build();
@@ -31,7 +40,7 @@ public class GoogleTokenVerifier {
                 if (payload.getEmailVerified() == null || !payload.getEmailVerified()) {
                     throw new RuntimeException("Email is not verified by Google.");
                 }
-                return payload;
+                return new SocialTokenDetail(payload.getSubject(), payload.getEmail());
             } else {
                 throw new RuntimeException("Invalid Google ID token.");
             }
