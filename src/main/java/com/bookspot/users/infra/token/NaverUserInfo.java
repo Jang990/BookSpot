@@ -1,4 +1,4 @@
-package com.bookspot.users.infra;
+package com.bookspot.users.infra.token;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package com.bookspot.users.infra;
+package com.bookspot.users.infra.token;
 
 import com.bookspot.global.auth.OAuthClientProperties;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;

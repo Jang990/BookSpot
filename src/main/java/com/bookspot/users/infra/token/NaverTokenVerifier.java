@@ -1,12 +1,10 @@
-package com.bookspot.users.infra;
+package com.bookspot.users.infra.token;
 
 import com.bookspot.global.api.ApiRequester;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
 
 @Slf4j
 @Service

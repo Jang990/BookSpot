@@ -1,7 +1,7 @@
 package com.bookspot.users.presentation;
 
 import com.bookspot.users.application.UserTokenService;
-import com.bookspot.users.infra.NaverTokenVerifier;
+import com.bookspot.users.infra.token.NaverTokenVerifier;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
