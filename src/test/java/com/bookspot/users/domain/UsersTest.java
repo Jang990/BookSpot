@@ -19,6 +19,13 @@ import static org.mockito.Mockito.*;
 class UsersTest {
 
     @Test
+    void 사용자_생성_시_email이_없다면_랜덤_닉네임_생성() {
+        Users user = Users.createUser("1", OAuthProvider.KAKAO, null);
+        assertTrue(user.getNickname().startsWith("사용자-"));
+        assertEquals(12, user.getNickname().length());
+    }
+
+    @Test
     void 책가방_사용_시_영속_객체만_사용가능() {
         // given
         Book book = mock(Book.class);
