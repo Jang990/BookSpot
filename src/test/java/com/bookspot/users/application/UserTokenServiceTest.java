@@ -4,7 +4,7 @@ import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
 import com.bookspot.users.application.helper.SocialTokenVerifierSelector;
 import com.bookspot.users.domain.OAuthProvider;
-import com.bookspot.users.domain.SocialTokenDetail;
+import com.bookspot.users.domain.auth.SocialTokenDetail;
 import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

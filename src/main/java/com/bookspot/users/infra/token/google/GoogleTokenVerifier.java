@@ -2,8 +2,8 @@ package com.bookspot.users.infra.token.google;
 
 import com.bookspot.global.auth.OAuthClientProperties;
 import com.bookspot.users.domain.OAuthProvider;
-import com.bookspot.users.domain.SocialTokenDetail;
-import com.bookspot.users.domain.SocialTokenVerifier;
+import com.bookspot.users.domain.auth.SocialTokenDetail;
+import com.bookspot.users.domain.auth.SocialTokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;

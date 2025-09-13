@@ -1,7 +1,7 @@
 package com.bookspot.users.application.helper;
 
 import com.bookspot.users.domain.OAuthProvider;
-import com.bookspot.users.domain.SocialTokenVerifier;
+import com.bookspot.users.domain.auth.SocialTokenVerifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

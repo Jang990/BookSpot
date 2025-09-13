@@ -3,8 +3,8 @@ package com.bookspot.users.infra.token.naver;
 import com.bookspot.global.api.ApiRequester;
 
 import com.bookspot.users.domain.OAuthProvider;
-import com.bookspot.users.domain.SocialTokenDetail;
-import com.bookspot.users.domain.SocialTokenVerifier;
+import com.bookspot.users.domain.auth.SocialTokenDetail;
+import com.bookspot.users.domain.auth.SocialTokenVerifier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
