@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @Entity
 @Table(
@@ -64,7 +66,13 @@ public class Users {
             OAuthProvider oAuthProvider,
             String email
     ) {
-        String nickname = email;
+
+        String nickname;
+        if(email == null)
+            nickname = "사용자-" + UUID.randomUUID().toString().substring(0,8);
+        else
+            nickname = email;
+
         return new Users(
                 email, nickname,
                 UsersRole.USER,
