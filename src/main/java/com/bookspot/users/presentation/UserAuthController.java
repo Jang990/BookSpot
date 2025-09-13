@@ -48,4 +48,14 @@ public class UserAuthController {
                 )
         );
     }
+
+    @PostMapping("kakao")
+    public ResponseEntity<UserTokenResponse> kakaoLogin(@Valid @RequestBody LoginRequest requestDto) {
+        return ResponseEntity.ok(
+                userTokenService.createToken(
+                        requestDto.idToken(),
+                        OAuthProvider.KAKAO
+                )
+        );
+    }
 }
