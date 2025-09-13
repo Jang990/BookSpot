@@ -1,7 +1,7 @@
 package com.bookspot.users.domain;
 
 public enum OAuthProvider {
-    GOOGLE;
+    GOOGLE, NAVER;
 
     public static OAuthProvider fromString(String role) {
         if (role == null)

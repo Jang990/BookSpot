@@ -34,4 +34,8 @@ public class UserAuthController {
         return ResponseEntity.ok(userTokenService.createToken(requestDto.idToken()));
     }
 
+    @PostMapping("naver")
+    public ResponseEntity<UserTokenResponse> naverLogin(@Valid @RequestBody LoginRequest requestDto) {
+        return ResponseEntity.ok(userTokenService.createNaverToken(requestDto.idToken()));
+    }
 }
