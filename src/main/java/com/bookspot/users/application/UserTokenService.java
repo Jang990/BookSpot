@@ -2,7 +2,7 @@ package com.bookspot.users.application;
 
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
-import com.bookspot.users.infra.token.GoogleTokenVerifier;
+import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;

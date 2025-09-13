@@ -1,4 +1,4 @@
-package com.bookspot.users.infra.token;
+package com.bookspot.users.infra.token.naver;
 
 record NaverApiResponse(
     String resultcode,
