@@ -30,13 +30,4 @@ public class UserTokenService {
 
         return new UserTokenResponse(user.nickname(), user.role(), token);
     }
-
-    public UserTokenResponse createNaverToken(String idToken) {
-        SocialTokenDetail result = naverTokenVerifier.verifyToken(idToken);
-        UserDto user = userService.createOrFindUser(result.email(), OAuthProvider.NAVER, result.subjectId());
-
-        GeneratedToken token = jwtProvider.createToken(user);
-
-        return new UserTokenResponse(user.nickname(), user.role(), token);
-    }
 }
