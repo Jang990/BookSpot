@@ -6,7 +6,6 @@ import com.bookspot.users.application.helper.SocialTokenVerifierSelector;
 import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.domain.auth.SocialTokenDetail;
 import com.bookspot.users.domain.auth.SocialTokenVerifier;
-import com.bookspot.users.infra.token.naver.NaverTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserTokenService {
     private final SocialTokenVerifierSelector socialTokenVerifierSelector;
-    private final NaverTokenVerifier naverTokenVerifier;
     private final JwtProvider jwtProvider;
     private final UserService userService;
 
