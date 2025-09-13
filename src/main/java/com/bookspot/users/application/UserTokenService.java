@@ -2,8 +2,10 @@ package com.bookspot.users.application;
 
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.dto.GeneratedToken;
+import com.bookspot.users.application.helper.SocialTokenVerifierSelector;
 import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.domain.SocialTokenDetail;
+import com.bookspot.users.domain.SocialTokenVerifier;
 import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
 import com.bookspot.users.infra.token.naver.NaverTokenVerifier;
 import com.bookspot.users.presentation.UserTokenResponse;
@@ -14,13 +16,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserTokenService {
-    private final GoogleTokenVerifier googleTokenVerifier;
+    private final SocialTokenVerifierSelector socialTokenVerifierSelector;
     private final NaverTokenVerifier naverTokenVerifier;
     private final JwtProvider jwtProvider;
     private final UserService userService;
 
     public UserTokenResponse createToken(String idToken, OAuthProvider provider) {
-        SocialTokenDetail result = googleTokenVerifier.verifyToken(idToken);
+        SocialTokenVerifier tokenVerifier = socialTokenVerifierSelector.select(provider);
+        SocialTokenDetail result = tokenVerifier.verifyToken(idToken);
         UserDto user = userService.createOrFindUser(result.email(), provider, result.subjectId());
 
         GeneratedToken token = jwtProvider.createToken(user);
