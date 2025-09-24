@@ -34,4 +34,5 @@ public class Library {
     private String libraryCode;
 
     private boolean supportsLoanStatus;
+    private String isbnSearchPattern;
 }
