@@ -44,7 +44,8 @@ public class LibraryService {
                 library.getHomePage(),
                 library.getClosedInfo(),
                 library.getOperatingInfo(),
-                library.isSupportsLoanStatus()
+                library.isSupportsLoanStatus(),
+                library.getIsbnSearchPattern()
         );
     }
 

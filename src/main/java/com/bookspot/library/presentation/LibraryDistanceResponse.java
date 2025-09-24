@@ -15,4 +15,5 @@ public class LibraryDistanceResponse {
     private String closedInfo;
     private String operatingInfo;
     private boolean supportsLoanStatus;
+    private String isbnSearchPattern;
 }
