@@ -3,6 +3,8 @@ package com.bookspot.shelves.application;
 import com.bookspot.shelves.application.mapper.ShelvesDataMapper;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
+import com.bookspot.shelves.domain.exception.ShelfForbiddenException;
+import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.request.ShelfCreationRequest;
 import com.bookspot.users.domain.Users;
@@ -26,5 +28,17 @@ public class ShelvesManageService {
         shelvesRepository.save(shelf);
 
         return ShelvesDataMapper.transform(shelf);
+    }
+
+    public void delete(long userId, long shelfId) {
+        Shelves shelf = shelvesRepository.findById(shelfId)
+                .orElseThrow(ShelfNotFoundException::new);
+
+        if (shelf.isOwnerBy(userId)) {
+            shelvesRepository.deleteById(shelfId);
+            return;
+        }
+
+        throw new ShelfForbiddenException(userId, shelf.getId());
     }
 }
