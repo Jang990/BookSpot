@@ -1,5 +1,7 @@
 package com.bookspot.shelves.presentation;
 
+import com.bookspot.shelves.application.ShelvesManageService;
+import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.request.ShelfCreationRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +15,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class ShelvesManageController {
+    private final ShelvesManageService shelvesManageService;
 
     @PostMapping
-    public ResponseEntity<Void> createShelf(
+    public ResponseEntity<ShelfDetailResponse> createShelf(
             @AuthenticationPrincipal String userIdStr,
             @Valid @RequestBody ShelfCreationRequest request
     ) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(
+                shelvesManageService.create(
+                        Long.parseLong(userIdStr),
+                        request
+                )
+        );
     }
 }

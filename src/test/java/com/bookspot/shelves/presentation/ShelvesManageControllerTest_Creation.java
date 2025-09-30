@@ -2,6 +2,7 @@ package com.bookspot.shelves.presentation;
 
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.SecurityConfig;
+import com.bookspot.shelves.application.ShelvesManageService;
 import com.bookspot.shelves.presentation.dto.request.ShelfCreationRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,18 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ShelvesManageController.class)
 @Import(SecurityConfig.class)
-@MockBean(JpaMetamodelMappingContext.class)
+@MockBean({JpaMetamodelMappingContext.class, JwtProvider.class, ShelvesManageService.class})
 class ShelvesManageControllerTest_Creation {
     private static final String COMMON_PATH = "/api/users/shelves";
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper om;
-
-    @MockBean
-    private JwtProvider jwtProvider;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper om;
 
     @Test
     void 로그인하지_않은_사용자의_생성은_불가능() throws Exception {
