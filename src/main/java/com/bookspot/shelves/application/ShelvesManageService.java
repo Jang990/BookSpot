@@ -12,8 +12,10 @@ import com.bookspot.users.domain.UsersRepository;
 import com.bookspot.users.domain.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ShelvesManageService {
     private final UsersRepository usersRepository;
@@ -40,5 +42,24 @@ public class ShelvesManageService {
         }
 
         throw new ShelfForbiddenException(userId, shelf.getId());
+    }
+
+    public ShelfDetailResponse update(
+            long userId, long shelfId,
+            ShelfCreationRequest request
+    ) {
+        Shelves shelf = shelvesRepository.findById(shelfId)
+                .orElseThrow(ShelfNotFoundException::new);
+
+        if (!shelf.isOwnerBy(userId))
+            throw new ShelfForbiddenException(userId, shelf.getId());
+
+        shelf.changeName(request.getName());
+        if(request.getIsPublic())
+            shelf.makePublic();
+        else
+            shelf.makePrivate();
+
+        return ShelvesDataMapper.transform(shelf);
     }
 }
