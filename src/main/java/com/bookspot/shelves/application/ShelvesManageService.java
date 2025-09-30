@@ -27,4 +27,8 @@ public class ShelvesManageService {
 
         return ShelvesDataMapper.transform(shelf);
     }
+
+    public void delete(long userId, long shelfId) {
+
+    }
 }

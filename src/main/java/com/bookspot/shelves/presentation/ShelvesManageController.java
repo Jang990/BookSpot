@@ -32,4 +32,12 @@ public class ShelvesManageController {
                 )
         );
     }
+
+    @DeleteMapping("/{shelfId}")
+    public ResponseEntity<ShelfDetailResponse> createShelf(
+            @AuthenticationPrincipal String userIdStr,
+            @PathVariable("shelfId") long shelfId
+    ) {
+        return ResponseEntity.noContent().build();
+    }
 }
