@@ -10,7 +10,7 @@ public class ShelfNotFoundException extends AppException {
             "SHELF_FORBIDDEN",
             "책장(%d)를 DB에서 찾을 수 없습니다.".formatted(shelf),
             "책장을 찾을 수 없습니다.",
-            HttpStatus.FORBIDDEN
+            HttpStatus.NOT_FOUND
         );
     }
 
@@ -18,7 +18,7 @@ public class ShelfNotFoundException extends AppException {
         super(
                 "SHELF_NOT_FOUND",
                 "책장을 찾을 수 없습니다.",
-                HttpStatus.FORBIDDEN
+                HttpStatus.NOT_FOUND
         );
     }
 }
