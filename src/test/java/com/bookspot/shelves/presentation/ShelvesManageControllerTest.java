@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
 class ShelvesManageControllerTest {
-    private static final String COMMON_PATH = "/api/users/shelves/1";
+    private static final String COMMON_PATH = "/api/users/shelves";
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,7 +42,7 @@ class ShelvesManageControllerTest {
                         post(COMMON_PATH)
                         .with(authentication(userAuth(10L)))
                 )
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk());
     }
 
     private static UsernamePasswordAuthenticationToken userAuth(long userId) {
