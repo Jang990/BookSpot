@@ -26,7 +26,6 @@ class ShelvesManageControllerTest_Delete {
     private static final String COMMON_PATH = "/api/users/shelves/12";
 
     @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper om;
 
     @Test
     void 로그인하지_않은_사용자는_삭제_불가능() throws Exception {
