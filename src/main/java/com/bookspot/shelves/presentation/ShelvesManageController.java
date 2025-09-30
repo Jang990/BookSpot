@@ -33,11 +33,20 @@ public class ShelvesManageController {
         );
     }
 
+    /**
+     * @see com.bookspot.shelves.domain.exception.ShelfNotFoundException
+     * @see com.bookspot.shelves.domain.exception.ShelfForbiddenException
+     */
     @DeleteMapping("/{shelfId}")
-    public ResponseEntity<ShelfDetailResponse> createShelf(
+    public ResponseEntity<ShelfDetailResponse> deleteShelf(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("shelfId") long shelfId
     ) {
+        shelvesManageService.delete(
+                Long.parseLong(userIdStr),
+                shelfId
+        );
+
         return ResponseEntity.noContent().build();
     }
 }

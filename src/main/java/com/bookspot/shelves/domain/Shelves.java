@@ -37,4 +37,8 @@ public class Shelves {
         this.isPublic = isPublic;
         this.bookCount = 0;
     }
+
+    public boolean isOwnerBy(long userId) {
+        return users.getId().equals(userId);
+    }
 }
