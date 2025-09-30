@@ -41,4 +41,16 @@ public class Shelves {
     public boolean isOwnerBy(long userId) {
         return users.getId().equals(userId);
     }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void makePublic() {
+        isPublic = true;
+    }
+
+    public void makePrivate() {
+        isPublic = false;
+    }
 }

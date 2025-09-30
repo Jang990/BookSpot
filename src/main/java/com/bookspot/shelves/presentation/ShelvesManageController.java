@@ -38,7 +38,7 @@ public class ShelvesManageController {
      * @see com.bookspot.shelves.domain.exception.ShelfForbiddenException
      */
     @DeleteMapping("/{shelfId}")
-    public ResponseEntity<ShelfDetailResponse> deleteShelf(
+    public ResponseEntity<Void> deleteShelf(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("shelfId") long shelfId
     ) {
@@ -48,5 +48,19 @@ public class ShelvesManageController {
         );
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{shelfId}")
+    public ResponseEntity<ShelfDetailResponse> updateShelf(
+            @AuthenticationPrincipal String userIdStr,
+            @PathVariable("shelfId") long shelfId,
+            @Valid @RequestBody ShelfCreationRequest request
+    ) {
+        return ResponseEntity.ok(
+                shelvesManageService.update(
+                        Long.parseLong(userIdStr),
+                        shelfId, request
+                )
+        );
     }
 }
