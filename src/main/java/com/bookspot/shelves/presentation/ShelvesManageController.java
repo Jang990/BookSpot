@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 public class ShelvesManageController {
     private final ShelvesManageService shelvesManageService;
 
+    /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     */
     @PostMapping
     public ResponseEntity<ShelfDetailResponse> createShelf(
             @AuthenticationPrincipal String userIdStr,
