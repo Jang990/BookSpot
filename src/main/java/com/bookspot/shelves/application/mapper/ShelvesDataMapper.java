@@ -6,6 +6,7 @@ import com.bookspot.shelves.presentation.dto.ShelfSummaryResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ShelvesDataMapper {
     public static ShelfDetailResponse transform(Shelves shelf) {
@@ -27,9 +28,21 @@ public class ShelvesDataMapper {
                                         shelf.getBookCount(),
                                         shelf.getCreatedAt().toString(),
                                         shelf.isPublic(),
-                                        List.of()
+                                        randThumbnails()
                                 )
                         ).toList()
         );
+    }
+
+    private static final List<List<String>> list = List.of(
+            List.of("9788966260959", "9788966262281", "9791162242742"),
+            List.of("9788937460449", "9788937460777"),
+            List.of()
+    );
+
+    // TODO: 임시 코드. 이후에 책장 속에 책을 추가하고 실제 isbn13을 가져오는 쿼리로 가져와서 합쳐야함.
+    private static List<String> randThumbnails() {
+        int randIdx = ThreadLocalRandom.current().nextInt(list.size());
+        return list.get(randIdx);
     }
 }
