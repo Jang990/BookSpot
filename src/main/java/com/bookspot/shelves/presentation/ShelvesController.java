@@ -20,7 +20,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ShelvesController {
     private final ShelvesQueryService shelvesQueryService;
-    
+
+    /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     */
     @GetMapping("/api/users/{userId}/shelves")
     public ResponseEntity<ShelvesSummaryResponse> findUserShelves(
             @AuthenticationPrincipal String userIdStr,
