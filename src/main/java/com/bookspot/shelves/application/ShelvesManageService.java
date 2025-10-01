@@ -2,6 +2,7 @@ package com.bookspot.shelves.application;
 
 import com.bookspot.shelves.application.mapper.ShelvesDataMapper;
 import com.bookspot.shelves.domain.Shelves;
+import com.bookspot.shelves.domain.ShelvesManager;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfForbiddenException;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
@@ -20,13 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShelvesManageService {
     private final UsersRepository usersRepository;
     private final ShelvesRepository shelvesRepository;
+    private final ShelvesManager shelfManager;
 
     public ShelfDetailResponse create(long userId, ShelfCreationRequest request) {
-        // TODO: 사용자가 책장을 얼마나 만들었는지 검증 필요
-        Users users = usersRepository.findById(userId)
+        Users users = usersRepository.findByIdWithLock(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        Shelves shelf = new Shelves(users, request.getName(), request.getIsPublic());
+        Shelves shelf = shelfManager.create(users, request);
         shelvesRepository.save(shelf);
 
         return ShelvesDataMapper.transform(shelf);
