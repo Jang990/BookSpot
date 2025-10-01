@@ -19,6 +19,7 @@ public class ShelvesManageController {
 
     /**
      * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserShelfFullException
      */
     @PostMapping
     public ResponseEntity<ShelfDetailResponse> createShelf(
@@ -34,6 +35,8 @@ public class ShelvesManageController {
     }
 
     /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.users.domain.exception.UserShelfEmptyException
      * @see com.bookspot.shelves.domain.exception.ShelfNotFoundException
      * @see com.bookspot.shelves.domain.exception.ShelfForbiddenException
      */

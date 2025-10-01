@@ -31,11 +31,15 @@ public class Shelves {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Shelves(Users users, String name, boolean isPublic) {
+    protected Shelves(Users users, String name, boolean isPublic) {
         this.users = users;
         this.name = name;
         this.isPublic = isPublic;
         this.bookCount = 0;
+    }
+
+    public boolean isOwnerBy(Users users) {
+        return users.equals(users);
     }
 
     public boolean isOwnerBy(long userId) {

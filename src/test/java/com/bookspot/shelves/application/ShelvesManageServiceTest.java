@@ -1,5 +1,6 @@
 package com.bookspot.shelves.application;
 
+import com.bookspot.shelves.domain.ShelfTestHelper;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfForbiddenException;
@@ -36,7 +37,7 @@ class ShelvesManageServiceTest {
         when(mockUser.getId()).thenReturn(1L);
 
         // 책장 설정
-        Shelves shelf = new Shelves(mockUser, "내책장", true);
+        Shelves shelf = ShelfTestHelper.create(mockUser, "내책장", true);
         ReflectionTestUtils.setField(shelf, "id", 123L);
         when(repository.findById(anyLong())).thenReturn(Optional.of(shelf));
 
@@ -53,7 +54,7 @@ class ShelvesManageServiceTest {
         when(mockUser.getId()).thenReturn(1L);
 
         // 책장 설정
-        Shelves shelf = new Shelves(mockUser, "내책장", true);
+        Shelves shelf = ShelfTestHelper.create(mockUser, "내책장", true);
         ReflectionTestUtils.setField(shelf, "id", 123L);
         when(repository.findById(anyLong())).thenReturn(Optional.of(shelf));
 
