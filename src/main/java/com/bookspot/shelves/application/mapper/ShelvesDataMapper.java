@@ -2,6 +2,8 @@ package com.bookspot.shelves.application.mapper;
 
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
+import com.bookspot.shelves.presentation.dto.ShelfSummaryResponse;
+import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
 
 import java.util.List;
 
@@ -12,6 +14,22 @@ public class ShelvesDataMapper {
                 shelf.getId(), shelf.getName(),
                 shelf.getCreatedAt().toString(), shelf.isPublic(),
                 shelf.getBookCount(), List.of()
+        );
+    }
+
+    public static ShelvesSummaryResponse transform(List<Shelves> shelves) {
+        return new ShelvesSummaryResponse(
+                shelves.stream()
+                        .map(shelf ->
+                                new ShelfSummaryResponse(
+                                        shelf.getId(),
+                                        shelf.getName(),
+                                        shelf.getBookCount(),
+                                        shelf.getCreatedAt().toString(),
+                                        shelf.isPublic(),
+                                        List.of()
+                                )
+                        ).toList()
         );
     }
 }
