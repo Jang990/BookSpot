@@ -17,8 +17,18 @@ import java.util.List;
 public class ShelvesQueryService {
     private final ShelvesRepository shelvesRepository;
 
-    public ShelvesSummaryResponse findUserShelves(long userId) {
-        List<Shelves> shelves = shelvesRepository.findByUsersId(userId);
-        return ShelvesDataMapper.transform(shelves);
+    public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
+        if(isOwner(loginUserId, shelvesOwnerUserId))
+            return ShelvesDataMapper.transform(
+                    shelvesRepository.findByUsersId(shelvesOwnerUserId)
+            );
+        else
+            return ShelvesDataMapper.transform(
+                    shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId)
+            );
+    }
+
+    private boolean isOwner(Long loginUserId, long shelvesOwnerUserId) {
+        return loginUserId != null && loginUserId.equals(shelvesOwnerUserId);
     }
 }

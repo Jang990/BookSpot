@@ -8,6 +8,7 @@ import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
 import com.bookspot.shelves.presentation.dto.ShelfSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +21,21 @@ import java.util.Map;
 public class ShelvesController {
     private final ShelvesQueryService shelvesQueryService;
 
+    /*
+    TODO: 다른 사용자도 볼 수 있게는 만들었지만 시큐리티 설정으로 사실상 불가능
+        게시판으로 빼고 유지한다면 상관없음. 하지만 다른 사용자 책장을 볼 수 있는 기능을 넣는다면 시큐리티 설정 필요.
+     */
     @GetMapping("/api/users/{userId}/shelves")
-    public ResponseEntity<ShelvesSummaryResponse> findUserShelves(@PathVariable(name = "userId") long userId) {
+    public ResponseEntity<ShelvesSummaryResponse> findUserShelves(
+            @AuthenticationPrincipal String userIdStr,
+            @PathVariable(name = "userId") long shelvesOwnerUserId
+    ) {
+        Long loginUserId = userIdStr.equals("anonymousUser") ? null : Long.parseLong(userIdStr);
         return ResponseEntity.ok(
-                shelvesQueryService.findUserShelves(userId)
+                shelvesQueryService.findUserShelves(
+                        loginUserId,
+                        shelvesOwnerUserId
+                )
         );
     }
 
