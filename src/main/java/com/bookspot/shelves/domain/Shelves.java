@@ -38,6 +38,10 @@ public class Shelves {
         this.bookCount = 0;
     }
 
+    public boolean isOwnerBy(Users users) {
+        return users.equals(users);
+    }
+
     public boolean isOwnerBy(long userId) {
         return users.getId().equals(userId);
     }

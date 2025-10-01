@@ -34,10 +34,13 @@ public class ShelvesManageService {
     }
 
     public void delete(long userId, long shelfId) {
+        Users users = usersRepository.findByIdWithLock(userId)
+                .orElseThrow(UserNotFoundException::new);
         Shelves shelf = shelvesRepository.findById(shelfId)
                 .orElseThrow(ShelfNotFoundException::new);
 
-        if (shelf.isOwnerBy(userId)) {
+        if (shelf.isOwnerBy(users)) {
+            users.decreaseShelfSize();
             shelvesRepository.deleteById(shelfId);
             return;
         }
