@@ -20,11 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ShelvesController {
     private final ShelvesQueryService shelvesQueryService;
-
-    /*
-    TODO: 다른 사용자도 볼 수 있게는 만들었지만 시큐리티 설정으로 사실상 불가능
-        게시판으로 빼고 유지한다면 상관없음. 하지만 다른 사용자 책장을 볼 수 있는 기능을 넣는다면 시큐리티 설정 필요.
-     */
+    
     @GetMapping("/api/users/{userId}/shelves")
     public ResponseEntity<ShelvesSummaryResponse> findUserShelves(
             @AuthenticationPrincipal String userIdStr,
