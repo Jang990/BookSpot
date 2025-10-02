@@ -1,5 +1,10 @@
 package com.bookspot.shelves.domain;
 
+import com.bookspot.book.domain.Book;
+import com.bookspot.global.Events;
+import com.bookspot.shelves.domain.event.AddedBookToShelf;
+import com.bookspot.shelves.domain.exception.ShelfBookFullException;
+import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import com.bookspot.users.domain.Users;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -56,5 +61,16 @@ public class Shelves {
 
     public void makePrivate() {
         isPublic = false;
+    }
+
+    public void addBook(Book book) {
+        if(id == null)
+            throw new ShelfNotFoundException();
+
+        if (bookCount >= ShelfConst.MAX_SHELF_BOOKS_SIZE)
+            throw new ShelfBookFullException(this.id, book.getId());
+
+        this.bookCount++;
+        Events.raise(new AddedBookToShelf(this.id, book.getId()));
     }
 }
