@@ -1,6 +1,7 @@
-package com.bookspot.shelves.domain;
+package com.bookspot.shelfbooks.domain;
 
 import com.bookspot.book.domain.Book;
+import com.bookspot.shelves.domain.Shelves;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
