@@ -11,30 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class ShelvesDataMapper {
-    public static ShelfDetailResponse transform(Shelves shelf) {
-        // TODO: 관련 도서 상세 정보 필요
-        return new ShelfDetailResponse(
-                shelf.getId(), shelf.getName(),
-                shelf.getCreatedAt().toString(), shelf.isPublic(),
-                shelf.getBookCount(), List.of()
-        );
-    }
-
-    public static ShelvesSummaryResponse transform(List<Shelves> shelves) {
-        return new ShelvesSummaryResponse(
-                shelves.stream()
-                        .map(shelf ->
-                                new ShelfSummaryResponse(
-                                        shelf.getId(),
-                                        shelf.getName(),
-                                        shelf.getBookCount(),
-                                        shelf.getCreatedAt().toString(),
-                                        shelf.isPublic(),
-                                        randThumbnails()
-                                )
-                        ).toList()
-        );
-    }
 
     public ShelfDetailResponse transform_TEMP(Shelves shelf) {
         // TODO: 관련 도서 상세 정보 필요
