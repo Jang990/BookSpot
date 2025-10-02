@@ -1,5 +1,6 @@
 package com.bookspot.shelves.application;
 
+import com.bookspot.shelves.application.mapper.ShelvesDataMapper;
 import com.bookspot.shelves.domain.ShelfTestHelper;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesManager;
@@ -10,6 +11,7 @@ import com.bookspot.users.domain.UsersRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -21,16 +23,12 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ShelvesManageServiceTest {
-    ShelvesManageService service;
-
     @Mock UsersRepository usersRepository;
     @Mock ShelvesRepository repository;
     @Mock ShelvesManager shelvesManager;
+    @Mock ShelvesDataMapper shelvesDataMapper;
 
-    @BeforeEach
-    void beforeEach() {
-        service = new ShelvesManageService(usersRepository, repository, shelvesManager);
-    }
+    @InjectMocks ShelvesManageService service;
 
     @Test
     void 삭제_시_owner가_일치하지_않으면_예외처리() {
