@@ -21,17 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShelvesQueryService {
     private final UsersRepository usersRepository;
     private final ShelvesRepository shelvesRepository;
+    private final ShelvesDataMapper shelvesDataMapper;
 
     public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
         Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
                 .orElseThrow(UserNotFoundException::new);
 
         if(shelvesOwner.getId().equals(loginUserId))
-            return ShelvesDataMapper.transform(
+            return shelvesDataMapper.transform_TEMP(
                     shelvesRepository.findByUsersId(shelvesOwnerUserId)
             );
         else
-            return ShelvesDataMapper.transform(
+            return shelvesDataMapper.transform_TEMP(
                     shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId)
             );
     }
@@ -41,11 +42,11 @@ public class ShelvesQueryService {
                 .orElseThrow(ShelfNotFoundException::new);
 
         if(shelf.isPublic())
-            return ShelvesDataMapper.transform(shelf);
+            return shelvesDataMapper.transform_TEMP(shelf);
 
         if(loginUserId == null || !shelf.isOwnerBy(loginUserId))
             throw new ShelfPrivateAccessException(shelfId);
         else
-            return ShelvesDataMapper.transform(shelf);
+            return shelvesDataMapper.transform_TEMP(shelf);
     }
 }

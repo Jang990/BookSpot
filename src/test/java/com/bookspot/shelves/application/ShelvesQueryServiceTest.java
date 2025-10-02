@@ -1,13 +1,14 @@
 package com.bookspot.shelves.application;
 
+import com.bookspot.shelves.application.mapper.ShelvesDataMapper;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfPrivateAccessException;
-import com.bookspot.users.domain.Users;
 import com.bookspot.users.domain.UsersRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,13 +21,9 @@ import static org.mockito.Mockito.*;
 class ShelvesQueryServiceTest {
     @Mock UsersRepository usersRepository;
     @Mock ShelvesRepository shelvesRepository;
+    @Mock ShelvesDataMapper shelvesDataMapper;
 
-    ShelvesQueryService queryService;
-
-    @BeforeEach
-    void beforeEach() {
-        queryService = new ShelvesQueryService(usersRepository, shelvesRepository);
-    }
+    @InjectMocks ShelvesQueryService queryService;
 
     @Test
     void 비공개_책장_상세정보_조회__비로그인_사용자는_예외처리() {
