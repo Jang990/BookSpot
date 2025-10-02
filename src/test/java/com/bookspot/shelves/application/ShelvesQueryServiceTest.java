@@ -50,10 +50,6 @@ class ShelvesQueryServiceTest {
 
     @Test
     void 비공개_책장_소유자는_상세정보_조회가능() {
-        // 사용자 설정
-        Users owner = mock(Users.class);
-        when(usersRepository.findById(anyLong())).thenReturn(Optional.of(owner));
-
         // 책장 설정
         Shelves shelf = mock(Shelves.class);
         when(shelf.isPublic()).thenReturn(false); // 비공개 책장
