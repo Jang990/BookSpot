@@ -26,7 +26,7 @@ public class ShelfBook {
 
     private int idx;
 
-    protected ShelfBook(Shelves shelf, Book book, int idx) {
+    public ShelfBook(Shelves shelf, Book book, int idx) {
         this.shelf = shelf;
         this.book = book;
         this.idx = idx;
