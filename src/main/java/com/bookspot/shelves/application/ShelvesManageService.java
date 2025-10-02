@@ -31,7 +31,7 @@ public class ShelvesManageService {
         Shelves shelf = shelfManager.create(owner, request);
         shelvesRepository.save(shelf);
 
-        return shelvesDataMapper.transform_TEMP(shelf);
+        return shelvesDataMapper.transform(shelf);
     }
 
     public void delete(long loginUserId, long shelfId) {
@@ -65,6 +65,6 @@ public class ShelvesManageService {
         else
             shelf.makePrivate();
 
-        return shelvesDataMapper.transform_TEMP(shelf);
+        return shelvesDataMapper.transform(shelf);
     }
 }

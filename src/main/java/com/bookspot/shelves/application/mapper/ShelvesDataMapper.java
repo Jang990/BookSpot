@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class ShelvesDataMapper {
 
-    public ShelfDetailResponse transform_TEMP(Shelves shelf) {
+    public ShelfDetailResponse transform(Shelves shelf) {
         // TODO: 관련 도서 상세 정보 필요
         return new ShelfDetailResponse(
                 shelf.getId(), shelf.getName(),
@@ -21,7 +21,7 @@ public class ShelvesDataMapper {
         );
     }
 
-    public ShelvesSummaryResponse transform_TEMP(List<Shelves> shelves) {
+    public ShelvesSummaryResponse transform(List<Shelves> shelves) {
         return new ShelvesSummaryResponse(
                 shelves.stream()
                         .map(shelf ->

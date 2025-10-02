@@ -28,11 +28,11 @@ public class ShelvesQueryService {
                 .orElseThrow(UserNotFoundException::new);
 
         if(shelvesOwner.getId().equals(loginUserId))
-            return shelvesDataMapper.transform_TEMP(
+            return shelvesDataMapper.transform(
                     shelvesRepository.findByUsersId(shelvesOwnerUserId)
             );
         else
-            return shelvesDataMapper.transform_TEMP(
+            return shelvesDataMapper.transform(
                     shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId)
             );
     }
@@ -42,11 +42,11 @@ public class ShelvesQueryService {
                 .orElseThrow(ShelfNotFoundException::new);
 
         if(shelf.isPublic())
-            return shelvesDataMapper.transform_TEMP(shelf);
+            return shelvesDataMapper.transform(shelf);
 
         if(loginUserId == null || !shelf.isOwnerBy(loginUserId))
             throw new ShelfPrivateAccessException(shelfId);
         else
-            return shelvesDataMapper.transform_TEMP(shelf);
+            return shelvesDataMapper.transform(shelf);
     }
 }
