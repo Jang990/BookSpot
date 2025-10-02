@@ -33,6 +33,7 @@ public class ShelfBooksEventHandler {
         if(shelfBookRepository.existsByShelfAndBook(shelves, book))
             throw new ShelfBookAlreadyExistsException(shelves.getId(), book.getId());
 
+        // TODO: 이후에 책장 책의 idx 변경 기능 추가하기
         ShelfBook shelfBook = new ShelfBook(shelves, book, 0);
         shelfBookRepository.save(shelfBook);
     }
