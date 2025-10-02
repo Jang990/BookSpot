@@ -58,4 +58,18 @@ class ShelvesQueryServiceTest {
         queryService.findShelfDetail(12L, 1L);
     }
 
+    @Test
+    void 비공개_책장과_관련없는_사용자는_상세정보_조회시_예외처리() {
+        // 책장 설정
+        Shelves shelf = mock(Shelves.class);
+        when(shelf.isPublic()).thenReturn(false); // 비공개 책장
+        when(shelf.isOwnerBy(anyLong())).thenReturn(false); // 소유자 아님
+        when(shelvesRepository.findWithUser(anyLong())).thenReturn(Optional.of(shelf));
+
+        assertThrows(
+                ShelfPrivateAccessException.class,
+                () -> queryService.findShelfDetail(12L, 1L)
+        );
+    }
+
 }
