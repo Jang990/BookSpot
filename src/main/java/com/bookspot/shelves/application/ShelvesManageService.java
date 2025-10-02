@@ -49,7 +49,7 @@ public class ShelvesManageService {
         throw new ShelfForbiddenException(loginUserId, shelf.getId());
     }
 
-    public ShelfDetailResponse update(
+    public void update(
             long loginUserId, long shelfId,
             ShelfCreationRequest request
     ) {
@@ -64,7 +64,5 @@ public class ShelvesManageService {
             shelf.makePublic();
         else
             shelf.makePrivate();
-
-        return shelvesDataMapper.transform(shelf);
     }
 }

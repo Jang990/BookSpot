@@ -53,17 +53,20 @@ public class ShelvesManageController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     * @see com.bookspot.shelves.domain.exception.ShelfForbiddenException
+     */
     @PatchMapping("/{shelfId}")
-    public ResponseEntity<ShelfDetailResponse> updateShelf(
+    public ResponseEntity<Void> updateShelf(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("shelfId") long shelfId,
             @Valid @RequestBody ShelfCreationRequest request
     ) {
-        return ResponseEntity.ok(
-                shelvesManageService.update(
-                        Long.parseLong(userIdStr),
-                        shelfId, request
-                )
+        shelvesManageService.update(
+                Long.parseLong(userIdStr),
+                shelfId, request
         );
+        return ResponseEntity.noContent().build();
     }
 }
