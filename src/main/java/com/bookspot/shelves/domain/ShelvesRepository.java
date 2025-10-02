@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
@@ -13,4 +14,7 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
 
     @Query("select s from Shelves s where s.users.id = :userId and s.isPublic = true")
     List<Shelves> findPublicShelvesBy(@Param("userId") long userId);
+
+    @Query("SELECT s FROM Shelves s JOIN FETCH s.users WHERE s.id = :shelfId")
+    Optional<Shelves> findWithUser(@Param("shelfId") long shelfId);
 }
