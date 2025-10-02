@@ -23,18 +23,18 @@ public class ShelvesManageService {
     private final ShelvesRepository shelvesRepository;
     private final ShelvesManager shelfManager;
 
-    public ShelfDetailResponse create(long userId, ShelfCreationRequest request) {
-        Users users = usersRepository.findByIdWithLock(userId)
+    public ShelfDetailResponse create(long ownerUserId, ShelfCreationRequest request) {
+        Users owner = usersRepository.findByIdWithLock(ownerUserId)
                 .orElseThrow(UserNotFoundException::new);
 
-        Shelves shelf = shelfManager.create(users, request);
+        Shelves shelf = shelfManager.create(owner, request);
         shelvesRepository.save(shelf);
 
         return ShelvesDataMapper.transform(shelf);
     }
 
-    public void delete(long userId, long shelfId) {
-        Users users = usersRepository.findByIdWithLock(userId)
+    public void delete(long loginUserId, long shelfId) {
+        Users users = usersRepository.findByIdWithLock(loginUserId)
                 .orElseThrow(UserNotFoundException::new);
         Shelves shelf = shelvesRepository.findById(shelfId)
                 .orElseThrow(ShelfNotFoundException::new);
@@ -45,18 +45,18 @@ public class ShelvesManageService {
             return;
         }
 
-        throw new ShelfForbiddenException(userId, shelf.getId());
+        throw new ShelfForbiddenException(loginUserId, shelf.getId());
     }
 
     public ShelfDetailResponse update(
-            long userId, long shelfId,
+            long loginUserId, long shelfId,
             ShelfCreationRequest request
     ) {
         Shelves shelf = shelvesRepository.findById(shelfId)
                 .orElseThrow(ShelfNotFoundException::new);
 
-        if (!shelf.isOwnerBy(userId))
-            throw new ShelfForbiddenException(userId, shelf.getId());
+        if (!shelf.isOwnerBy(loginUserId))
+            throw new ShelfForbiddenException(loginUserId, shelf.getId());
 
         shelf.changeName(request.getName());
         if(request.getIsPublic())
