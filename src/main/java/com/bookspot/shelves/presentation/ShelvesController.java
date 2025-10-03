@@ -1,14 +1,19 @@
 package com.bookspot.shelves.presentation;
 
 import com.bookspot.shelves.application.ShelvesQueryService;
+import com.bookspot.shelves.presentation.dto.ShelfBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
+import com.bookspot.shelves.presentation.dto.ShelvesBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +38,18 @@ public class ShelvesController {
                         loginUserId,
                         shelvesOwnerUserId
                 )
+        );
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/api/users/shelves/books/{bookId}")
+    public ResponseEntity<ShelvesBookStatusResponse> findUserShelvesBookStatus(
+            @AuthenticationPrincipal String userIdStr,
+            @PathVariable(name = "bookId") long bookId
+    ) {
+        Long loginUserId = parseLoginUserId(userIdStr);
+        return ResponseEntity.ok(
+                shelvesQueryService.findBookStatus(loginUserId, bookId)
         );
     }
 
