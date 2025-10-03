@@ -5,6 +5,7 @@ import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import com.bookspot.shelves.domain.exception.ShelfPrivateAccessException;
+import com.bookspot.shelves.infra.ShelvesQuerydslRepository;
 import com.bookspot.shelves.presentation.dto.ShelfBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesBookStatusResponse;
@@ -26,6 +27,8 @@ public class ShelvesQueryService {
     private final UsersRepository usersRepository;
     private final ShelvesRepository shelvesRepository;
     private final ShelvesDataMapper shelvesDataMapper;
+
+    private final ShelvesQuerydslRepository shelvesQuerydslRepository;
 
     public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
         Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
@@ -56,13 +59,7 @@ public class ShelvesQueryService {
 
     public ShelvesBookStatusResponse findBookStatus(long loginUserId, long bookId) {
         return new ShelvesBookStatusResponse(
-                List.of(
-                        new ShelfBookStatusResponse(1, "추천하는 책", true, false),
-                        new ShelfBookStatusResponse(2, "책장 A", false, true),
-                        new ShelfBookStatusResponse(3, "개발 필독서", true, false),
-                        new ShelfBookStatusResponse(4, "나중에 볼 책", false, true),
-                        new ShelfBookStatusResponse(11, "영향을 받은 책", true, false)
-                )
+                shelvesQuerydslRepository.findShelvesStatus(loginUserId, bookId)
         );
     }
 }
