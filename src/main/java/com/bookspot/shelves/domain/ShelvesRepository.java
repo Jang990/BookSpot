@@ -1,6 +1,7 @@
 package com.bookspot.shelves.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,8 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
 
     @Query("SELECT s FROM Shelves s JOIN FETCH s.users WHERE s.id = :shelfId")
     Optional<Shelves> findWithUser(@Param("shelfId") long shelfId);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("UPDATE Shelves s SET s.bookCount = s.bookCount + 1 WHERE s.id IN :ids")
+    void increaseBookCountIn(@Param("ids") List<Long> ids);
 }

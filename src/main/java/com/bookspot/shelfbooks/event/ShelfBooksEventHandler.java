@@ -9,11 +9,15 @@ import com.bookspot.shelfbooks.domain.exception.ShelfBookAlreadyExistsException;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.event.AddedBookToShelf;
+import com.bookspot.shelves.domain.event.AddedBookToShelves;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -37,4 +41,32 @@ public class ShelfBooksEventHandler {
         ShelfBook shelfBook = new ShelfBook(shelves, book, 0);
         shelfBookRepository.save(shelfBook);
     }
+
+    @EventListener(AddedBookToShelves.class)
+    public void handle(AddedBookToShelves event) {
+        List<Shelves> shelves = shelvesRepository.findAllById(event.shelfIds());
+        if (shelves.size() != event.shelfIds().size()) {
+            List<Long> foundShelfIds = toShelfIds(shelves);
+            List<Long> notFoundShelfIds = event.shelfIds().stream()
+                    .filter(shelfId -> !foundShelfIds.contains(shelfId)).toList();
+            throw new ShelfNotFoundException(notFoundShelfIds);
+        }
+
+        Book book = bookRepository.findById(event.bookId())
+                .orElseThrow(BookNotFoundException::new);
+
+        List<ShelfBook> shelfBooks = new ArrayList<>();
+        for (Shelves shelf : shelves) {
+            // TODO: 인덱스 관리 필요
+            shelfBooks.add(new ShelfBook(shelf, book, 0));
+        }
+
+        shelvesRepository.increaseBookCountIn(toShelfIds(shelves));
+        shelfBookRepository.saveAll(shelfBooks);
+    }
+
+    private List<Long> toShelfIds(List<Shelves> shelves) {
+        return shelves.stream().map(Shelves::getId).toList();
+    }
+
 }
