@@ -49,15 +49,7 @@ public class ShelvesController {
     ) {
         Long loginUserId = parseLoginUserId(userIdStr);
         return ResponseEntity.ok(
-                new ShelvesBookStatusResponse(
-                        List.of(
-                                new ShelfBookStatusResponse(1, "추천하는 책", true, false),
-                                new ShelfBookStatusResponse(2, "책장 A", false, true),
-                                new ShelfBookStatusResponse(3, "개발 필독서", true, false),
-                                new ShelfBookStatusResponse(4, "나중에 볼 책", false, true),
-                                new ShelfBookStatusResponse(11, "영향을 받은 책", true, false)
-                        )
-                )
+                shelvesQueryService.findBookStatus(loginUserId, bookId)
         );
     }
 
