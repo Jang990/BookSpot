@@ -45,15 +45,13 @@ public class ShelfBooksEventHandler {
     @EventListener(AddedBookToShelves.class)
     public void handle(AddedBookToShelves event) {
         List<Shelves> shelves = shelvesRepository.findAllById(event.shelfIds());
-        if (shelves.size() != event.shelfIds().size()) {
-            List<Long> foundShelfIds = toShelfIds(shelves);
-            List<Long> notFoundShelfIds = event.shelfIds().stream()
-                    .filter(shelfId -> !foundShelfIds.contains(shelfId)).toList();
-            throw new ShelfNotFoundException(notFoundShelfIds);
-        }
-
         Book book = bookRepository.findById(event.bookId())
                 .orElseThrow(BookNotFoundException::new);
+        if (shelves.size() != event.shelfIds().size())
+            throw new ShelfNotFoundException(toShelfIds(shelves));
+
+        if (shelfBookRepository.existsByShelfIdInAndBookId(toShelfIds(shelves), event.bookId()))
+            throw new ShelfBookAlreadyExistsException(toShelfIds(shelves), event.bookId());
 
         List<ShelfBook> shelfBooks = new ArrayList<>();
         for (Shelves shelf : shelves) {
