@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,5 +30,17 @@ public class ShelfBooksManageService {
             shelf.addBook(book);
         else
             throw new ShelfForbiddenException(loginUserId, shelfId);
+    }
+
+    public void addBookToShelf(long loginUserId, List<Long> shelfIds, long bookId) {
+        /*Shelves shelf = shelvesRepository.findById(shelfId)
+                .orElseThrow(ShelfNotFoundException::new);
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(BookNotFoundException::new);
+
+        if(shelf.isOwnerBy(loginUserId))
+            shelf.addBook(book);
+        else
+            throw new ShelfForbiddenException(loginUserId, shelfId);*/
     }
 }
