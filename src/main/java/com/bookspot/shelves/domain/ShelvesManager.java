@@ -25,6 +25,8 @@ public class ShelvesManager {
         shelves.forEach(shelf -> {
             if(!shelf.isOwnerBy(userId))
                 throw new ShelfForbiddenException(userId, shelf.getId());
+        });
+        shelves.forEach(shelf -> {
             if(shelf.isFull())
                 throw new ShelfBookFullException(shelf.getId(), bookId);
         });
