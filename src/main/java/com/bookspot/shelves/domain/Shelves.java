@@ -55,6 +55,10 @@ public class Shelves {
         return bookCount >= ShelfConst.MAX_SHELF_BOOKS_SIZE;
     }
 
+    public boolean isEmpty() {
+        return bookCount == 0;
+    }
+
     public void changeName(String name) {
         this.name = name;
     }
