@@ -2,6 +2,7 @@ package com.bookspot.shelves.domain;
 
 import com.bookspot.book.domain.Book;
 import com.bookspot.global.Events;
+import com.bookspot.shelfbooks.domain.ShelfBook;
 import com.bookspot.shelves.domain.event.AddedBookToShelfEvent;
 import com.bookspot.shelves.domain.exception.ShelfBookFullException;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
@@ -14,6 +15,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +38,9 @@ public class Shelves {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "shelf", fetch = FetchType.LAZY)
+    private List<ShelfBook> shelfBooks = new ArrayList<>(); // 조회용
 
     protected Shelves(Users users, String name, boolean isPublic) {
         this.users = users;

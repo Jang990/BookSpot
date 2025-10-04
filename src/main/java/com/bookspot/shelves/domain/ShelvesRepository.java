@@ -22,7 +22,12 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
     @Query("select s from Shelves s where s.users.id = :userId and s.isPublic = true")
     List<Shelves> findPublicShelvesBy(@Param("userId") long userId);
 
-    @Query("SELECT s FROM Shelves s JOIN FETCH s.users WHERE s.id = :shelfId")
+    @Query("""
+            SELECT s FROM Shelves s
+            JOIN FETCH s.users u
+            LEFT JOIN FETCH s.shelfBooks sb
+            WHERE s.id = :shelfId
+            """)
     Optional<Shelves> findDetailById(@Param("shelfId") long shelfId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
