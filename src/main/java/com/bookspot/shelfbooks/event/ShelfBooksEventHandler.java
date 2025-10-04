@@ -8,8 +8,8 @@ import com.bookspot.shelfbooks.domain.ShelfBookRepository;
 import com.bookspot.shelfbooks.domain.exception.ShelfBookAlreadyExistsException;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
-import com.bookspot.shelves.domain.event.AddedBookToShelf;
-import com.bookspot.shelves.domain.event.AddedBookToShelves;
+import com.bookspot.shelves.domain.event.AddedBookToShelfEvent;
+import com.bookspot.shelves.domain.event.AddedBookToShelvesEvent;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -27,8 +27,8 @@ public class ShelfBooksEventHandler {
     private final BookRepository bookRepository;
     private final ShelfBookRepository shelfBookRepository;
 
-    @EventListener(AddedBookToShelf.class)
-    public void handle(AddedBookToShelf event) {
+    @EventListener(AddedBookToShelfEvent.class)
+    public void handle(AddedBookToShelfEvent event) {
         Shelves shelves = shelvesRepository.findById(event.shelfId())
                 .orElseThrow(ShelfNotFoundException::new);
         Book book = bookRepository.findById(event.bookId())
@@ -42,8 +42,8 @@ public class ShelfBooksEventHandler {
         shelfBookRepository.save(shelfBook);
     }
 
-    @EventListener(AddedBookToShelves.class)
-    public void handle(AddedBookToShelves event) {
+    @EventListener(AddedBookToShelvesEvent.class)
+    public void handle(AddedBookToShelvesEvent event) {
         List<Shelves> shelves = shelvesRepository.findAllById(event.shelfIds());
         Book book = bookRepository.findById(event.bookId())
                 .orElseThrow(BookNotFoundException::new);

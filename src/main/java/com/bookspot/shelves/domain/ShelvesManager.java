@@ -1,8 +1,8 @@
 package com.bookspot.shelves.domain;
 
 import com.bookspot.global.Events;
-import com.bookspot.shelves.domain.event.AddedBookToShelves;
-import com.bookspot.shelves.domain.event.RemovedBookToShelves;
+import com.bookspot.shelves.domain.event.AddedBookToShelvesEvent;
+import com.bookspot.shelves.domain.event.RemovedBookToShelvesEvent;
 import com.bookspot.shelves.domain.exception.ShelfAlreadyEmptyException;
 import com.bookspot.shelves.domain.exception.ShelfBookFullException;
 import com.bookspot.shelves.domain.exception.ShelfForbiddenException;
@@ -32,7 +32,7 @@ public class ShelvesManager {
         });
 
         List<Long> shelfIds = shelves.stream().map(Shelves::getId).toList();
-        Events.raise(new AddedBookToShelves(shelfIds, bookId));
+        Events.raise(new AddedBookToShelvesEvent(shelfIds, bookId));
     }
 
     public void removeBookToShelves(List<Shelves> shelves, long userId, long bookId) {
@@ -47,6 +47,6 @@ public class ShelvesManager {
         });
 
         List<Long> shelfIds = shelves.stream().map(Shelves::getId).toList();
-        Events.raise(new RemovedBookToShelves(shelfIds, bookId));
+        Events.raise(new RemovedBookToShelvesEvent(shelfIds, bookId));
     }
 }
