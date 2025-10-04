@@ -51,6 +51,10 @@ public class Shelves {
         return users.getId().equals(userId);
     }
 
+    public boolean isFull() {
+        return bookCount >= ShelfConst.MAX_SHELF_BOOKS_SIZE;
+    }
+
     public void changeName(String name) {
         this.name = name;
     }
@@ -67,7 +71,7 @@ public class Shelves {
         if(id == null)
             throw new ShelfNotFoundException();
 
-        if (bookCount >= ShelfConst.MAX_SHELF_BOOKS_SIZE)
+        if (isFull())
             throw new ShelfBookFullException(this.id, book.getId());
 
         this.bookCount++;
