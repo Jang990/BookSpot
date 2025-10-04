@@ -31,6 +31,12 @@ public class ShelfBooksManageController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * @see com.bookspot.shelves.domain.exception.ShelfNotFoundException
+     * @see com.bookspot.shelves.domain.exception.ShelfBookFullException
+     * @see com.bookspot.shelves.domain.exception.ShelfForbiddenException
+     * @see com.bookspot.shelfbooks.domain.exception.ShelfBookAlreadyExistsException
+     */
     @PostMapping("/api/users/books/{bookId}/shelves")
     public ResponseEntity<Void> addBookToShelves(
             @AuthenticationPrincipal String userIdStr,
