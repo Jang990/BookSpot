@@ -45,7 +45,7 @@ public class ShelvesQueryService {
     }
 
     public ShelfDetailResponse findShelfDetail(Long loginUserId, long shelfId) {
-        Shelves shelf = shelvesRepository.findWithUser(shelfId)
+        Shelves shelf = shelvesRepository.findDetailById(shelfId)
                 .orElseThrow(ShelfNotFoundException::new);
 
         if(shelf.isPublic())
