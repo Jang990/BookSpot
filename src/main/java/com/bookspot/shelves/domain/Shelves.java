@@ -2,7 +2,7 @@ package com.bookspot.shelves.domain;
 
 import com.bookspot.book.domain.Book;
 import com.bookspot.global.Events;
-import com.bookspot.shelves.domain.event.AddedBookToShelf;
+import com.bookspot.shelves.domain.event.AddedBookToShelfEvent;
 import com.bookspot.shelves.domain.exception.ShelfBookFullException;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import com.bookspot.users.domain.Users;
@@ -55,6 +55,10 @@ public class Shelves {
         return bookCount >= ShelfConst.MAX_SHELF_BOOKS_SIZE;
     }
 
+    public boolean isEmpty() {
+        return bookCount == 0;
+    }
+
     public void changeName(String name) {
         this.name = name;
     }
@@ -75,6 +79,6 @@ public class Shelves {
             throw new ShelfBookFullException(this.id, book.getId());
 
         this.bookCount++;
-        Events.raise(new AddedBookToShelf(this.id, book.getId()));
+        Events.raise(new AddedBookToShelfEvent(this.id, book.getId()));
     }
 }

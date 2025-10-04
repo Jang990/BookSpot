@@ -9,7 +9,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class BulkShelfBookCreationRequest {
+public class BulkShelfIdsRequest {
     @Size(min = 1, max = 50)
     private List<Long> shelfIds;
 }

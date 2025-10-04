@@ -1,7 +1,8 @@
 package com.bookspot.shelves.presentation;
 
 import com.bookspot.shelves.application.ShelfBooksManageService;
-import com.bookspot.shelves.presentation.dto.request.BulkShelfBookCreationRequest;
+import com.bookspot.shelves.presentation.dto.request.BulkShelfIdsRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,9 +42,29 @@ public class ShelfBooksManageController {
     public ResponseEntity<Void> addBookToShelves(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("bookId") long bookId,
-            @RequestBody BulkShelfBookCreationRequest request
+            @Valid @RequestBody BulkShelfIdsRequest request
     ) {
         shelfBooksManageService.addBookToShelves(
+                Long.parseLong(userIdStr),
+                request.getShelfIds(),
+                bookId
+        );
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * @see com.bookspot.shelves.domain.exception.ShelfNotFoundException
+     * @see com.bookspot.shelves.domain.exception.ShelfForbiddenException
+     * @see com.bookspot.shelves.domain.exception.ShelfAlreadyEmptyException
+     * @see com.bookspot.shelfbooks.domain.exception.ShelfBookNotFoundException
+     */
+    @DeleteMapping("/api/users/books/{bookId}/shelves")
+    public ResponseEntity<Void> removeBookToShelves(
+            @AuthenticationPrincipal String userIdStr,
+            @PathVariable("bookId") long bookId,
+            @Valid BulkShelfIdsRequest request
+    ) {
+        shelfBooksManageService.removeBookToShelves(
                 Long.parseLong(userIdStr),
                 request.getShelfIds(),
                 bookId
