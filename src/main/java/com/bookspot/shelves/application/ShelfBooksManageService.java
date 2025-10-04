@@ -4,6 +4,7 @@ import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import com.bookspot.book.domain.exception.BookNotFoundException;
 import com.bookspot.shelves.domain.Shelves;
+import com.bookspot.shelves.domain.ShelvesManager;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfForbiddenException;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
@@ -19,8 +20,9 @@ import java.util.List;
 public class ShelfBooksManageService {
     private final BookRepository bookRepository;
     private final ShelvesRepository shelvesRepository;
+    private final ShelvesManager shelvesManager;
 
-    public void addBookToShelf(long loginUserId, long shelfId, long bookId) {
+    public void addBookToShelves(long loginUserId, long shelfId, long bookId) {
         Shelves shelf = shelvesRepository.findById(shelfId)
                 .orElseThrow(ShelfNotFoundException::new);
         Book book = bookRepository.findById(bookId)
@@ -32,15 +34,12 @@ public class ShelfBooksManageService {
             throw new ShelfForbiddenException(loginUserId, shelfId);
     }
 
-    public void addBookToShelf(long loginUserId, List<Long> shelfIds, long bookId) {
-        /*Shelves shelf = shelvesRepository.findById(shelfId)
-                .orElseThrow(ShelfNotFoundException::new);
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(BookNotFoundException::new);
+    public void addBookToShelves(long loginUserId, List<Long> shelfIds, long bookId) {
+        List<Shelves> shelves = shelvesRepository.findByIdsWithLock(loginUserId, shelfIds);
 
-        if(shelf.isOwnerBy(loginUserId))
-            shelf.addBook(book);
-        else
-            throw new ShelfForbiddenException(loginUserId, shelfId);*/
+        if(shelves.size() != shelfIds.size())
+            throw new ShelfNotFoundException(shelfIds);
+
+        shelvesManager.addBookToShelves(shelves, loginUserId, bookId);
     }
 }

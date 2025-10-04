@@ -1,17 +1,14 @@
 package com.bookspot.shelves.presentation;
 
 import com.bookspot.shelves.application.ShelfBooksManageService;
+import com.bookspot.shelves.presentation.dto.request.BulkShelfBookCreationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @PreAuthorize("isAuthenticated()")
-@RequestMapping("/api/shelves/{shelfId}/books")
 @RestController
 @RequiredArgsConstructor
 public class ShelfBooksManageController {
@@ -24,13 +21,27 @@ public class ShelfBooksManageController {
      * @see com.bookspot.shelves.domain.exception.ShelfBookFullException
      * @see com.bookspot.shelfbooks.domain.exception.ShelfBookAlreadyExistsException
      */
-    @PostMapping("/{bookId}")
+    @PostMapping("/api/shelves/{shelfId}/books/{bookId}")
     public ResponseEntity<Void> addBookToShelf(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("shelfId") long shelfId,
             @PathVariable("bookId") long bookId
     ) {
-        shelfBooksManageService.addBookToShelf(Long.parseLong(userIdStr), shelfId, bookId);
+        shelfBooksManageService.addBookToShelves(Long.parseLong(userIdStr), shelfId, bookId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/api/users/books/{bookId}/shelves")
+    public ResponseEntity<Void> addBookToShelves(
+            @AuthenticationPrincipal String userIdStr,
+            @PathVariable("bookId") long bookId,
+            @RequestBody BulkShelfBookCreationRequest request
+    ) {
+        shelfBooksManageService.addBookToShelves(
+                Long.parseLong(userIdStr),
+                request.getShelfIds(),
+                bookId
+        );
         return ResponseEntity.noContent().build();
     }
 
