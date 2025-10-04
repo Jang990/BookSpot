@@ -17,8 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 
 @Service
 @Transactional(readOnly = true)
@@ -49,12 +47,12 @@ public class ShelvesQueryService {
                 .orElseThrow(ShelfNotFoundException::new);
 
         if(shelf.isPublic())
-            return shelvesDataMapper.transform(shelf);
+            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks());
 
         if(loginUserId == null || !shelf.isOwnerBy(loginUserId))
             throw new ShelfPrivateAccessException(shelfId);
         else
-            return shelvesDataMapper.transform(shelf);
+            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks());
     }
 
     public ShelvesBookStatusResponse findBookStatus(long loginUserId, long bookId) {
