@@ -2,6 +2,7 @@ package com.bookspot.shelves.presentation;
 
 import com.bookspot.shelves.application.ShelfBooksManageService;
 import com.bookspot.shelves.presentation.dto.request.BulkShelfIdsRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +42,7 @@ public class ShelfBooksManageController {
     public ResponseEntity<Void> addBookToShelves(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("bookId") long bookId,
-            @RequestBody BulkShelfIdsRequest request
+            @Valid @RequestBody BulkShelfIdsRequest request
     ) {
         shelfBooksManageService.addBookToShelves(
                 Long.parseLong(userIdStr),
@@ -61,7 +62,7 @@ public class ShelfBooksManageController {
     public ResponseEntity<Void> removeBookToShelves(
             @AuthenticationPrincipal String userIdStr,
             @PathVariable("bookId") long bookId,
-            BulkShelfIdsRequest request
+            @Valid BulkShelfIdsRequest request
     ) {
         shelfBooksManageService.removeBookToShelves(
                 Long.parseLong(userIdStr),
