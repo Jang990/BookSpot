@@ -9,6 +9,7 @@ import lombok.Getter;
 public class ShelfBookStatusResponse {
     private final long id;
     private final String name;
+    private final int bookCount;
     @JsonProperty("isPublic")
     private final boolean isPublic;
     @JsonProperty("isExists")

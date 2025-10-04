@@ -22,6 +22,7 @@ public class ShelvesQuerydslRepository {
                             ShelfBookStatusResponse.class,
                             shelves.id,
                             shelves.name,
+                            shelves.bookCount,
                             shelves.isPublic,
                             shelfBook.id.isNotNull()
                     )
