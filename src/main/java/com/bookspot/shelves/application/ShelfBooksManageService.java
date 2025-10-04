@@ -42,4 +42,13 @@ public class ShelfBooksManageService {
 
         shelvesManager.addBookToShelves(shelves, loginUserId, bookId);
     }
+
+    public void removeBookToShelves(long loginUserId, List<Long> shelfIds, long bookId) {
+        List<Shelves> shelves = shelvesRepository.findByIdsWithLock(loginUserId, shelfIds);
+
+        if(shelves.size() != shelfIds.size())
+            throw new ShelfNotFoundException(shelfIds);
+
+        shelvesManager.removeBookToShelves(shelves, loginUserId, bookId);
+    }
 }

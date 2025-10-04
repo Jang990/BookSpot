@@ -51,4 +51,24 @@ public class ShelfBooksManageController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * @see com.bookspot.shelves.domain.exception.ShelfNotFoundException
+     * @see com.bookspot.shelves.domain.exception.ShelfForbiddenException
+     * @see com.bookspot.shelves.domain.exception.ShelfAlreadyEmptyException
+     * @see com.bookspot.shelfbooks.domain.exception.ShelfBookNotFoundException
+     */
+    @DeleteMapping("/api/users/books/{bookId}/shelves")
+    public ResponseEntity<Void> removeBookToShelves(
+            @AuthenticationPrincipal String userIdStr,
+            @PathVariable("bookId") long bookId,
+            BulkShelfBookCreationRequest request
+    ) {
+        shelfBooksManageService.removeBookToShelves(
+                Long.parseLong(userIdStr),
+                request.getShelfIds(),
+                bookId
+        );
+        return ResponseEntity.noContent().build();
+    }
+
 }
