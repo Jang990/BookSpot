@@ -28,4 +28,8 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("UPDATE Shelves s SET s.bookCount = s.bookCount + 1 WHERE s.id IN :ids")
     void increaseBookCountIn(@Param("ids") List<Long> ids);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("UPDATE Shelves s SET s.bookCount = s.bookCount - 1 WHERE s.id IN :ids")
+    int decreaseBookCountIn(@Param("ids") List<Long> ids);
 }

@@ -6,12 +6,15 @@ import com.bookspot.book.domain.exception.BookNotFoundException;
 import com.bookspot.shelfbooks.domain.ShelfBook;
 import com.bookspot.shelfbooks.domain.ShelfBookRepository;
 import com.bookspot.shelfbooks.domain.exception.ShelfBookAlreadyExistsException;
+import com.bookspot.shelfbooks.domain.exception.ShelfBookNotFoundException;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.event.AddedBookToShelfEvent;
 import com.bookspot.shelves.domain.event.AddedBookToShelvesEvent;
+import com.bookspot.shelves.domain.event.RemovedBookToShelvesEvent;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -61,6 +65,22 @@ public class ShelfBooksEventHandler {
 
         shelvesRepository.increaseBookCountIn(toShelfIds(shelves));
         shelfBookRepository.saveAll(shelfBooks);
+    }
+
+    @EventListener(RemovedBookToShelvesEvent.class)
+    public void handle(RemovedBookToShelvesEvent event) {
+        int targetShelfSize = event.shelfIds().size();
+
+        int deletedShelfBookCount = shelfBookRepository.deleteByShelfIdsAndBookId(event.shelfIds(), event.bookId());
+        if(deletedShelfBookCount < targetShelfSize)
+            throw new ShelfBookNotFoundException(event.shelfIds(), event.bookId());
+
+        int decreasedShelfCount = shelvesRepository.decreaseBookCountIn(event.shelfIds());
+        if (decreasedShelfCount < targetShelfSize) {
+            log.error("데이터 불일치 발생 == 삭제된 책장 도서 수: {}, 감소된 책장 수: {}, 이벤트: {}",
+                    deletedShelfBookCount, decreasedShelfCount ,event);
+            throw new ShelfNotFoundException(event.shelfIds());
+        }
     }
 
     private List<Long> toShelfIds(List<Shelves> shelves) {
