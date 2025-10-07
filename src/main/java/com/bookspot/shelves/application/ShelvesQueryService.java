@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -32,14 +34,12 @@ public class ShelvesQueryService {
         Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
                 .orElseThrow(UserNotFoundException::new);
 
+        List<Shelves> shelves;
         if(shelvesOwner.getId().equals(loginUserId))
-            return shelvesDataMapper.transform(
-                    shelvesRepository.findByUsersId(shelvesOwnerUserId)
-            );
+            shelves = shelvesRepository.findByUsersId(shelvesOwnerUserId);
         else
-            return shelvesDataMapper.transform(
-                    shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId)
-            );
+            shelves = shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId);
+        return shelvesDataMapper.transform(shelves);
     }
 
     public ShelfDetailResponse findShelfDetail(Long loginUserId, long shelfId) {
