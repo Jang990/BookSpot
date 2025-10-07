@@ -13,13 +13,24 @@ import java.util.Optional;
 
 @Repository
 public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
+    @Query("""
+            SELECT s FROM Shelves s
+                JOIN FETCH s.users u
+                LEFT JOIN FETCH s.shelfBooks sb
+            WHERE s.id = :userId
+            """)
     List<Shelves> findByUsersId(long userId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT s FROM Shelves s WHERE s.users.id = :userId AND s.id in :shelfIds")
     List<Shelves> findByIdsWithLock(@Param("userId") long userId, @Param("shelfIds") List<Long> shelfIds);
 
-    @Query("select s from Shelves s where s.users.id = :userId and s.isPublic = true")
+    @Query("""
+            SELECT s
+            FROM Shelves s
+                LEFT JOIN FETCH s.shelfBooks sb
+            WHERE s.users.id = :userId and s.isPublic = true
+            """)
     List<Shelves> findPublicShelvesBy(@Param("userId") long userId);
 
     @Query("""
