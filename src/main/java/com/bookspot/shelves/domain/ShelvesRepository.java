@@ -17,7 +17,7 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
             SELECT s FROM Shelves s
                 JOIN FETCH s.users u
                 LEFT JOIN FETCH s.shelfBooks sb
-            WHERE s.id = :userId
+            WHERE s.users.id = :userId
             """)
     List<Shelves> findByUsersId(long userId);
 
