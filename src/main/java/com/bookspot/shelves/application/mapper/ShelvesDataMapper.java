@@ -4,6 +4,7 @@ import com.bookspot.book.domain.Book;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
 import com.bookspot.shelfbooks.domain.ShelfBook;
+import com.bookspot.shelves.application.ShelvesQueryService;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelfSummaryResponse;
@@ -32,7 +33,7 @@ public class ShelvesDataMapper {
         );
     }
 
-    public ShelvesSummaryResponse transform(List<Shelves> shelves) {
+    public ShelvesSummaryResponse transform(List<Shelves> shelves, Map<Long, String> bookIdsAndIsbn13) {
         return new ShelvesSummaryResponse(
                 shelves.stream()
                         .map(shelf ->
@@ -42,10 +43,20 @@ public class ShelvesDataMapper {
                                         shelf.getBookCount(),
                                         shelf.getCreatedAt().toString(),
                                         shelf.isPublic(),
-                                        randThumbnails()
+                                        toIsbn13(shelf, bookIdsAndIsbn13)
                                 )
                         ).toList()
         );
+    }
+
+    private List<String> toIsbn13(Shelves shelf, Map<Long, String> bookIdsAndIsbn13) {
+        return shelf.getShelfBooks()
+                .stream()
+                .limit(ShelvesQueryService.THUMBNAIL_BOOK_COUNT)
+                .map(ShelfBook::getBook)
+                .map(Book::getId)
+                .map(bookIdsAndIsbn13::get)
+                .toList();
     }
 
     private static final List<List<String>> list = List.of(
