@@ -1,7 +1,9 @@
 package com.bookspot.shelves.application.mapper;
 
+import com.bookspot.book.domain.Book;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
+import com.bookspot.shelfbooks.domain.ShelfBook;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelfSummaryResponse;
@@ -17,12 +19,16 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class ShelvesDataMapper {
 
-    public ShelfDetailResponse transform(Shelves shelf) {
-        // TODO: 관련 도서 상세 정보 필요
+    public ShelfDetailResponse transform(Shelves shelf, List<ShelfBook> shelfBooks) {
+        List<Long> relatedBookIds = shelfBooks.stream()
+                .map(ShelfBook::getBook)
+                .map(Book::getId)
+                .toList();
+
         return new ShelfDetailResponse(
                 shelf.getId(), shelf.getName(),
                 shelf.getCreatedAt().toString(), shelf.isPublic(),
-                shelf.getBookCount(), randBooks()
+                shelf.getBookCount(), relatedBookIds
         );
     }
 

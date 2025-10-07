@@ -1,6 +1,5 @@
 package com.bookspot.shelves.presentation.dto;
 
-import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,5 +15,5 @@ public class ShelfDetailResponse {
     @JsonProperty("isPublic")
     private boolean isPublic;
     private int bookCount;
-    List<BookPreviewResponse> books;
+    private List<Long> bookIds;
 }

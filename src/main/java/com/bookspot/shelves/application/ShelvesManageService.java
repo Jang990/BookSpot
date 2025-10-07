@@ -31,7 +31,7 @@ public class ShelvesManageService {
         Shelves shelf = shelfManager.create(owner, request);
         shelvesRepository.save(shelf);
 
-        return shelvesDataMapper.transform(shelf);
+        return shelvesDataMapper.transform(shelf, shelf.getShelfBooks());
     }
 
     public void delete(long loginUserId, long shelfId) {
