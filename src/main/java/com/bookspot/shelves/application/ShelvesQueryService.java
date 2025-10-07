@@ -1,12 +1,13 @@
 package com.bookspot.shelves.application;
 
+import com.bookspot.shelfbooks.domain.ShelfBook;
 import com.bookspot.shelves.application.mapper.ShelvesDataMapper;
+import com.bookspot.book.application.BookIsbnService;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import com.bookspot.shelves.domain.exception.ShelfPrivateAccessException;
 import com.bookspot.shelves.infra.ShelvesQuerydslRepository;
-import com.bookspot.shelves.presentation.dto.ShelfBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
@@ -17,14 +18,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ShelvesQueryService {
+    public static final int THUMBNAIL_BOOK_COUNT = 3;
+
     private final UsersRepository usersRepository;
     private final ShelvesRepository shelvesRepository;
     private final ShelvesDataMapper shelvesDataMapper;
+    private final BookIsbnService bookIsbnService;
 
     private final ShelvesQuerydslRepository shelvesQuerydslRepository;
 
@@ -32,14 +39,19 @@ public class ShelvesQueryService {
         Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
                 .orElseThrow(UserNotFoundException::new);
 
+        List<Shelves> shelves;
         if(shelvesOwner.getId().equals(loginUserId))
-            return shelvesDataMapper.transform(
-                    shelvesRepository.findByUsersId(shelvesOwnerUserId)
-            );
+            shelves = shelvesRepository.findByUsersId(shelvesOwnerUserId);
         else
-            return shelvesDataMapper.transform(
-                    shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId)
-            );
+            shelves = shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId);
+
+        List<ShelfBook> shelfBooks = shelves.stream()
+                .map(Shelves::getShelfBooks)
+                .flatMap(sb -> sb.stream().limit(THUMBNAIL_BOOK_COUNT))
+                .toList();
+
+        Map<Long, String> bookIdAndIsbn13 = bookIsbnService.findBookIsbn(shelfBooks);
+        return shelvesDataMapper.transform(shelves, bookIdAndIsbn13);
     }
 
     public ShelfDetailResponse findShelfDetail(Long loginUserId, long shelfId) {

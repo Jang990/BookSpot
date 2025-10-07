@@ -1,5 +1,6 @@
 package com.bookspot.shelves.application;
 
+import com.bookspot.book.domain.BookRepository;
 import com.bookspot.shelves.application.mapper.ShelvesDataMapper;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
@@ -21,6 +22,7 @@ class ShelvesQueryServiceTest {
     @Mock UsersRepository usersRepository;
     @Mock ShelvesRepository shelvesRepository;
     @Mock ShelvesDataMapper shelvesDataMapper;
+    @Mock BookRepository bookRepository;
 
     @InjectMocks ShelvesQueryService queryService;
 
