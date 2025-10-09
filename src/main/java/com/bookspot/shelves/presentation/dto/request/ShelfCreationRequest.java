@@ -12,7 +12,7 @@ import lombok.*;
 public class ShelfCreationRequest {
     @NotNull
     @NotBlank
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 50)
     private String name;
     @NotNull
     private Boolean isPublic;
