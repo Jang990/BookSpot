@@ -1,5 +1,6 @@
 package com.bookspot.shelves.presentation;
 
+import com.bookspot.global.log.BasicLog;
 import com.bookspot.shelves.application.ShelvesQueryService;
 import com.bookspot.shelves.presentation.dto.ShelfBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
@@ -41,6 +42,7 @@ public class ShelvesController {
         );
     }
 
+    @BasicLog
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/api/users/shelves/books/{bookId}")
     public ResponseEntity<ShelvesBookStatusResponse> findUserShelvesBookStatus(
