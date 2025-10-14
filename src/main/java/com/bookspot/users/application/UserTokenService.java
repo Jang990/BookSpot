@@ -24,6 +24,6 @@ public class UserTokenService {
 
         GeneratedToken token = jwtProvider.createToken(user);
 
-        return new UserTokenResponse(user.nickname(), user.role(), token);
+        return new UserTokenResponse(user.id(), user.nickname(), user.role(), token);
     }
 }

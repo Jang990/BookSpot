@@ -30,6 +30,7 @@ public class SecurityConfig {
                 // 일단 전부 받음
                 .authorizeHttpRequests(
                         authorize -> authorize
+                                .requestMatchers("/api/users/*/shelves").permitAll()
                                 .requestMatchers(
                                         "/api/users/**",
                                         "/api/stocks/*/loan/refresh").authenticated()

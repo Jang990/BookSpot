@@ -5,9 +5,7 @@ import com.bookspot.global.Events;
 import com.bookspot.users.domain.event.BookAddedToBagEvent;
 import com.bookspot.users.domain.event.BookBagClearedEvent;
 import com.bookspot.users.domain.event.BookDeletedFromBagEvent;
-import com.bookspot.users.domain.exception.UserBagEmptyException;
-import com.bookspot.users.domain.exception.UserBagFullException;
-import com.bookspot.users.domain.exception.UserNotFoundException;
+import com.bookspot.users.domain.exception.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,6 +44,7 @@ public class Users {
     private String providerId;
 
     private int bookBagSize = 0;
+    private int shelfSize = 0;
 
     private Users(
             String email,
@@ -112,5 +111,23 @@ public class Users {
 
         bookBagSize = 0;
         Events.raise(new BookBagClearedEvent(id));
+    }
+
+    public void increaseShelfSize() {
+        if(id == null)
+            throw new UserNotFoundException();
+        if(shelfSize >= UsersConst.MAX_SHELF_SIZE)
+            throw new UserShelfFullException(id);
+
+        shelfSize++;
+    }
+
+    public void decreaseShelfSize() {
+        if(id == null)
+            throw new UserNotFoundException();
+        if(shelfSize <= 0)
+            throw new UserShelfEmptyException(id);
+
+        shelfSize--;
     }
 }
