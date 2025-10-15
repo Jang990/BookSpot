@@ -33,7 +33,7 @@ public class OpenSearchPageable {
     }
 
     public static OpenSearchPageable sortByRelevance(Pageable pageable) {
-        return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
+        return new OpenSearchPageable(pageable, BookSortOptions.SORT_BY_SCORE);
     }
 
     public static OpenSearchPageable withRank(Pageable pageable) {
