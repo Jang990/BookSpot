@@ -30,16 +30,19 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     private final BookSearchRequestBuilder searchRequestBuilder;
 
     @Override
-    public BookPageResult search(BookSearchCond searchRequest, Pageable pageable, OpenSearchPageable pageable_TEMP) {
+    public BookPageResult search(
+            BookSearchCond searchRequest,
+            Pageable pageable,
+            OpenSearchPageable pageable_TEMP
+    ) {
         if(searchRequest == null || pageable == null || pageable_TEMP == null)
             throw new IllegalArgumentException("필수 조건 누락");
-        OpenSearchPageable openSearchPageable = createOpenSearchPageable(searchRequest, pageable);
 
         try {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchRequest.toBoolQuery(),
-                            openSearchPageable
+                            pageable_TEMP
                     ),
                     BookDocument.class
             );
@@ -48,19 +51,6 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private OpenSearchPageable createOpenSearchPageable(
-            BookSearchCond searchRequest,
-            Pageable pageable
-    ) {
-        // TODO: infra 로직은 아닌 것 같음.
-        OpenSearchPageable result;
-        if(searchRequest.hasKeyword())
-            result = OpenSearchPageable.withScore(pageable);
-        else
-            result = OpenSearchPageable.onlyLoanCount(pageable);
-        return result;
     }
 
     @Override
