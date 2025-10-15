@@ -12,6 +12,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class BookSearchRequest {
+    private static final BookSort DEFAULT_SORT_BY = BookSort.RELEVANCE;
+
     @Size(min = 2)
     private String title;
     private List<Long> bookIds;
@@ -26,4 +28,9 @@ public class BookSearchRequest {
     private Integer categoryId;
 
     private CategoryLevel categoryLevel;
+    private BookSort sortBy;
+
+    public BookSort getSortBy() {
+        return sortBy == null ? DEFAULT_SORT_BY : sortBy;
+    }
 }
