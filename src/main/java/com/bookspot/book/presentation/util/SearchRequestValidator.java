@@ -4,6 +4,7 @@ import com.bookspot.book.presentation.consts.BookBindingError;
 import com.bookspot.book.presentation.consts.BookRequestCond;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
+import com.bookspot.book.presentation.request.BookSort;
 import com.bookspot.book.presentation.request.CategoryLevel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,15 @@ public class SearchRequestValidator {
         }
 
         validatePageSize(pageable.getPageSize(), bindingResult);
+    }
+
+    public static void validateSortByRelevanceCond(BindingResult bindingResult, String title, BookSort sortBy) throws BindException {
+        if(bindingResult.hasErrors())
+            throw new BindException(bindingResult);
+        if (title == null && sortBy == BookSort.RELEVANCE) {
+            bindingResult.addError(BookBindingError.SEARCH_RELEVANCE_SORT_CRITERIA_INVALID.error());
+            throw new BindException(bindingResult);
+        }
     }
 
     public static void validatePageSize(int pageSize, BindingResult bindingResult) throws BindException {

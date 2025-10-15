@@ -43,6 +43,11 @@ public class BookController {
                 request.getCategoryLevel(),
                 bindingResult
         );
+        SearchRequestValidator.validateSortByRelevanceCond(
+                bindingResult,
+                request.getTitle(),
+                request.getSortBy()
+        );
 
         return ResponseEntity.ok(
                 bookService.findBooks(
@@ -71,6 +76,11 @@ public class BookController {
                 request.getCategoryId(),
                 request.getCategoryLevel(),
                 bindingResult
+        );
+        SearchRequestValidator.validateSortByRelevanceCond(
+                bindingResult,
+                request.getTitle(),
+                request.getSortBy()
         );
 
         return ResponseEntity.ok(
