@@ -32,7 +32,7 @@ class BookOpenSearchRepositoryTest {
                 .build();
 
         PageRequest pageable = PageRequest.of(0, 10);
-        BookPageResult result = repository.search(request, pageable, OpenSearchPageable.sortByLoanCount(pageable));
+        BookPageResult result = repository.search(request, OpenSearchPageable.sortByLoanCount(pageable));
         for (BookDocument bookDocument : result.books()) {
             System.out.println(bookDocument.getTitle() + " " + bookDocument.getLoanCount());
         }

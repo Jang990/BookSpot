@@ -43,7 +43,6 @@ public class BookService {
     public BookPreviewPageResponse findBooks(BookSearchDto bookSearchDto, Pageable pageable) {
         BookPageResult pageResult = bookSearchRepository.search(
                 BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
-                pageable,
                 bookSearchDto.getSortBy() == BookSort.LOAN
                         ? OpenSearchPageable.sortByLoanCount(pageable)
                         : OpenSearchPageable.sortByRelevance(pageable)

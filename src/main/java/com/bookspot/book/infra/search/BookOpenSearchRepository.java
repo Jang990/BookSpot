@@ -15,6 +15,7 @@ import org.opensearch.client.opensearch._types.SortOptions;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -32,22 +33,25 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     @Override
     public BookPageResult search(
             BookSearchCond searchRequest,
-            Pageable pageable,
-            OpenSearchPageable pageable_TEMP
+            OpenSearchPageable pageable
     ) {
-        if(searchRequest == null || pageable == null || pageable_TEMP == null)
+        if(searchRequest == null || pageable == null)
             throw new IllegalArgumentException("필수 조건 누락");
 
         try {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchRequest.toBoolQuery(),
-                            pageable_TEMP
+                            pageable
                     ),
                     BookDocument.class
             );
 
-            return createPageResult(resp, pageable);
+            PageRequest pageRequest = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize()
+            );
+            return createPageResult(resp, pageRequest);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
