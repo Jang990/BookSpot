@@ -16,21 +16,12 @@ public class OpenSearchAfter {
 
     public OpenSearchAfter(SearchAfterCond searchAfterCond) {
         this.pageSize = searchAfterCond.pageSize();
-        if(searchAfterCond.lastScore() == null){
-            this.sortOptions = BookSortOptions.COMMON_SORT;
-            this.searchAfter =  List.of(
-                    String.valueOf(searchAfterCond.lastLoanCount()),
-                    String.valueOf(searchAfterCond.lastBookId())
-            );
-        }
-        else {
-            this.sortOptions = BookSortOptions.SORT_WITH_SCORE;
-            this.searchAfter = List.of(
-                    String.valueOf(searchAfterCond.lastLoanCount()),
-                    searchAfterCond.lastScore(),
-                    String.valueOf(searchAfterCond.lastBookId())
-            );
-        }
+        this.sortOptions = searchAfterCond.sortOptions();
+        this.searchAfter = List.of(
+                String.valueOf(searchAfterCond.lastLoanCount()),
+                searchAfterCond.lastScore(),
+                String.valueOf(searchAfterCond.lastBookId())
+        );
     }
 
     public boolean hasScoreSortOption() {
