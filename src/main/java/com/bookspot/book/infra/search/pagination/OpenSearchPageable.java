@@ -17,17 +17,6 @@ public class OpenSearchPageable {
         this.sortOptions = sortOptions;
     }
 
-    public static OpenSearchPageable withScore(Pageable pageable) {
-        return new OpenSearchPageable(pageable, BookSortOptions.SORT_WITH_SCORE);
-    }
-
-    public static OpenSearchPageable onlyLoanCount(Pageable pageable) {
-        return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
-    }
-
-
-
-
     public static OpenSearchPageable sortByLoanCount(Pageable pageable) {
         return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
     }
