@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class BookSearchRequest {
-    private static final BookSort DEFAULT_SORT_BY = BookSort.RELEVANCE;
+    private static final BookSort DEFAULT_SORT_BY = BookSort.LOAN;
 
     @Size(min = 2)
     private String title;
