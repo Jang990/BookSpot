@@ -23,8 +23,4 @@ public class OpenSearchAfter {
                 String.valueOf(searchAfterCond.lastBookId())
         );
     }
-
-    public boolean hasScoreSortOption() {
-        return sortOptions == BookSortOptions.SORT_WITH_SCORE;
-    }
 }

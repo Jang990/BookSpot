@@ -1,19 +1,11 @@
 package com.bookspot.book.infra.search.builder;
 
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
-import com.bookspot.book.infra.search.pagination.BookSortOptions;
-import com.bookspot.book.infra.search.pagination.OpenSearchAfter;
 import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.global.consts.Indices;
-import org.opensearch.client.opensearch._types.FieldSort;
-import org.opensearch.client.opensearch._types.SortOptions;
-import org.opensearch.client.opensearch._types.SortOrder;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch.core.SearchRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BookSearchRequestBuilder {
@@ -34,7 +26,7 @@ public class BookSearchRequestBuilder {
 
     public SearchRequest build(
             Query query,
-            OpenSearchAfter searchAfter
+            SearchAfterCond searchAfter
     ) {
         SearchRequest.Builder builder = new SearchRequest.Builder();
         builder.index(Indices.BOOK_INDEX);
@@ -42,9 +34,9 @@ public class BookSearchRequestBuilder {
         if (searchAfter.hasScoreSortOption())
             builder.minScore(MIN_SCORE);
 
-        builder.size(searchAfter.getPageSize());
-        builder.searchAfter(searchAfter.getSearchAfter());
-        builder.sort(searchAfter.getSortOptions());
+        builder.size(searchAfter.pageSize());
+        builder.searchAfter(searchAfter.getSearchAfterValues());
+        builder.sort(searchAfter.sortOptions());
 
         return builder.build();
     }

@@ -69,7 +69,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchCond.toBoolQuery(),
-                            new OpenSearchAfter(searchAfterCond)
+                            searchAfterCond
                     ),
                     BookDocument.class
             );
