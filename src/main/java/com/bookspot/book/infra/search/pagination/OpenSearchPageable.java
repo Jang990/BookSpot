@@ -29,6 +29,17 @@ public class OpenSearchPageable {
         return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
     }
 
+
+
+
+    public static OpenSearchPageable sortByLoanCount(Pageable pageable) {
+        return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
+    }
+
+    public static OpenSearchPageable sortByRelevance(Pageable pageable) {
+        return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
+    }
+
     public static OpenSearchPageable withRank(Pageable pageable) {
         return new OpenSearchPageable(pageable, BookSortOptions.RANKING_SORT);
     }

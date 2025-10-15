@@ -17,6 +17,12 @@ public class BookSortOptions {
             buildSort("book_id", SortOrder.Asc)
     );
 
+    public static final List<SortOptions> SORT_BY_SCORE  = List.of(
+            buildSort("_score", SortOrder.Desc),
+            buildSort("loan_count", SortOrder.Desc),
+            buildSort("book_id", SortOrder.Asc)
+    );
+
     public static final List<SortOptions> RANKING_SORT = List.of(
             buildSort("rank", SortOrder.Asc),
             buildSort("book_id", SortOrder.Asc)
