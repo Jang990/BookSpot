@@ -31,7 +31,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
 
     @Override
     public BookPageResult search(BookSearchCond searchRequest, Pageable pageable, OpenSearchPageable pageable_TEMP) {
-        if(searchRequest == null || pageable == null)
+        if(searchRequest == null || pageable == null || pageable_TEMP == null)
             throw new IllegalArgumentException("필수 조건 누락");
         OpenSearchPageable openSearchPageable = createOpenSearchPageable(searchRequest, pageable);
 
