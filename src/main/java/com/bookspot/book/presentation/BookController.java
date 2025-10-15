@@ -43,10 +43,9 @@ public class BookController {
                 request.getCategoryLevel(),
                 bindingResult
         );
-        SearchRequestValidator.validateSortByRelevanceCond(
-                bindingResult,
-                request.getTitle(),
-                request.getSortBy()
+        SearchRequestValidator.validateSortByRelevance(
+                request,
+                bindingResult
         );
 
         return ResponseEntity.ok(
@@ -71,16 +70,14 @@ public class BookController {
             BindingResult bindingResult
     ) throws BindException {
         SearchRequestValidator.validatePageSize(size, bindingResult);
-        SearchRequestValidator.validateSortByScore(request, searchAfterRequest, bindingResult);
+        SearchRequestValidator.validateSortByRelevance(request, bindingResult);
         SearchRequestValidator.validateCategoryCond(
                 request.getCategoryId(),
                 request.getCategoryLevel(),
                 bindingResult
         );
-        SearchRequestValidator.validateSortByRelevanceCond(
-                bindingResult,
-                request.getTitle(),
-                request.getSortBy()
+        SearchRequestValidator.validateNumericScore(
+                searchAfterRequest.getLastScore(), bindingResult
         );
 
         return ResponseEntity.ok(

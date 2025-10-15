@@ -63,12 +63,6 @@ class BookControllerTest_TermSearch {
     }
 
     @Test
-    void search_After기반의_방식에서_score_기반_정렬이_필요하다면_검색어는_필수() throws Exception {
-        mvc.perform(get("/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void search_After기반의_방식에서_lastScore에_문자가_포함돼_있으면_안된다() throws Exception {
         mvc.perform(get("/api/books?lastLoanCount=111&lastBookId=111&lastScore=abc"))
                 .andExpect(status().isBadRequest());
@@ -111,14 +105,13 @@ class BookControllerTest_TermSearch {
             "/api/books?bookIds=1&bookIds=2&bookIds=3",
             "/api/books?title=ABC&bookIds=1,2,3",
             "/api/books?title=ABC&bookIds=1,2,3&libraryId=1",
-            "/api/books?lastLoanCount=123&lastBookId=123",
             "/api/books?libraryId=123456",
             "/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567&title=한강",
 
             "/api/books?categoryId=123&categoryLevel=TOP",
             "/api/books?categoryId=123&categoryLevel=MID",
             "/api/books?categoryId=123&categoryLevel=LEAF",
-            "/api/books?lastLoanCount=123&lastBookId=123&categoryId=123&categoryLevel=TOP",
+            "/api/books?lastLoanCount=123&lastBookId=123&lastScore=1.0&categoryId=123&categoryLevel=TOP",
     })
     void 정상처리_API(String testApi) throws Exception {
         mvc.perform(get(testApi))
