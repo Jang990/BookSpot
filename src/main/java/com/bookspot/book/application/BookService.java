@@ -63,8 +63,7 @@ public class BookService {
     ) {
         BookSearchAfterResult result = bookSearchRepository.search(
                 BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
-                BookDataMapper.transform(searchAfterCond),
-                pageSize
+                BookDataMapper.transform(searchAfterCond, pageSize)
         );
 
         return new BookPreviewSearchAfterResponse(

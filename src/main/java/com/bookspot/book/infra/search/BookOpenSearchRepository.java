@@ -60,8 +60,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     @Override
     public BookSearchAfterResult search(
             BookSearchCond searchCond,
-            SearchAfterCond searchAfterCond,
-            int pageSize
+            SearchAfterCond searchAfterCond
     ) {
         if(searchCond == null || searchAfterCond == null)
             throw new IllegalArgumentException("필수 조건 누락");
@@ -70,7 +69,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchCond.toBoolQuery(),
-                            new OpenSearchAfter(pageSize, searchAfterCond)
+                            new OpenSearchAfter(searchAfterCond)
                     ),
                     BookDocument.class
             );

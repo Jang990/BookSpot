@@ -88,11 +88,12 @@ public class BookDataMapper {
         );
     }
 
-    public static SearchAfterCond transform(BookSearchAfterRequest searchAfterCond) {
+    public static SearchAfterCond transform(BookSearchAfterRequest searchAfterCond, int pageSize) {
         return new SearchAfterCond(
                 searchAfterCond.getLastScore(),
                 searchAfterCond.getLastLoanCount(),
-                searchAfterCond.getLastBookId()
+                searchAfterCond.getLastBookId(),
+                pageSize
         );
     }
 }

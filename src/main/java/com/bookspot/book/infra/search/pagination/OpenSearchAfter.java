@@ -14,8 +14,8 @@ public class OpenSearchAfter {
     private final List<String> searchAfter;
     private final List<SortOptions> sortOptions;
 
-    public OpenSearchAfter(int pageSize, SearchAfterCond searchAfterCond) {
-        this.pageSize = pageSize;
+    public OpenSearchAfter(SearchAfterCond searchAfterCond) {
+        this.pageSize = searchAfterCond.pageSize();
         if(searchAfterCond.lastScore() == null){
             this.sortOptions = BookSortOptions.COMMON_SORT;
             this.searchAfter =  List.of(
