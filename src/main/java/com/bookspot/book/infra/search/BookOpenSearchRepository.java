@@ -11,6 +11,7 @@ import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch.OpenSearchClient;
+import org.opensearch.client.opensearch._types.SortOptions;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +30,7 @@ public class BookOpenSearchRepository implements BookSearchRepository {
     private final BookSearchRequestBuilder searchRequestBuilder;
 
     @Override
-    public BookPageResult search(BookSearchCond searchRequest, Pageable pageable) {
+    public BookPageResult search(BookSearchCond searchRequest, Pageable pageable, OpenSearchPageable pageable_TEMP) {
         if(searchRequest == null || pageable == null)
             throw new IllegalArgumentException("필수 조건 누락");
         OpenSearchPageable openSearchPageable = createOpenSearchPageable(searchRequest, pageable);

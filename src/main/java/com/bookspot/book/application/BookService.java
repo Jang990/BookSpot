@@ -41,7 +41,8 @@ public class BookService {
     public BookPreviewPageResponse findBooks(BookSearchDto bookSearchDto, Pageable pageable) {
         BookPageResult pageResult = bookSearchRepository.search(
                 BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
-                pageable
+                pageable,
+                null
         );
 
         return new BookPreviewPageResponse(
