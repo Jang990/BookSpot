@@ -57,7 +57,8 @@ public class BookController {
      */
     @GetMapping(value = "/api/books", params = {
             BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT,
-            BookSearchAfterRequest.PARAM_LAST_BOOK_ID
+            BookSearchAfterRequest.PARAM_LAST_BOOK_ID,
+            BookSearchAfterRequest.PARAM_LAST_SCORE
     })
     public ResponseEntity<BookPreviewSearchAfterResponse> findBook(
             @Valid BookSearchRequest request,
@@ -66,11 +67,13 @@ public class BookController {
             BindingResult bindingResult
     ) throws BindException {
         SearchRequestValidator.validatePageSize(size, bindingResult);
-        SearchRequestValidator.validateSortByScore(request, searchAfterRequest, bindingResult);
         SearchRequestValidator.validateCategoryCond(
                 request.getCategoryId(),
                 request.getCategoryLevel(),
                 bindingResult
+        );
+        SearchRequestValidator.validateNumericScore(
+                searchAfterRequest.getLastScore(), bindingResult
         );
 
         return ResponseEntity.ok(

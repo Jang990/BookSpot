@@ -11,9 +11,11 @@ import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch.OpenSearchClient;
+import org.opensearch.client.opensearch._types.SortOptions;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -24,49 +26,43 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class BookOpenSearchRepository implements BookSearchRepository {
-    private final OpenSearchClient client;
+    private static final double MIN_SCORE = 50d;
 
+    private final OpenSearchClient client;
     private final BookSearchRequestBuilder searchRequestBuilder;
 
     @Override
-    public BookPageResult search(BookSearchCond searchRequest, Pageable pageable) {
+    public BookPageResult search(
+            BookSearchCond searchRequest,
+            OpenSearchPageable pageable
+    ) {
         if(searchRequest == null || pageable == null)
             throw new IllegalArgumentException("필수 조건 누락");
-        OpenSearchPageable openSearchPageable = createOpenSearchPageable(searchRequest, pageable);
 
         try {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchRequest.toBoolQuery(),
-                            openSearchPageable
+                            pageable,
+                            searchRequest.hasKeyword() ? MIN_SCORE : null
                     ),
                     BookDocument.class
             );
 
-            return createPageResult(resp, pageable);
+            PageRequest pageRequest = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize()
+            );
+            return createPageResult(resp, pageRequest);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private OpenSearchPageable createOpenSearchPageable(
-            BookSearchCond searchRequest,
-            Pageable pageable
-    ) {
-        // TODO: infra 로직은 아닌 것 같음.
-        OpenSearchPageable result;
-        if(searchRequest.hasKeyword())
-            result = OpenSearchPageable.withScore(pageable);
-        else
-            result = OpenSearchPageable.onlyLoanCount(pageable);
-        return result;
-    }
-
     @Override
     public BookSearchAfterResult search(
             BookSearchCond searchCond,
-            SearchAfterCond searchAfterCond,
-            int pageSize
+            SearchAfterCond searchAfterCond
     ) {
         if(searchCond == null || searchAfterCond == null)
             throw new IllegalArgumentException("필수 조건 누락");
@@ -75,7 +71,8 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchCond.toBoolQuery(),
-                            new OpenSearchAfter(pageSize, searchAfterCond)
+                            searchAfterCond,
+                            searchCond.hasKeyword() ? MIN_SCORE : null
                     ),
                     BookDocument.class
             );

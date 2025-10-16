@@ -3,6 +3,7 @@ package com.bookspot.book.infra.search;
 import com.bookspot.book.infra.BookDocument;
 import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
+import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,8 @@ class BookOpenSearchRepositoryTest {
                 .keyword("이기적 유전자")
                 .build();
 
-        BookPageResult result = repository.search(request, PageRequest.of(0, 10));
+        PageRequest pageable = PageRequest.of(0, 10);
+        BookPageResult result = repository.search(request, OpenSearchPageable.sortByLoanCount(pageable));
         for (BookDocument bookDocument : result.books()) {
             System.out.println(bookDocument.getTitle() + " " + bookDocument.getLoanCount());
         }

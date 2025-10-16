@@ -87,12 +87,4 @@ public class BookDataMapper {
                 category.substring(dotIdx + 1)
         );
     }
-
-    public static SearchAfterCond transform(BookSearchAfterRequest searchAfterCond) {
-        return new SearchAfterCond(
-                searchAfterCond.getLastScore(),
-                searchAfterCond.getLastLoanCount(),
-                searchAfterCond.getLastBookId()
-        );
-    }
 }
