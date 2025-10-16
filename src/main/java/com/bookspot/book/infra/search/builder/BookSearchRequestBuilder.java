@@ -9,14 +9,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BookSearchRequestBuilder {
-    private static final double MIN_SCORE = 50d;
-    public SearchRequest build(Query query, OpenSearchPageable pageable) {
+    public SearchRequest build(
+            Query query,
+            OpenSearchPageable pageable,
+            Double minScore
+    ) {
         SearchRequest.Builder builder = new SearchRequest.Builder();
         builder.index(Indices.BOOK_INDEX);
         builder.query(query);
 
-        if(pageable.hasScoreSortOption())
-            builder.minScore(MIN_SCORE);
+        if(minScore != null)
+            builder.minScore(minScore);
         builder.from(pageable.getOffset());
         builder.size(pageable.getPageSize());
         builder.sort(pageable.getSortOptions());
@@ -26,13 +29,14 @@ public class BookSearchRequestBuilder {
 
     public SearchRequest build(
             Query query,
-            SearchAfterCond searchAfter
+            SearchAfterCond searchAfter,
+            Double minScore
     ) {
         SearchRequest.Builder builder = new SearchRequest.Builder();
         builder.index(Indices.BOOK_INDEX);
         builder.query(query);
-        if (searchAfter.hasScoreSortOption())
-            builder.minScore(MIN_SCORE);
+        if(minScore != null)
+            builder.minScore(minScore);
 
         builder.size(searchAfter.pageSize());
         builder.searchAfter(searchAfter.getSearchAfterValues());
