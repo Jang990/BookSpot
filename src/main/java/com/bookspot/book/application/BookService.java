@@ -3,10 +3,14 @@ package com.bookspot.book.application;
 import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.application.mapper.BookDataMapper;
 import com.bookspot.book.domain.exception.BookNotFoundException;
+import com.bookspot.book.infra.search.cond.SearchAfterCond;
+import com.bookspot.book.infra.search.pagination.BookSortOptions;
+import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
+import com.bookspot.book.presentation.request.BookSort;
 import com.bookspot.book.presentation.response.BookDetailResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
 import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
@@ -41,7 +45,9 @@ public class BookService {
     public BookPreviewPageResponse findBooks(BookSearchDto bookSearchDto, Pageable pageable) {
         BookPageResult pageResult = bookSearchRepository.search(
                 BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
-                pageable
+                bookSearchDto.getSortBy() == BookSort.LOAN
+                        ? OpenSearchPageable.sortByLoanCount(pageable)
+                        : OpenSearchPageable.sortByRelevance(pageable)
         );
 
         return new BookPreviewPageResponse(
@@ -59,8 +65,15 @@ public class BookService {
     ) {
         BookSearchAfterResult result = bookSearchRepository.search(
                 BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
-                BookDataMapper.transform(searchAfterCond),
-                pageSize
+                new SearchAfterCond(
+                        searchAfterCond.getLastScore(),
+                        searchAfterCond.getLastLoanCount(),
+                        searchAfterCond.getLastBookId(),
+                        pageSize,
+                        bookSearchDto.getSortBy() == BookSort.LOAN
+                                ? BookSortOptions.COMMON_SORT
+                                : BookSortOptions.SORT_BY_SCORE
+                )
         );
 
         return new BookPreviewSearchAfterResponse(

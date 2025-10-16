@@ -51,18 +51,14 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void search_After기반의_방식은_온전한_SearchAfterRequest_필드들이_필요() throws Exception {
-        mvc.perform(get("/api/books?lastLoanCount=111"))
-                .andExpect(status().isBadRequest());
-
-        mvc.perform(get("/api/books?lastBookId=111"))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void search_After기반의_방식에서_score_기반_정렬이_필요하다면_검색어는_필수() throws Exception {
-        mvc.perform(get("/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567"))
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "/api/books?lastLoanCount=111",
+            "/api/books?lastBookId=111",
+            "/api/books?lastBookId=111&lastLoanCount=111"
+    })
+    void search_After기반의_방식은_온전한_SearchAfterRequest_필드들이_모두_필요(String api) throws Exception {
+        mvc.perform(get(api))
                 .andExpect(status().isBadRequest());
     }
 
@@ -93,6 +89,15 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void 정확도_정렬_검색에_검색어가_존재하지_않으면_오류() throws Exception {
+        mvc.perform(get("/api/books?sortBy=RELEVANCE"))
+                .andExpect(status().isBadRequest());
+        
+        mvc.perform(get("/api/books?sortBy=RELEVANCE&lastLoanCount=111&lastBookId=111&lastScore=123.4567"))
+                .andExpect(status().isBadRequest());
+    }
+
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",
@@ -100,14 +105,13 @@ class BookControllerTest_TermSearch {
             "/api/books?bookIds=1&bookIds=2&bookIds=3",
             "/api/books?title=ABC&bookIds=1,2,3",
             "/api/books?title=ABC&bookIds=1,2,3&libraryId=1",
-            "/api/books?lastLoanCount=123&lastBookId=123",
             "/api/books?libraryId=123456",
             "/api/books?lastLoanCount=111&lastBookId=111&lastScore=123.4567&title=한강",
 
             "/api/books?categoryId=123&categoryLevel=TOP",
             "/api/books?categoryId=123&categoryLevel=MID",
             "/api/books?categoryId=123&categoryLevel=LEAF",
-            "/api/books?lastLoanCount=123&lastBookId=123&categoryId=123&categoryLevel=TOP",
+            "/api/books?lastLoanCount=123&lastBookId=123&lastScore=1.0&categoryId=123&categoryLevel=TOP",
     })
     void 정상처리_API(String testApi) throws Exception {
         mvc.perform(get(testApi))

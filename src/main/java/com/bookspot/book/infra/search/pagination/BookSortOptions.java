@@ -14,6 +14,13 @@ public class BookSortOptions {
     );
     public static final List<SortOptions> COMMON_SORT = List.of(
             buildSort("loan_count", SortOrder.Desc),
+            buildSort("_score", SortOrder.Desc),
+            buildSort("book_id", SortOrder.Asc)
+    );
+
+    public static final List<SortOptions> SORT_BY_SCORE  = List.of(
+            buildSort("_score", SortOrder.Desc),
+            buildSort("loan_count", SortOrder.Desc),
             buildSort("book_id", SortOrder.Asc)
     );
 

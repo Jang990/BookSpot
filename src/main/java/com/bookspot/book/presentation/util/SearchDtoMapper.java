@@ -11,6 +11,7 @@ public class SearchDtoMapper {
                 .libraryId(request.getLibraryId())
                 .categoryId(request.getCategoryId())
                 .categoryLevel(request.getCategoryLevel())
+                .sortBy(request.getSortBy())
                 .build();
     }
 }
