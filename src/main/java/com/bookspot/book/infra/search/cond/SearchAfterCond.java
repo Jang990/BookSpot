@@ -28,8 +28,4 @@ public record SearchAfterCond(
 
         throw new IllegalArgumentException("지원하지 않는 순서의 SEARCH_AFTER");
     }
-
-    public boolean hasScoreSortOption() {
-        return sortOptions == BookSortOptions.SORT_BY_SCORE;
-    }
 }
