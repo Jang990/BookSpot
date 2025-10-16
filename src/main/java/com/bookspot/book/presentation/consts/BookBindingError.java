@@ -5,7 +5,6 @@ import org.springframework.validation.ObjectError;
 
 public enum BookBindingError {
 //    SEARCH_CRITERIA_MISSING(new ObjectError("", new String[]{"book.search.criteria.missing"}, null, null)),
-    SEARCH_RELEVANCE_SORT_CRITERIA_INVALID(new ObjectError("", new String[]{"book.search.sort.relevance.criteria.invalid"}, null, null)),
     SEARCH_CRITERIA_INVALID(new ObjectError("", new String[]{"book.search.criteria.invalid"}, new Object[]{BookSearchAfterRequest.PARAM_LAST_LOAN_COUNT, BookSearchAfterRequest.PARAM_LAST_BOOK_ID}, null)),
     SEARCH_CATEGORY_INVALID(new ObjectError("", new String[]{"book.search.category.invalid"}, new Object[]{}, null)),
     SEARCH_AFTER_INVALID_SCORE(new ObjectError("", new String[]{"book.search.after.score.invalid"}, null, null)),

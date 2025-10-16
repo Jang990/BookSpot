@@ -71,7 +71,7 @@ public class BookService {
                         searchAfterCond.getLastBookId(),
                         pageSize,
                         bookSearchDto.getSortBy() == BookSort.LOAN
-                                ? BookSortOptions.COMMON_SORT
+                                ? BookSortOptions.SORT_BY_LOAN_COUNT
                                 : BookSortOptions.SORT_BY_SCORE
                 )
         );

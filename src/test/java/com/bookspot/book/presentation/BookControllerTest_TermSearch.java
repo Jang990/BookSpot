@@ -89,15 +89,6 @@ class BookControllerTest_TermSearch {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void 정확도_정렬_검색에_검색어가_존재하지_않으면_오류() throws Exception {
-        mvc.perform(get("/api/books?sortBy=RELEVANCE"))
-                .andExpect(status().isBadRequest());
-        
-        mvc.perform(get("/api/books?sortBy=RELEVANCE&lastLoanCount=111&lastBookId=111&lastScore=123.4567"))
-                .andExpect(status().isBadRequest());
-    }
-
     @ParameterizedTest
     @ValueSource(strings = {
             "/api/books?title=ABC",

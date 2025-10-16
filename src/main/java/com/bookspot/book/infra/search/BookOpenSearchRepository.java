@@ -26,8 +26,9 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class BookOpenSearchRepository implements BookSearchRepository {
-    private final OpenSearchClient client;
+    private static final double MIN_SCORE = 50d;
 
+    private final OpenSearchClient client;
     private final BookSearchRequestBuilder searchRequestBuilder;
 
     @Override
@@ -42,7 +43,8 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchRequest.toBoolQuery(),
-                            pageable
+                            pageable,
+                            searchRequest.hasKeyword() ? MIN_SCORE : null
                     ),
                     BookDocument.class
             );
@@ -69,7 +71,8 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             SearchResponse<BookDocument> resp = client.search(
                     searchRequestBuilder.build(
                             searchCond.toBoolQuery(),
-                            searchAfterCond
+                            searchAfterCond,
+                            searchCond.hasKeyword() ? MIN_SCORE : null
                     ),
                     BookDocument.class
             );
