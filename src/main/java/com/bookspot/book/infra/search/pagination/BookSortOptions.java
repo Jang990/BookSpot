@@ -7,11 +7,6 @@ import org.opensearch.client.opensearch._types.SortOrder;
 import java.util.List;
 
 public class BookSortOptions {
-    public static final List<SortOptions> SORT_WITH_SCORE = List.of(
-            buildSort("loan_count", SortOrder.Desc),
-            buildSort("_score", SortOrder.Desc),
-            buildSort("book_id", SortOrder.Asc)
-    );
     public static final List<SortOptions> COMMON_SORT = List.of(
             buildSort("loan_count", SortOrder.Desc),
             buildSort("_score", SortOrder.Desc),

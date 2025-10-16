@@ -46,6 +46,6 @@ public class OpenSearchPageable {
     }
 
     public boolean hasScoreSortOption() {
-        return sortOptions == BookSortOptions.SORT_WITH_SCORE;
+        return sortOptions == BookSortOptions.SORT_BY_SCORE;
     }
 }
