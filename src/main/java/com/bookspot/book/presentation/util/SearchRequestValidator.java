@@ -56,19 +56,6 @@ public class SearchRequestValidator {
         }
     }
 
-    public static void validateSortByRelevance(
-            BookSearchRequest request,
-            BindingResult bindingResult
-    ) throws BindException {
-        if(bindingResult.hasErrors())
-            throw new BindException(bindingResult);
-
-        if (request.getSortBy() == BookSort.RELEVANCE && request.getTitle() == null) {
-            bindingResult.addError(BookBindingError.SEARCH_RELEVANCE_SORT_CRITERIA_INVALID.error());
-            throw new BindException(bindingResult);
-        }
-    }
-
     public static boolean isNotNumeric(String strNum) {
         try {
             double num = Double.parseDouble(strNum);
