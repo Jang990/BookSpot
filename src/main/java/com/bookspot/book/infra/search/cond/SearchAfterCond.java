@@ -19,7 +19,7 @@ public record SearchAfterCond(
                     String.valueOf(lastLoanCount),
                     String.valueOf(lastBookId)
             );
-        else if(sortOptions == BookSortOptions.COMMON_SORT)
+        else if(sortOptions == BookSortOptions.SORT_BY_LOAN_COUNT)
             return List.of(
                     String.valueOf(lastLoanCount),
                     lastScore,

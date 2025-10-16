@@ -18,7 +18,7 @@ public class OpenSearchPageable {
     }
 
     public static OpenSearchPageable sortByLoanCount(Pageable pageable) {
-        return new OpenSearchPageable(pageable, BookSortOptions.COMMON_SORT);
+        return new OpenSearchPageable(pageable, BookSortOptions.SORT_BY_LOAN_COUNT);
     }
 
     public static OpenSearchPageable sortByRelevance(Pageable pageable) {
