@@ -13,11 +13,20 @@ public record SearchAfterCond(
         List<SortOptions> sortOptions
 ) {
     public List<String> getSearchAfterValues() {
-        return List.of(
-                String.valueOf(lastLoanCount),
-                lastScore,
-                String.valueOf(lastBookId)
-        );
+        if(sortOptions == BookSortOptions.SORT_BY_SCORE)
+            return List.of(
+                    lastScore,
+                    String.valueOf(lastLoanCount),
+                    String.valueOf(lastBookId)
+            );
+        else if(sortOptions == BookSortOptions.COMMON_SORT)
+            return List.of(
+                    String.valueOf(lastLoanCount),
+                    lastScore,
+                    String.valueOf(lastBookId)
+            );
+
+        throw new IllegalArgumentException("지원하지 않는 순서의 SEARCH_AFTER");
     }
 
     public boolean hasScoreSortOption() {
