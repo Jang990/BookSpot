@@ -11,10 +11,7 @@ import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSort;
-import com.bookspot.book.presentation.response.BookDetailResponse;
-import com.bookspot.book.presentation.response.BookPreviewPageResponse;
-import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
-import com.bookspot.book.presentation.response.BookResponse;
+import com.bookspot.book.presentation.response.*;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.domain.BookRepository;
 import com.bookspot.category.domain.BookCategoryRepository;
@@ -32,14 +29,16 @@ public class BookService {
     private final BookSearchRepository bookSearchRepository;
     private final BookCategoryRepository bookCategoryRepository;
 
-    public List<BookResponse> findAll(List<Long> bookIds) {
+    public BookPreviewListResponse findAll(List<Long> bookIds) {
         List<Book> books = repository.findAllById(bookIds);
         if(books.size() != bookIds.size())
             throw new BookNotFoundException(bookIds);
 
-        return books.stream()
-                .map(book -> new BookResponse(book.getId(), book.getTitle()))
-                .toList();
+        return new BookPreviewListResponse(
+                books.stream()
+                        .map(book -> BookDataMapper.transform(book, bookCategoryRepository))
+                        .toList()
+        );
     }
 
     public BookPreviewPageResponse findBooks(BookSearchDto bookSearchDto, Pageable pageable) {

@@ -1,6 +1,7 @@
 package com.bookspot.book.application.mapper;
 
 import com.bookspot.book.application.dto.BookSearchDto;
+import com.bookspot.book.domain.Book;
 import com.bookspot.book.infra.BookDocument;
 import com.bookspot.book.infra.BookRankingDocument;
 import com.bookspot.book.infra.search.cond.BookCategoryCond;
@@ -8,6 +9,7 @@ import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.CategoryLevel;
+import com.bookspot.book.presentation.response.BookPreviewListResponse;
 import com.bookspot.book.presentation.response.BookPreviewResponse;
 import com.bookspot.book.presentation.response.BookRankPreviewResponse;
 import com.bookspot.book.presentation.response.CategoryResponse;
@@ -20,6 +22,37 @@ import java.util.List;
 
 @Service
 public class BookDataMapper {
+    public static BookPreviewResponse transform(Book book, BookCategoryRepository categoryRepository) {
+        Integer subjectCode = book.getSubjectCode();
+
+        return new BookPreviewResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getIsbn13(),
+                book.getPublicationYear(),
+                book.getPublisher(),
+                book.getLoanCount(),
+                book.getMonthlyLoanIncrease(),
+                transform(categoryRepository, subjectCode),
+                book.getCreatedAt().toString()
+        );
+    }
+
+    private static CategoryResponse transform(BookCategoryRepository categoryRepository, Integer subjectCode) {
+        if(subjectCode == null)
+            return CategoryResponse.EMPTY_CATEGORY;
+
+        String categoryName = categoryRepository.findById(subjectCode)
+                .orElseThrow(() -> new CategoryNotFoundException(subjectCode))
+                .getName();
+
+        return new CategoryResponse(
+                subjectCode,
+                categoryName
+        );
+    }
+
     public static BookPreviewResponse transform(BookDocument book) {
         return new BookPreviewResponse(
                 book.getBookId(),
