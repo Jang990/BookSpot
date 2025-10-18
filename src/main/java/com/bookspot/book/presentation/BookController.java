@@ -2,9 +2,11 @@ package com.bookspot.book.presentation;
 
 import com.bookspot.book.application.BookService;
 import com.bookspot.book.presentation.consts.BookBindingError;
+import com.bookspot.book.presentation.request.BookIdsSearchRequest;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.BookSearchRequest;
 import com.bookspot.book.presentation.response.BookDetailResponse;
+import com.bookspot.book.presentation.response.BookPreviewListResponse;
 import com.bookspot.book.presentation.response.BookPreviewPageResponse;
 import com.bookspot.book.presentation.response.BookPreviewSearchAfterResponse;
 import com.bookspot.book.presentation.util.SearchDtoMapper;
@@ -24,6 +26,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
+
+    @GetMapping(value = "/api/books/by-ids", params = "bookIds")
+    public ResponseEntity<BookPreviewListResponse> findBook(
+            @Valid BookIdsSearchRequest request
+    ) {
+        return ResponseEntity.ok(bookService.findAll(request.getBookIds()));
+    }
 
     /**
      * @see com.bookspot.category.domain.exception.CategoryNotFoundException

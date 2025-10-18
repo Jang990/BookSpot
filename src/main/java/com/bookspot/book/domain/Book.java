@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 /**
  * Batch서버에서 책 추가는 하지만 삭제는 하지 않는다.
@@ -11,6 +16,7 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Book {
     @Id
@@ -29,4 +35,10 @@ public class Book {
     private String publisher;
     private int loanCount;
     private int monthlyLoanIncrease;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
 }
