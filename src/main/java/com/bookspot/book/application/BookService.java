@@ -36,15 +36,8 @@ public class BookService {
         if(books.size() != bookIds.size())
             throw new BookNotFoundException(bookIds);
 
-        Map<Long, Book> bookMap = books.stream()
-                .collect(Collectors.toMap(Book::getId, b -> b));
-
-        // 전달받은 bookIds 순서와 일치시키기 위함. - 컨트롤러 로직인가?
-        List<Book> sortedBooks = bookIds.stream()
-                .map(bookMap::get)
-                .toList();
         return new BookPreviewListResponse(
-                sortedBooks.stream()
+                books.stream()
                         .map(book -> BookDataMapper.transform(book, bookCategoryRepository))
                         .toList()
         );

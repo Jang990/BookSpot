@@ -40,6 +40,7 @@ public class Shelves {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "shelf", fetch = FetchType.LAZY)
+    @OrderBy("createdAt DESC")
     private List<ShelfBook> shelfBooks = new ArrayList<>(); // 조회용
 
     protected Shelves(Users users, String name, boolean isPublic) {
