@@ -27,8 +27,9 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
     private final BookService bookService;
 
+    @BasicLog
     @GetMapping(value = "/api/books/by-ids", params = "bookIds")
-    public ResponseEntity<BookPreviewListResponse> findBook(
+    public ResponseEntity<BookPreviewListResponse> findBookWithIds(
             @Valid BookIdsSearchRequest request
     ) {
         return ResponseEntity.ok(bookService.findAll(request.getBookIds()));
