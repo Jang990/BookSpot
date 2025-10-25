@@ -49,4 +49,23 @@ class BookOpenSearchRepositoryTest_SearchQuality {
         // https://product.kyobobook.co.kr/detail/S000000576311
         assertEquals("9788932471112", bookDocuments.get(2).getIsbn13());
     }
+
+    @Test
+    void 이기적_검색어_개선된케이스1() {
+        BookSearchCond request = BookSearchCond.builder()
+                .keyword("이기적")
+                .bookIds(List.of(20984L))
+                .build();
+
+        BookPageResult result = repository.search(
+                request,
+                OpenSearchPageable.sortByLoanCount(TOP3_PAGEABLE)
+        );
+
+        List<BookDocument> bookDocuments = result.books().get().toList();
+
+        // 블루프린트:이기적 인간은 어떻게 좋은 사회를 만드는가
+        // https://product.kyobobook.co.kr/detail/S000200465020
+        assertEquals("9788960519626", bookDocuments.getFirst().getIsbn13());
+    }
 }
