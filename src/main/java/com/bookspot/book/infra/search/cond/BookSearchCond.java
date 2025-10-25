@@ -59,7 +59,7 @@ public class BookSearchCond {
 //                                            "title.ngram^6",
                                             "title.ws^8",
                                             "title.keyword^10",
-                                            "author^6",
+                                            "author^7",
                                             "publisher^8"
                                     ),
                                     keyword,
