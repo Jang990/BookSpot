@@ -1,5 +1,6 @@
 package com.bookspot.book.infra.search;
 
+import com.bookspot.book.infra.BookCommonFields;
 import com.bookspot.book.infra.BookDocument;
 import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Profile("prod")
 class BookOpenSearchRepositoryTest_SearchQuality {
     private final PageRequest TOP3_PAGEABLE = PageRequest.of(0, 3);
+    private final PageRequest TOP10_PAGEABLE = PageRequest.of(0, 10);
 
     @Autowired
     BookSearchRepository repository;
@@ -67,5 +69,26 @@ class BookOpenSearchRepositoryTest_SearchQuality {
         // 블루프린트:이기적 인간은 어떻게 좋은 사회를 만드는가
         // https://product.kyobobook.co.kr/detail/S000200465020
         assertEquals("9788960519626", bookDocuments.getFirst().getIsbn13());
+    }
+
+    // author의 검색 부스트가 6 -> 7로 상향된 원인
+    @Test
+    void 저자가_길어도_검색결과에_포함할_수_있는_케이스() {
+        BookSearchCond request = BookSearchCond.builder()
+                .keyword("이도경")
+                .build();
+
+        BookPageResult result = repository.search(
+                request,
+                OpenSearchPageable.sortByLoanCount(TOP10_PAGEABLE)
+        );
+
+        List<BookDocument> bookDocuments = result.books().get().toList();
+
+        assertTrue(
+                bookDocuments.stream()
+                        .map(BookCommonFields::getAuthor)
+                        .anyMatch(author -> "마틴 클레프만 지음 ;정재부,김영준,이도경 옮김".equals(author))
+        );
     }
 }
