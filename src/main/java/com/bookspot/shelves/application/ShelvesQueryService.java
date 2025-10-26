@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,18 @@ public class ShelvesQueryService {
     private final BookIsbnService bookIsbnService;
 
     private final ShelvesQuerydslRepository shelvesQuerydslRepository;
+
+    public ShelvesSummaryResponse findPublicShelves(Pageable pageable) {
+        List<Shelves> shelves = shelvesRepository.findPublicShelvesBy(pageable);
+
+        List<ShelfBook> shelfBooks = shelves.stream()
+                .map(Shelves::getShelfBooks)
+                .flatMap(sb -> sb.stream().limit(THUMBNAIL_BOOK_COUNT))
+                .toList();
+
+        Map<Long, String> bookIdAndIsbn13 = bookIsbnService.findBookIsbn(shelfBooks);
+        return shelvesDataMapper.transform(shelves, bookIdAndIsbn13);
+    }
 
     public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
         Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
