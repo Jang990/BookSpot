@@ -37,7 +37,8 @@ public class ShelvesQueryService {
     private final ShelvesQuerydslRepository shelvesQuerydslRepository;
 
     public ShelvesSummaryResponse findPublicShelves(Pageable pageable) {
-        List<Shelves> shelves = shelvesRepository.findPublicShelvesBy(pageable);
+        // 1:N에 페이징 불가능 => Lazy 로딩 + BatchSize 활용
+        List<Shelves> shelves = shelvesRepository.findPublicShelves(pageable);
 
         List<ShelfBook> shelfBooks = shelves.stream()
                 .map(Shelves::getShelfBooks)

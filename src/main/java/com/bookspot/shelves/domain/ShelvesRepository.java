@@ -39,11 +39,10 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
     @Query("""
             SELECT s
             FROM Shelves s
-                LEFT JOIN FETCH s.shelfBooks sb
             WHERE s.isPublic = true
             ORDER BY s.createdAt DESC
             """)
-    List<Shelves> findPublicShelvesBy(Pageable pageable);
+    List<Shelves> findPublicShelves(Pageable pageable);
 
     @Query("""
             SELECT s FROM Shelves s
