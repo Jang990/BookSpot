@@ -19,6 +19,7 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
                 JOIN FETCH s.users u
                 LEFT JOIN FETCH s.shelfBooks sb
             WHERE s.users.id = :userId
+            ORDER BY s.updatedAt DESC
             """)
     List<Shelves> findByUsersId(long userId);
 
@@ -31,6 +32,7 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
             FROM Shelves s
                 LEFT JOIN FETCH s.shelfBooks sb
             WHERE s.users.id = :userId and s.isPublic = true
+            ORDER BY s.updatedAt DESC
             """)
     List<Shelves> findPublicShelvesBy(@Param("userId") long userId);
 
