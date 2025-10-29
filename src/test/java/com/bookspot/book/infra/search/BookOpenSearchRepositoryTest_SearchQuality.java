@@ -91,4 +91,11 @@ class BookOpenSearchRepositoryTest_SearchQuality {
                         .anyMatch(author -> "마틴 클레프만 지음 ;정재부,김영준,이도경 옮김".equals(author))
         );
     }
+
+    @Test
+    void ISBN_검색() {
+        BookDocument result = repository.search("9788936434120");
+        assertEquals("소년이 온다",result.getTitle());
+        assertEquals("한강 지음",result.getAuthor());
+    }
 }

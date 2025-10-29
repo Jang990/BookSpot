@@ -83,6 +83,25 @@ public class BookOpenSearchRepository implements BookSearchRepository {
         }
     }
 
+    @Override
+    public BookDocument search(String isbn13) {
+        if(isbn13 == null && isbn13.length() != 13)
+            throw new IllegalArgumentException("필수 조건 누락");
+
+        try {
+            SearchResponse<BookDocument> resp = client.search(
+                    searchRequestBuilder.build(isbn13),
+                    BookDocument.class
+            );
+
+            return resp.hits().hits().stream()
+                    .map(Hit::source)
+                    .findAny().orElse(null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private BookSearchAfterResult createSearchAfterResult(SearchResponse<BookDocument> resp) {
         List<BookDocument> list = resp.hits().hits().stream()
                 .map(Hit::source)

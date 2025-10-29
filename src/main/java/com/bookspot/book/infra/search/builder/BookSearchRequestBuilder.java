@@ -3,6 +3,7 @@ package com.bookspot.book.infra.search.builder;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
 import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.global.consts.Indices;
+import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch.core.SearchRequest;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,27 @@ public class BookSearchRequestBuilder {
         builder.sort(searchAfter.sortOptions());
 
         return builder.build();
+    }
+
+    public SearchRequest build(
+            String isbn13
+    ) {
+        SearchRequest.Builder builder = new SearchRequest.Builder();
+        builder.index(Indices.BOOK_INDEX);
+        builder.query(isbnQuery(isbn13));
+        return builder.build();
+    }
+
+    private Query isbnQuery(String isbn13) {
+        BoolQuery.Builder builder = new BoolQuery.Builder();
+        builder.filter(
+                new Query.Builder()
+                        .term(
+                                mp -> mp.field("isbn13")
+                                        .value(fv-> fv.stringValue(isbn13))
+                        )
+                        .build()
+        );
+        return builder.build().toQuery();
     }
 }

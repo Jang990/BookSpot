@@ -10,4 +10,5 @@ import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 public interface BookSearchRepository {
     BookPageResult search(BookSearchCond searchRequest, OpenSearchPageable pageable);
     BookSearchAfterResult search(BookSearchCond searchCond, SearchAfterCond searchAfterCond);
+    BookDocument search(String isbn13);
 }
