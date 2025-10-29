@@ -16,7 +16,7 @@ public class PublicShelvesController {
     private final ShelvesQueryService shelvesQueryService;
 
     @GetMapping("/api/shelves")
-    public ResponseEntity<ShelvesSummaryResponse> findUserShelves(
+    public ResponseEntity<ShelvesSummaryResponse> findPublicShelves(
             @PageableDefault(size = 12) Pageable pageable
     ) {
         return ResponseEntity.ok(
