@@ -16,4 +16,6 @@ public class ShelfSummaryResponse {
     @JsonProperty("isPublic")
     private boolean isPublic;
     private List<String> thumbnailImageIsbn;
+
+    private long ownerId;
 }

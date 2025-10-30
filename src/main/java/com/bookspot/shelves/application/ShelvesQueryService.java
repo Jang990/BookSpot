@@ -73,12 +73,12 @@ public class ShelvesQueryService {
                 .orElseThrow(ShelfNotFoundException::new);
 
         if(shelf.isPublic())
-            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks());
+            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks(), shelf.getUsers());
 
         if(loginUserId == null || !shelf.isOwnerBy(loginUserId))
             throw new ShelfPrivateAccessException(shelfId);
         else
-            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks());
+            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks(), shelf.getUsers());
     }
 
     public ShelvesBookStatusResponse findBookStatus(long loginUserId, long bookId) {

@@ -16,4 +16,5 @@ public class ShelfDetailResponse {
     private boolean isPublic;
     private int bookCount;
     private List<Long> bookIds;
+    private long ownerId;
 }
