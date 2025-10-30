@@ -5,13 +5,11 @@ import com.bookspot.book.infra.BookSearchRepository;
 import com.bookspot.book.infra.search.builder.BookSearchRequestBuilder;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
-import com.bookspot.book.infra.search.pagination.OpenSearchAfter;
 import com.bookspot.book.infra.search.pagination.OpenSearchPageable;
 import com.bookspot.book.infra.search.result.BookPageResult;
 import com.bookspot.book.infra.search.result.BookSearchAfterResult;
 import lombok.RequiredArgsConstructor;
 import org.opensearch.client.opensearch.OpenSearchClient;
-import org.opensearch.client.opensearch._types.SortOptions;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.springframework.data.domain.PageImpl;
@@ -78,25 +76,6 @@ public class BookOpenSearchRepository implements BookSearchRepository {
             );
 
             return createSearchAfterResult(resp);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public BookDocument search(String isbn13) {
-        if(isbn13 == null && isbn13.length() != 13)
-            throw new IllegalArgumentException("필수 조건 누락");
-
-        try {
-            SearchResponse<BookDocument> resp = client.search(
-                    searchRequestBuilder.build(isbn13),
-                    BookDocument.class
-            );
-
-            return resp.hits().hits().stream()
-                    .map(Hit::source)
-                    .findAny().orElse(null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
