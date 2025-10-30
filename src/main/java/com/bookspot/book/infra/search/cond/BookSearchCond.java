@@ -16,6 +16,7 @@ import java.util.function.Function;
 public class BookSearchCond {
     private List<Long> bookIds;
     private String keyword;
+    private String isbn13;
     private Long libraryId;
     private BookCategoryCond categoryCond;
 
@@ -24,7 +25,11 @@ public class BookSearchCond {
     }
 
     public boolean hasKeyword() {
-        return StringUtils.hasText(keyword);
+        return isbn13 == null && StringUtils.hasText(keyword);
+    }
+
+    public boolean hasIsbn13() {
+        return keyword == null && StringUtils.hasText(isbn13);
     }
 
     public boolean hasLibraryId() {
@@ -36,6 +41,9 @@ public class BookSearchCond {
     }
 
     public Query toBoolQuery() {
+        if(keyword != null && isbn13 != null)
+            throw new IllegalArgumentException("키워드와 ISBN13을 함께 검색할 수 없음");
+
         BoolQuery.Builder builder = new BoolQuery.Builder();
 
         if (hasBookIds())
@@ -49,6 +57,10 @@ public class BookSearchCond {
                             categoryCond.getCategoryValue()
                     )
             );
+
+        if (hasIsbn13()) {
+            builder.filter(term("isbn13", isbn13));
+        }
 
         if (hasKeyword())
             builder.minimumShouldMatch("1")

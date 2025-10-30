@@ -15,6 +15,7 @@ import com.bookspot.users.domain.Users;
 import com.bookspot.users.domain.UsersRepository;
 import com.bookspot.users.domain.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,19 @@ public class ShelvesQueryService {
     private final BookIsbnService bookIsbnService;
 
     private final ShelvesQuerydslRepository shelvesQuerydslRepository;
+
+    public ShelvesSummaryResponse findPublicShelves(Pageable pageable) {
+        // 1:N에 페이징 불가능 => Lazy 로딩 + BatchSize 활용
+        List<Shelves> shelves = shelvesRepository.findPublicShelves(pageable);
+
+        List<ShelfBook> shelfBooks = shelves.stream()
+                .map(Shelves::getShelfBooks)
+                .flatMap(sb -> sb.stream().limit(THUMBNAIL_BOOK_COUNT))
+                .toList();
+
+        Map<Long, String> bookIdAndIsbn13 = bookIsbnService.findBookIsbn(shelfBooks);
+        return shelvesDataMapper.transform(shelves, bookIdAndIsbn13);
+    }
 
     public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
         Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
@@ -59,12 +73,12 @@ public class ShelvesQueryService {
                 .orElseThrow(ShelfNotFoundException::new);
 
         if(shelf.isPublic())
-            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks());
+            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks(), shelf.getUsers());
 
         if(loginUserId == null || !shelf.isOwnerBy(loginUserId))
             throw new ShelfPrivateAccessException(shelfId);
         else
-            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks());
+            return shelvesDataMapper.transform(shelf, shelf.getShelfBooks(), shelf.getUsers());
     }
 
     public ShelvesBookStatusResponse findBookStatus(long loginUserId, long bookId) {

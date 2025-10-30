@@ -1,5 +1,6 @@
 package com.bookspot.book.application.mapper;
 
+import com.bookspot.book.application.Isbn13Checker;
 import com.bookspot.book.application.dto.BookSearchDto;
 import com.bookspot.book.domain.Book;
 import com.bookspot.book.infra.BookDocument;
@@ -83,7 +84,7 @@ public class BookDataMapper {
         );
     }
 
-    public static BookSearchCond transform(BookCategoryRepository bookCategoryRepository, BookSearchDto bookSearchDto) {
+    public static BookSearchCond transform(BookCategoryRepository bookCategoryRepository, Isbn13Checker isbn13Checker, BookSearchDto bookSearchDto) {
         BookCategoryCond categoryCond = null;
         if (bookSearchDto.getCategoryId() != null) {
             BookCategory bookCategory = bookCategoryRepository.findById(bookSearchDto.getCategoryId())
@@ -94,12 +95,17 @@ public class BookDataMapper {
             );
         }
 
-        return BookSearchCond.builder()
-                .keyword(bookSearchDto.getTitle())
+        BookSearchCond.BookSearchCondBuilder condBuilder = BookSearchCond.builder()
                 .bookIds(bookSearchDto.getBookIds())
                 .libraryId(bookSearchDto.getLibraryId())
-                .categoryCond(categoryCond)
-                .build();
+                .categoryCond(categoryCond);
+
+        if (isbn13Checker.isIsbn13(bookSearchDto.getTitle()))
+            condBuilder.isbn13(bookSearchDto.getTitle());
+        else
+            condBuilder.keyword(bookSearchDto.getTitle());
+
+        return condBuilder.build();
     }
 
     private static BookCategoryCond createCategoryCond(

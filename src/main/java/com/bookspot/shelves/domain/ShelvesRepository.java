@@ -1,6 +1,7 @@
 package com.bookspot.shelves.domain;
 
 import jakarta.persistence.LockModeType;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,6 +19,7 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
                 JOIN FETCH s.users u
                 LEFT JOIN FETCH s.shelfBooks sb
             WHERE s.users.id = :userId
+            ORDER BY s.updatedAt DESC
             """)
     List<Shelves> findByUsersId(long userId);
 
@@ -30,8 +32,17 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
             FROM Shelves s
                 LEFT JOIN FETCH s.shelfBooks sb
             WHERE s.users.id = :userId and s.isPublic = true
+            ORDER BY s.updatedAt DESC
             """)
     List<Shelves> findPublicShelvesBy(@Param("userId") long userId);
+
+    @Query("""
+            SELECT s
+            FROM Shelves s
+            WHERE s.isPublic = true
+            ORDER BY s.createdAt DESC
+            """)
+    List<Shelves> findPublicShelves(Pageable pageable);
 
     @Query("""
             SELECT s FROM Shelves s
