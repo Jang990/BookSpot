@@ -36,6 +36,7 @@ public class ShelvesDataMapper {
     }
 
     public ShelvesSummaryResponse transform(List<Shelves> shelves, Map<Long, String> bookIdsAndIsbn13) {
+        // TODO: 참 애매하다. 책장마다 Users를 받아야 맞는거 같은데... 일단 구현 편의성을 위해 shelf에서 user.id를 뽑는다
         return new ShelvesSummaryResponse(
                 shelves.stream()
                         .map(shelf ->
@@ -45,7 +46,9 @@ public class ShelvesDataMapper {
                                         shelf.getBookCount(),
                                         shelf.getCreatedAt().toString(),
                                         shelf.isPublic(),
-                                        toIsbn13(shelf, bookIdsAndIsbn13)
+                                        toIsbn13(shelf, bookIdsAndIsbn13),
+
+                                        shelf.getUsers().getId()
                                 )
                         ).toList()
         );
