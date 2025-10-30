@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Isbn13Checker {
     public boolean isIsbn13(String keyword) {
-        return keyword.length() == 13 && hasOnlyNumber(keyword);
+        return keyword != null && keyword.length() == 13 && hasOnlyNumber(keyword);
     }
 
     private boolean hasOnlyNumber(String keyword) {
