@@ -25,12 +25,13 @@ class BookServiceTest {
     @Mock BookSearchRepository bookSearchRepository;
     @Mock BookCategoryRepository bookCategoryRepository;
 
+    @Mock Isbn13Checker isbn13Checker;
+
     @InjectMocks
     BookService service;
 
     @Test
-    void test() {
-
+    void 책_ID검색_시_ID에_맞게_정렬돼서_결과가_나옴() {
         Book book13 = mock(Book.class);
         when(book13.getId()).thenReturn(13L);
         when(book13.getSubjectCode()).thenReturn(null);

@@ -31,6 +31,8 @@ public class BookService {
     private final BookSearchRepository bookSearchRepository;
     private final BookCategoryRepository bookCategoryRepository;
 
+    private final Isbn13Checker isbn13Checker;
+
     public BookPreviewListResponse findAll(List<Long> bookIds) {
         List<Book> books = repository.findAllById(bookIds);
         if(books.size() != bookIds.size())
@@ -52,7 +54,7 @@ public class BookService {
 
     public BookPreviewPageResponse findBooks(BookSearchDto bookSearchDto, Pageable pageable) {
         BookPageResult pageResult = bookSearchRepository.search(
-                BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
+                BookDataMapper.transform(bookCategoryRepository, isbn13Checker, bookSearchDto),
                 bookSearchDto.getSortBy() == BookSort.LOAN
                         ? OpenSearchPageable.sortByLoanCount(pageable)
                         : OpenSearchPageable.sortByRelevance(pageable)
@@ -72,7 +74,7 @@ public class BookService {
             int pageSize
     ) {
         BookSearchAfterResult result = bookSearchRepository.search(
-                BookDataMapper.transform(bookCategoryRepository, bookSearchDto),
+                BookDataMapper.transform(bookCategoryRepository, isbn13Checker, bookSearchDto),
                 new SearchAfterCond(
                         searchAfterCond.getLastScore(),
                         searchAfterCond.getLastLoanCount(),
@@ -93,7 +95,7 @@ public class BookService {
         );
     }
 
-    public BookDetailResponse find(long id){
+    public BookDetailResponse find(long id) {
         Book book = repository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
 
