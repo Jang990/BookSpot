@@ -9,6 +9,7 @@ import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelfSummaryResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
+import com.bookspot.users.domain.Users;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class ShelvesDataMapper {
 
-    public ShelfDetailResponse transform(Shelves shelf, List<ShelfBook> shelfBooks) {
+    public ShelfDetailResponse transform(Shelves shelf, List<ShelfBook> shelfBooks, Users users) {
         List<Long> relatedBookIds = shelfBooks.stream()
                 .map(ShelfBook::getBook)
                 .map(Book::getId)
@@ -29,7 +30,8 @@ public class ShelvesDataMapper {
         return new ShelfDetailResponse(
                 shelf.getId(), shelf.getName(),
                 shelf.getCreatedAt().toString(), shelf.isPublic(),
-                shelf.getBookCount(), relatedBookIds
+                shelf.getBookCount(), relatedBookIds,
+                users.getId()
         );
     }
 
