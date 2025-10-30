@@ -41,6 +41,9 @@ public class BookSearchCond {
     }
 
     public Query toBoolQuery() {
+        if(keyword != null && isbn13 != null)
+            throw new IllegalArgumentException("키워드와 ISBN13을 함께 검색할 수 없음");
+
         BoolQuery.Builder builder = new BoolQuery.Builder();
 
         if (hasBookIds())

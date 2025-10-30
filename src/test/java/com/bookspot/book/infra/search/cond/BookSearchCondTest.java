@@ -1,5 +1,6 @@
 package com.bookspot.book.infra.search.cond;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
@@ -7,10 +8,21 @@ import org.opensearch.client.opensearch._types.query_dsl.Query;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BookSearchCondTest {
     @Test
-    void 정상처리() {
+    void keyword_isbn13을_함께_넣어_boolQuery를_생성하려하면_오류() {
+        BookSearchCond searchCond = BookSearchCond.builder()
+                .keyword("객체")
+                .isbn13("9788936434120")
+                .build();
+
+        assertThrows(IllegalArgumentException.class, searchCond::toBoolQuery);
+    }
+
+    @Test
+    void 키워드_검색_정상처리() {
         BookSearchCond searchCond = BookSearchCond.builder()
                 .bookIds(List.of(1L, 2L, 3L))
                 .keyword("객체")
@@ -51,7 +63,29 @@ class BookSearchCondTest {
                 )
         );
         assertThat(shoulds.get(0).multiMatch().query()).isEqualTo("객체");
+    }
 
+    @Test
+    void ISBN_검색_정상처리() {
+        BookSearchCond searchCond = BookSearchCond.builder()
+                .libraryId(1L)
+                .isbn13("9788936434120")
+                .build();
+
+        BoolQuery result = searchCond.toBoolQuery().bool();
+
+        assertThat(result.filter()).hasSize(2);
+        assertTermFilter(
+                result.filter().get(0),
+                "library_ids", "1"
+        );
+        assertTermFilter(
+                result.filter().get(1),
+                "isbn13", "9788936434120"
+        );
+
+        // should는 키워드 검색만 사용
+        assertThat(result.should()).isEmpty();
     }
 
     private void assertIdFilter(Query idFilter, String[] expectedIds) {
