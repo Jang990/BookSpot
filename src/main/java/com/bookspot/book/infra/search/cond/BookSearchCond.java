@@ -72,7 +72,10 @@ public class BookSearchCond {
                                             "title.ws^8",
                                             "title.keyword^10",
                                             "author^7",
-                                            "publisher^8"
+                                            "publisher^8",
+
+                                            "search_text^3",
+                                            "search_text.ws^5"
                                     ),
                                     keyword,
                                     Operator.And

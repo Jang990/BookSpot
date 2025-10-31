@@ -92,10 +92,79 @@ class BookOpenSearchRepositoryTest_SearchQuality {
         );
     }
 
+    /*
+        "title^5",
+        "title.ws^8",
+        "title.keyword^10",
+        "author^7",
+        "publisher^8"
+
+        이렇게 검색할 때 2025-09에서는 4156건이 나왔다.
+
+        제목+저자, 제목+출판사, ... 등의 검색을 위해
+        search_text 필드가 추가됐고, 그에 따라 검색 범위가 넓어졌지만
+        너무 넓어지진 않게 제한하는 테스트 코드
+
+        매월 세계사 관련 책이 늘어나면서 4500건을 초과할 수도 있음.
+     */
     @Test
-    void ISBN_검색() {
-        BookDocument result = repository.search("9788936434120");
-        assertEquals("소년이 온다",result.getTitle());
-        assertEquals("한강 지음",result.getAuthor());
+    void 세계사_검색결과가_과하게_늘어나지_않도록_주의() {
+        BookSearchCond request = BookSearchCond.builder()
+                .keyword("세계사")
+                .build();
+
+        BookPageResult result = repository.search(
+                request,
+                OpenSearchPageable.sortByLoanCount(TOP10_PAGEABLE)
+        );
+
+        assertTrue(
+                4000 < result.books().getTotalElements()
+                        && result.books().getTotalElements() < 4500
+        );
+    }
+
+    @Test
+    void 제목_저자__검색__세계사_임소미() {
+        BookSearchCond request = BookSearchCond.builder()
+                .keyword("세계사 임소미")
+                .build();
+
+        BookPageResult result = repository.search(
+                request,
+                OpenSearchPageable.sortByLoanCount(TOP10_PAGEABLE)
+        );
+
+        List<BookDocument> books = result.books().get().toList();
+
+        // 요즘 어른을 위한 최소한의 세계사 - 임소미 저자(글) · 김봉중 감수
+        // https://product.kyobobook.co.kr/detail/S000209045024
+        assertEquals("9791193128428", books.getFirst().getIsbn13());
+
+        // 요즘 어른을 위한 최소한의 세계사(큰글자도서)
+        // https://product.kyobobook.co.kr/detail/S000212194834
+        assertEquals("9791193128701", books.get(1).getIsbn13());
+    }
+
+    @Test
+    void 제목_출판사__검색__셜록_열림원() {
+        BookSearchCond request = BookSearchCond.builder()
+                .keyword("셜록 열림원")
+                .build();
+
+        BookPageResult result = repository.search(
+                request,
+                OpenSearchPageable.sortByLoanCount(TOP10_PAGEABLE)
+        );
+
+        List<BookDocument> books = result.books().get().toList();
+
+        // [국내도서] 셜록 1: 주홍색 연구 아서 코넌 도일 저자(글)  | 최현빈 번역
+        // https://product.kyobobook.co.kr/detail/S000001909416
+        assertEquals("9791188047154", books.getFirst().getIsbn13());
+
+        // [국내도서] 셜록 2: 바스커빌의 사냥개
+        // https://product.kyobobook.co.kr/detail/S000001909415
+        assertEquals("9791188047147", books.get(1).getIsbn13());
     }
 }
