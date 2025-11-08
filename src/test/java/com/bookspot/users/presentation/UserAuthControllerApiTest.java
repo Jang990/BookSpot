@@ -1,5 +1,6 @@
 package com.bookspot.users.presentation;
 
+import com.bookspot.SpringBootWithH2Test;
 import com.bookspot.WebSecurityAuthHelper;
 import com.bookspot.bag.domain.BagBook;
 import com.bookspot.bag.domain.BagBookCreator;
@@ -36,10 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@ActiveProfiles("h2")
-@AutoConfigureMockMvc
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootWithH2Test
 @Transactional
 class UserAuthControllerApiTest {
     @Autowired
