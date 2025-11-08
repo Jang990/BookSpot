@@ -1,7 +1,6 @@
 package com.bookspot.bag.event;
 
 import com.bookspot.bag.domain.BagBookRepository;
-import com.bookspot.users.domain.event.BookAddedToBagEvent;
 import com.bookspot.users.domain.event.DeletedUserEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -11,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DeletedUserEventHandler {
+public class DeletedUserEventBagHandler {
     private final BagBookRepository bagBookRepository;
 
     @EventListener(DeletedUserEvent.class)
