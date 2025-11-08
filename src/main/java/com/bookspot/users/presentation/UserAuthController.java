@@ -23,7 +23,8 @@ public class UserAuthController {
     public ResponseEntity<Void> deleteUser(
             @AuthenticationPrincipal String userIdStr
     ) {
-        Long userId = Long.parseLong(userIdStr);
+        long userId = Long.parseLong(userIdStr);
+        userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 
