@@ -16,4 +16,8 @@ public interface ShelfBookRepository extends JpaRepository<ShelfBook, Long> {
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("DELETE FROM ShelfBook sb WHERE sb.shelf.id IN :shelfIds AND sb.book.id = :bookId")
     int deleteByShelfIdsAndBookId(@Param("shelfIds") List<Long> shelfIds, @Param("bookId") long bookId);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("DELETE FROM ShelfBook sb WHERE sb.shelf.id IN :shelfIds")
+    int deleteByShelfIds(@Param("shelfIds") List<Long> shelfIds);
 }

@@ -5,6 +5,7 @@ import com.bookspot.global.Events;
 import com.bookspot.users.domain.event.BookAddedToBagEvent;
 import com.bookspot.users.domain.event.BookBagClearedEvent;
 import com.bookspot.users.domain.event.BookDeletedFromBagEvent;
+import com.bookspot.users.domain.event.DeletedUserEvent;
 import com.bookspot.users.domain.exception.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -139,5 +140,11 @@ public class Users {
             throw new UserShelfEmptyException(id);
 
         shelfSize--;
+    }
+
+    public void delete() {
+        if(id == null)
+            throw new UserNotFoundException();
+        Events.raise(new DeletedUserEvent(id));
     }
 }
