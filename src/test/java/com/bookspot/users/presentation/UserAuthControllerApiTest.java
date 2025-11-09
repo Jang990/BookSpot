@@ -107,10 +107,11 @@ class UserAuthControllerApiTest {
         assertEquals(3, shelvesRepository.count()); // 사용자 - 탈퇴 사용자(2) + 일반 사용자(1)
         assertEquals(3, shelfBookRepository.count()); // 사용자 - 탈퇴 사용자(2) + 일반 사용자(1)
 
-        mockMvc.perform(delete("/api/v1/auth/users/me")
-                        // testUser의 ID를 문자열로 바꿔서 Spring Security의 'user'로 설정
-                        // 컨트롤러의 @AuthenticationPrincipal String userIdStr에 이 값이 들어감
-                        .with(authentication(WebSecurityAuthHelper.userAuth(deletedUser.getId())))
+        mockMvc.perform(
+                        WebSecurityAuthHelper.apiWithAuth(
+                                delete("/api/v1/auth/users/me"),
+                                deletedUser.getId()
+                        )
                 )
                 .andExpect(status().isNoContent());
 
@@ -126,13 +127,6 @@ class UserAuthControllerApiTest {
         assertEquals(1, shelvesRepository.count());
         assertEquals(1, shelvesRepository.findByUsersId(otherUser.getId()).size());
         assertEquals(1, shelfBookRepository.count());
-    }
-
-    private static UsernamePasswordAuthenticationToken userAuth(long userId) {
-        return new UsernamePasswordAuthenticationToken(
-                Long.toString(userId), null,
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
     }
 
     private Book createTestBook(String isbn13) {
