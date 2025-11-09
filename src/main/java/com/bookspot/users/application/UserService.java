@@ -4,6 +4,7 @@ import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.domain.Users;
 import com.bookspot.users.domain.UsersRepository;
 import com.bookspot.users.domain.exception.UserNotFoundException;
+import com.bookspot.users.presentation.UserDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,5 +35,16 @@ public class UserService {
 
         users.delete();
         usersRepository.deleteById(userId);
+    }
+
+    public UserDetailResponse findMyInfo(long userId) {
+        Users users = usersRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return new UserDetailResponse(
+                users.getEmail(),
+                users.getProvider().toString(),
+                users.getCreatedAt()
+        );
     }
 }
