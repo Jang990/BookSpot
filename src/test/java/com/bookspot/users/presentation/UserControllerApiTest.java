@@ -1,6 +1,7 @@
 package com.bookspot.users.presentation;
 
 import com.bookspot.SpringBootWithH2Test;
+import com.bookspot.WebSecurityAuthHelper;
 import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.domain.Users;
 import com.bookspot.users.domain.UsersRepository;
@@ -43,23 +44,15 @@ class UserControllerApiTest {
     @Test
     void 내정보_조회_API() throws Exception {
         mockMvc.perform(
-                apiWithAuth(get("/api/users/me"), testUser.getId())
+                WebSecurityAuthHelper.apiWithAuth(
+                        get("/api/users/me"),
+                        testUser.getId()
+                )
         )
                 .andDo(print())
                 .andExpect(jsonPath("$.email").value(testUser.getEmail()))
                 .andExpect(jsonPath("$.provider").value(testUser.getProvider().toString()))
                 .andExpect(jsonPath("$.createdAt").value(testUser.getCreatedAt().toString()));
-    }
-
-    public static MockHttpServletRequestBuilder apiWithAuth(MockHttpServletRequestBuilder request, long userId) {
-        return request.with(authentication(userAuth(userId)));
-    }
-
-    private static UsernamePasswordAuthenticationToken userAuth(long userId) {
-        return new UsernamePasswordAuthenticationToken(
-                Long.toString(userId), null,
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
     }
 
 }

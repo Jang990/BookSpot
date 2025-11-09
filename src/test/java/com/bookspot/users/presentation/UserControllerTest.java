@@ -1,5 +1,6 @@
 package com.bookspot.users.presentation;
 
+import com.bookspot.WebSecurityAuthHelper;
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.SecurityConfig;
 import com.bookspot.users.application.UserService;
@@ -41,19 +42,11 @@ class UserControllerTest {
     @Test
     void 내정보_조회는_인증된_사용자만_가능() throws Exception {
         mockMvc.perform(
-                apiWithAuth(get(FIND_MY_INFO_API), 1L))
+                        WebSecurityAuthHelper.apiWithAuth(
+                                get(FIND_MY_INFO_API), 1L
+                        )
+                )
                 .andExpect(status().isOk());
-    }
-
-    public MockHttpServletRequestBuilder apiWithAuth(MockHttpServletRequestBuilder request, long userId) {
-        return request.with(authentication(userAuth(userId)));
-    }
-
-    private static UsernamePasswordAuthenticationToken userAuth(long userId) {
-        return new UsernamePasswordAuthenticationToken(
-                Long.toString(userId), null,
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
     }
 
 }
