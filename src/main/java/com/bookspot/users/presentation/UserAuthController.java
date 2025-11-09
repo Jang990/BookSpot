@@ -18,16 +18,6 @@ public class UserAuthController {
     private final UserTokenService userTokenService;
     private final UserService userService;
 
-    @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/users/me")
-    public ResponseEntity<Void> deleteUser(
-            @AuthenticationPrincipal String userIdStr
-    ) {
-        long userId = Long.parseLong(userIdStr);
-        userService.deleteUser(userId);
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         /*
