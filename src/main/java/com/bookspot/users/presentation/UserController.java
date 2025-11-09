@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
+    /**
+     * @see com.bookspot.users.domain.exception.UserNotFoundException
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/me")
     public ResponseEntity<UserDetailResponse> findMyInfo(

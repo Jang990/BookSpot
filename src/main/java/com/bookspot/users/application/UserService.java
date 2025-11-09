@@ -38,6 +38,13 @@ public class UserService {
     }
 
     public UserDetailResponse findMyInfo(long userId) {
-        return null;
+        Users users = usersRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return new UserDetailResponse(
+                users.getEmail(),
+                users.getProvider().toString(),
+                users.getCreatedAt()
+        );
     }
 }
