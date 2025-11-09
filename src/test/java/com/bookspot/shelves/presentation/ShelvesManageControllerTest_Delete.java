@@ -35,8 +35,7 @@ class ShelvesManageControllerTest_Delete {
 
     @Test
     void 책장_삭제() throws Exception {
-        mockMvc.perform(delete(COMMON_PATH)
-                        .with(authentication(userAuth(1L))))
+        mockMvc.perform(WebSecurityAuthHelper.apiWithAuth(delete(COMMON_PATH), 1L))
                 .andExpect(status().isNoContent());
     }
 
