@@ -1,4 +1,4 @@
-package com.bookspot.users.presentation;
+package com.bookspot.users.presentation.response;
 
 import com.bookspot.global.auth.dto.GeneratedToken;
 import lombok.Getter;

@@ -6,7 +6,7 @@ import com.bookspot.users.application.helper.SocialTokenVerifierSelector;
 import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.domain.auth.SocialTokenDetail;
 import com.bookspot.users.domain.auth.SocialTokenVerifier;
-import com.bookspot.users.presentation.UserTokenResponse;
+import com.bookspot.users.presentation.response.UserTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,7 @@
 package com.bookspot.users.presentation;
 
 import com.bookspot.users.application.UserService;
+import com.bookspot.users.presentation.response.UserDetailResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

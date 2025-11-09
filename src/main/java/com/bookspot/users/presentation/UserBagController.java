@@ -2,13 +2,12 @@ package com.bookspot.users.presentation;
 
 import com.bookspot.bag.application.BagBookService;
 import com.bookspot.users.application.UserBagService;
+import com.bookspot.users.presentation.response.BagBookIdsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
