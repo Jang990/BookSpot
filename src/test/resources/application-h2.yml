@@ -1,0 +1,39 @@
+opensearch:
+  serverUrl: http://localhost:9200
+  username: admin
+  password: admin
+
+#opensearch:
+#  serverUrl: http://localhost:9200
+#  username: admin
+#  password: admin
+
+#batch.server.ip: http://localhost:8081
+front:
+  serverUrl: http://localhost:3000
+
+server.port: 8080
+spring:
+  sql.init.mode: always
+  application:
+    name: bookspot
+  messages:
+    basename: messages,errors
+  config.import:
+    - classpath:apis.yml
+    - classpath:oauth.yml
+
+  datasource:
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=MySQL
+  jpa:
+    database: h2
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        ddl-auto: create-drop
+    show-sql: true
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.H2Dialect

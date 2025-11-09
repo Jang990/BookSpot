@@ -1,5 +1,6 @@
 package com.bookspot.shelves.presentation;
 
+import com.bookspot.WebSecurityAuthHelper;
 import com.bookspot.global.auth.JwtProvider;
 import com.bookspot.global.auth.SecurityConfig;
 import com.bookspot.shelves.application.ShelvesManageService;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,16 +39,17 @@ class ShelvesManageControllerTest_Creation {
     @Autowired private ObjectMapper om;
 
     @Test
-    void 로그인하지_않은_사용자의_생성은_불가능() throws Exception {
+    void 로그인하지_않은_사용자의_책장_생성은_불가능() throws Exception {
         mockMvc.perform(post(COMMON_PATH))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void 로그인한_사용자의_생성() throws Exception {
+    void 로그인한_사용자의_책장_생성() throws Exception {
         mockMvc.perform(
-                        post(COMMON_PATH)
-                        .with(authentication(userAuth(10L)))
+                        WebSecurityAuthHelper.apiWithAuth(
+                                post(COMMON_PATH), 10L
+                        )
                                 .content(creationRequest("개발 필독서", true))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -57,8 +60,9 @@ class ShelvesManageControllerTest_Creation {
     @MethodSource("잘못된_생성_요청")
     void 생성_400오류_케이스(ShelfCreationRequest request) throws Exception {
         mockMvc.perform(
-                        post(COMMON_PATH)
-                                .with(authentication(userAuth(10L)))
+                        WebSecurityAuthHelper.apiWithAuth(
+                                        post(COMMON_PATH), 10L
+                                )
                                 .content(om.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -77,13 +81,6 @@ class ShelvesManageControllerTest_Creation {
 
     private String creationRequest(String name, Boolean isPublic) throws JsonProcessingException {
         return om.writeValueAsString(new ShelfCreationRequest(name, isPublic));
-    }
-
-    private static UsernamePasswordAuthenticationToken userAuth(long userId) {
-        return new UsernamePasswordAuthenticationToken(
-                Long.toString(userId), null,
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
     }
 
 }

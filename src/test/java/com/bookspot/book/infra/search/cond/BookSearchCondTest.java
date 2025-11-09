@@ -59,7 +59,10 @@ class BookSearchCondTest {
                         "title.ws^8",
                         "title.keyword^10",
                         "author^7",
-                        "publisher^8"
+                        "publisher^8",
+
+                        "search_text^3",
+                        "search_text.ws^5"
                 )
         );
         assertThat(shoulds.get(0).multiMatch().query()).isEqualTo("객체");

@@ -6,7 +6,7 @@ import com.bookspot.users.application.helper.SocialTokenVerifierSelector;
 import com.bookspot.users.domain.OAuthProvider;
 import com.bookspot.users.domain.auth.SocialTokenDetail;
 import com.bookspot.users.infra.token.google.GoogleTokenVerifier;
-import com.bookspot.users.presentation.UserTokenResponse;
+import com.bookspot.users.presentation.response.UserTokenResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

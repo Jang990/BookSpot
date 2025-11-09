@@ -1,4 +1,4 @@
-package com.bookspot.users.presentation;
+package com.bookspot.users.presentation.response;
 
 import java.util.List;
 
