@@ -41,7 +41,7 @@ class UserControllerTest {
     @Test
     void 내정보_조회는_인증된_사용자만_가능() throws Exception {
         mockMvc.perform(
-                apiWithAuth(get("/api/users/me"), 1L))
+                apiWithAuth(get(FIND_MY_INFO_API), 1L))
                 .andExpect(status().isOk());
     }
 
