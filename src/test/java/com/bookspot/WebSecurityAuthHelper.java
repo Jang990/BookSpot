@@ -20,7 +20,7 @@ public class WebSecurityAuthHelper {
         return request.with(authentication(userAuth(userId)));
     }
 
-    public static UsernamePasswordAuthenticationToken userAuth(long userId) {
+    private static UsernamePasswordAuthenticationToken userAuth(long userId) {
         return new UsernamePasswordAuthenticationToken(
                 Long.toString(userId), null,
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
