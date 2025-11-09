@@ -49,15 +49,4 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-    public MockHttpServletRequestBuilder apiWithAuth(MockHttpServletRequestBuilder request, long userId) {
-        return request.with(authentication(userAuth(userId)));
-    }
-
-    private static UsernamePasswordAuthenticationToken userAuth(long userId) {
-        return new UsernamePasswordAuthenticationToken(
-                Long.toString(userId), null,
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
-    }
-
 }
