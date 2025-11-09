@@ -10,6 +10,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 public class WebSecurityAuthHelper {
 
+    /**
+     * 컨트롤러의 @AuthenticationPrincipal String userIdStr에 이 값이 들어감
+     * @param request GET, POST, DELETE.. 등등 요청
+     * @param userId  @AuthenticationPrincipal에 들어갈 userId
+     * @return 체이닝해서 계속 사용 가능
+     */
     public static MockHttpServletRequestBuilder apiWithAuth(MockHttpServletRequestBuilder request, long userId) {
         return request.with(authentication(userAuth(userId)));
     }
