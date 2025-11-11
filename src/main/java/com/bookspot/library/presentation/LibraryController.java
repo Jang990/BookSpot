@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@BasicLog
 @RequestMapping("/api/libraries")
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +35,7 @@ public class LibraryController {
     /**
      * @see com.bookspot.library.domain.exception.LibraryNotFoundException
      */
+    @BasicLog
     @GetMapping("/{libraryId}")
     public ResponseEntity<LibraryDistanceResponse> findLibraries(
             @PathVariable long libraryId
