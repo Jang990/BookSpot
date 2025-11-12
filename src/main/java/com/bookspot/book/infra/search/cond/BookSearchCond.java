@@ -9,6 +9,7 @@ import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.util.ObjectBuilder;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -120,10 +121,23 @@ public class BookSearchCond {
 
     private Query yearRangeQuery(String fieldName) {
         return new Query.Builder()
-                .range(
-                        fn -> fn.field(fieldName)
-                                .gte(JsonData.of(yearRange.startYear()))
-                                .lte(JsonData.of(yearRange.endYear()))
+                .bool(
+                        b -> b.should(
+                                Arrays.asList(
+                                        new Query.Builder()
+                                                .range(r -> r.field(fieldName)
+                                                        .gte(JsonData.of(yearRange.startYear()))
+                                                        .lte(JsonData.of(yearRange.endYear())))
+                                                .build(),
+                                        new Query.Builder()
+                                                .bool(bb -> bb.mustNot(
+                                                        new Query.Builder()
+                                                                .exists(e -> e.field(fieldName))
+                                                                .build()
+                                                ))
+                                                .build()
+                                )
+                        )
                 )
                 .build();
     }

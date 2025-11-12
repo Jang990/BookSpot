@@ -101,10 +101,14 @@ class BookSearchCondTest {
 
         BoolQuery result = searchCond.toBoolQuery().bool();
         assertThat(result.filter()).hasSize(1);
+        List<Query> yearCondQueries = result.filter().get(0).bool().should();
+
+        // Year 범위 안쪽이거나 발행연도를 알 수 없으면 검색결과에 포함시킴
         assertRangeFilter(
-                result.filter().get(0).range(),
+                yearCondQueries.get(0).range(),
                 "publication_year", 2020, 2025
         );
+        assertEquals("publication_year", yearCondQueries.get(1).bool().mustNot().get(0).exists().field());
     }
 
     private void assertIdFilter(Query idFilter, String[] expectedIds) {
