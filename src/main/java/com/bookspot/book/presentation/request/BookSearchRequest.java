@@ -43,6 +43,6 @@ public class BookSearchRequest {
     }
 
     public Integer getEndYear() {
-        return Objects.requireNonNullElse(startYear, 9999);
+        return Objects.requireNonNullElse(endYear, 9999);
     }
 }
