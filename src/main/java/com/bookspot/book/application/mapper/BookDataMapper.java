@@ -8,6 +8,7 @@ import com.bookspot.book.infra.BookRankingDocument;
 import com.bookspot.book.infra.search.cond.BookCategoryCond;
 import com.bookspot.book.infra.search.cond.BookSearchCond;
 import com.bookspot.book.infra.search.cond.SearchAfterCond;
+import com.bookspot.book.infra.search.cond.YearRange;
 import com.bookspot.book.presentation.request.BookSearchAfterRequest;
 import com.bookspot.book.presentation.request.CategoryLevel;
 import com.bookspot.book.presentation.response.BookPreviewListResponse;
@@ -98,7 +99,8 @@ public class BookDataMapper {
         BookSearchCond.BookSearchCondBuilder condBuilder = BookSearchCond.builder()
                 .bookIds(bookSearchDto.getBookIds())
                 .libraryId(bookSearchDto.getLibraryId())
-                .categoryCond(categoryCond);
+                .categoryCond(categoryCond)
+                .yearRange(new YearRange(bookSearchDto.getStartYear(), bookSearchDto.getEndYear()));
 
         if (isbn13Checker.isIsbn13(bookSearchDto.getTitle()))
             condBuilder.isbn13(bookSearchDto.getTitle());

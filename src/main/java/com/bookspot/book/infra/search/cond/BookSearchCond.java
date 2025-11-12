@@ -2,12 +2,14 @@ package com.bookspot.book.infra.search.cond;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.opensearch.client.json.JsonData;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Operator;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.util.ObjectBuilder;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
@@ -19,6 +21,8 @@ public class BookSearchCond {
     private String isbn13;
     private Long libraryId;
     private BookCategoryCond categoryCond;
+    private YearRange yearRange;
+
 
     public boolean hasBookIds() {
         return bookIds != null && !bookIds.isEmpty();
@@ -34,6 +38,10 @@ public class BookSearchCond {
 
     public boolean hasLibraryId() {
         return libraryId != null;
+    }
+
+    public boolean hasYearRange() {
+        return yearRange != null;
     }
 
     public boolean hasCategoryFilter() {
@@ -61,6 +69,11 @@ public class BookSearchCond {
         if (hasIsbn13()) {
             builder.filter(term("isbn13", isbn13));
         }
+
+        if (hasYearRange()) {
+            builder.filter(yearRangeQuery("publication_year"));
+        }
+
 
         if (hasKeyword())
             builder.minimumShouldMatch("1")
@@ -102,6 +115,29 @@ public class BookSearchCond {
                 .term(
                         mp -> mp.field(fieldName)
                                 .value(fv-> fv.stringValue(keyword))
+                )
+                .build();
+    }
+
+    private Query yearRangeQuery(String fieldName) {
+        return new Query.Builder()
+                .bool(
+                        b -> b.should(
+                                Arrays.asList(
+                                        new Query.Builder()
+                                                .range(r -> r.field(fieldName)
+                                                        .gte(JsonData.of(yearRange.startYear()))
+                                                        .lte(JsonData.of(yearRange.endYear())))
+                                                .build(),
+                                        new Query.Builder()
+                                                .bool(bb -> bb.mustNot(
+                                                        new Query.Builder()
+                                                                .exists(e -> e.field(fieldName))
+                                                                .build()
+                                                ))
+                                                .build()
+                                )
+                        )
                 )
                 .build();
     }

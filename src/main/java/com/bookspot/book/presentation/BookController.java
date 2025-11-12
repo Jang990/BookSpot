@@ -53,6 +53,11 @@ public class BookController {
                 request.getCategoryLevel(),
                 bindingResult
         );
+        SearchRequestValidator.validateYearCond(
+                request.getStartYear(),
+                request.getEndYear(),
+                bindingResult
+        );
 
         return ResponseEntity.ok(
                 bookService.findBooks(
@@ -84,6 +89,12 @@ public class BookController {
         );
         SearchRequestValidator.validateNumericScore(
                 searchAfterRequest.getLastScore(), bindingResult
+        );
+
+        SearchRequestValidator.validateYearCond(
+                request.getStartYear(),
+                request.getEndYear(),
+                bindingResult
         );
 
         return ResponseEntity.ok(

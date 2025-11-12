@@ -71,4 +71,11 @@ public class SearchRequestValidator {
             throw new BindException(bindingResult);
         }
     }
+
+    public static void validateYearCond(int startYear, int endYear, BindingResult bindingResult) throws BindException {
+        if (startYear > endYear) {
+            bindingResult.addError(BookBindingError.SEARCH_YEAR_INVALID.error());
+            throw new BindException(bindingResult);
+        }
+    }
 }

@@ -2,8 +2,10 @@ package com.bookspot.book.infra.search.cond;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.opensearch.client.json.JsonData;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
+import org.opensearch.client.opensearch._types.query_dsl.RangeQuery;
 
 import java.util.List;
 
@@ -91,6 +93,24 @@ class BookSearchCondTest {
         assertThat(result.should()).isEmpty();
     }
 
+    @Test
+    void Year_범위_검색() {
+        BookSearchCond searchCond = BookSearchCond.builder()
+                .yearRange(new YearRange(2020, 2025))
+                .build();
+
+        BoolQuery result = searchCond.toBoolQuery().bool();
+        assertThat(result.filter()).hasSize(1);
+        List<Query> yearCondQueries = result.filter().get(0).bool().should();
+
+        // Year 범위 안쪽이거나 발행연도를 알 수 없으면 검색결과에 포함시킴
+        assertRangeFilter(
+                yearCondQueries.get(0).range(),
+                "publication_year", 2020, 2025
+        );
+        assertEquals("publication_year", yearCondQueries.get(1).bool().mustNot().get(0).exists().field());
+    }
+
     private void assertIdFilter(Query idFilter, String[] expectedIds) {
         assertThat(idFilter.ids().values())
                 .containsExactlyInAnyOrder(expectedIds);
@@ -106,6 +126,18 @@ class BookSearchCondTest {
 
         assertThat(termFilter.term().value().stringValue())
                 .isEqualTo(expectedValue);
+    }
+
+    private void assertRangeFilter(
+            RangeQuery rangeQuery,
+            String expectedFiledName,
+            int expectedGte,
+            int expectedLte
+    ) {
+        assertThat(rangeQuery.field())
+                .isEqualTo(expectedFiledName);
+        assertThat(rangeQuery.gte().to(Integer.class)).isEqualTo(expectedGte);
+        assertThat(rangeQuery.lte().to(Integer.class)).isEqualTo(expectedLte);
     }
 
 }
