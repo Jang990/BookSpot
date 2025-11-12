@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +31,18 @@ public class BookSearchRequest {
     private CategoryLevel categoryLevel;
     private BookSort sortBy;
 
+    private Integer startYear;
+    private Integer endYear;
+
     public BookSort getSortBy() {
         return sortBy == null ? DEFAULT_SORT_BY : sortBy;
+    }
+
+    public Integer getStartYear() {
+        return Objects.requireNonNullElse(startYear, 0);
+    }
+
+    public Integer getEndYear() {
+        return Objects.requireNonNullElse(startYear, 9999);
     }
 }
