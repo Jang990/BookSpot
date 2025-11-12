@@ -20,4 +20,6 @@ public class BookSearchDto {
     private Integer categoryId;
     private CategoryLevel categoryLevel;
     private BookSort sortBy;
+    private int startYear;
+    private int endYear;
 }

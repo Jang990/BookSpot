@@ -12,6 +12,8 @@ public class SearchDtoMapper {
                 .categoryId(request.getCategoryId())
                 .categoryLevel(request.getCategoryLevel())
                 .sortBy(request.getSortBy())
+                .startYear(request.getStartYear())
+                .endYear(request.getEndYear())
                 .build();
     }
 }
