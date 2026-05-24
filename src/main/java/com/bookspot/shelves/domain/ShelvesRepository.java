@@ -40,7 +40,7 @@ public interface ShelvesRepository extends JpaRepository<Shelves, Long> {
             SELECT s
             FROM Shelves s
             WHERE s.isPublic = true
-            ORDER BY s.createdAt DESC
+            ORDER BY s.updatedAt DESC
             """)
     List<Shelves> findPublicShelves(Pageable pageable);
 
