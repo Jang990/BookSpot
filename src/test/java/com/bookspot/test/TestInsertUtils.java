@@ -1,9 +1,12 @@
 package com.bookspot.test;
 
+import com.bookspot.users.domain.OAuthProvider;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class TestInsertUtils {
 
@@ -178,6 +181,172 @@ public class TestInsertUtils {
         }
     }
 
+    public static class UsersBuilder {
+        private Long id;
+        private String nickname = "test_user";
+        private String role = "USER";
+        private String provider = OAuthProvider.GOOGLE.toString();
+        private String providerId = "test_provider_id";
+
+        private static final String INSERT_SQL = """
+            INSERT INTO users
+            (id, nickname, role, provider, provider_id, created_at, updated_at)
+            VALUES(?, ?, ?, ?, ?, now(), now());
+            """;
+
+        public UsersBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public void insert(JdbcTemplate jdbcTemplate) {
+            if (id == null) {
+                throw new IllegalArgumentException("Users의 (id)는 필수 설정입니다.");
+            }
+
+            jdbcTemplate.update(INSERT_SQL, ps -> {
+                if (id != null) {
+                    ps.setLong(1, id);
+                } else {
+                    ps.setNull(1, java.sql.Types.BIGINT);
+                }
+                ps.setString(2, nickname);
+                ps.setString(3, role);
+                ps.setString(4, provider);
+                ps.setString(5, providerId);
+            });
+        }
+    }
+
+    public static class ShelvesBuilder {
+        private Long id;
+        private Integer bookCount = 0;
+        private Boolean isPublic = true;
+        private String name = "기본 서재";
+        private Long userId;
+        private LocalDateTime createdAt = LocalDateTime.now();
+        private LocalDateTime updatedAt = LocalDateTime.now();
+
+        private static final String INSERT_SQL = """
+            INSERT INTO shelves
+            (id, book_count, is_public, name, user_id, created_at, updated_at)
+            VALUES(?, ?, ?, ?, ?, ?, ?);
+            """;
+
+        public ShelvesBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ShelvesBuilder bookCount(Integer bookCount) {
+            this.bookCount = bookCount;
+            return this;
+        }
+
+        public ShelvesBuilder isPublic(Boolean isPublic) {
+            this.isPublic = isPublic;
+            return this;
+        }
+
+        public ShelvesBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ShelvesBuilder userId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public ShelvesBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public ShelvesBuilder updatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public void insert(JdbcTemplate jdbcTemplate) {
+            if (userId == null) {
+                throw new IllegalArgumentException("Shelves에 (user_id)는 필수 설정입니다.");
+            }
+
+            jdbcTemplate.update(INSERT_SQL, ps -> {
+                if (id != null) {
+                    ps.setLong(1, id);
+                } else {
+                    ps.setNull(1, java.sql.Types.BIGINT);
+                }
+                ps.setInt(2, bookCount);
+                ps.setBoolean(3, isPublic);
+                ps.setString(4, name);
+                ps.setLong(5, userId);
+                ps.setTimestamp(6, Timestamp.valueOf(createdAt));
+                ps.setTimestamp(7, Timestamp.valueOf(updatedAt));
+            });
+        }
+    }
+
+    public static class ShelfBooksBuilder {
+        private Long id;
+        private Long shelfId;
+        private Long bookId;
+        private Integer idx = 0;
+        private LocalDateTime createdAt = LocalDateTime.now();
+
+        private static final String INSERT_SQL = """
+            INSERT INTO shelf_books
+            (id, shelf_id, book_id, idx, created_at)
+            VALUES(?, ?, ?, ?, ?);
+            """;
+
+        public ShelfBooksBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ShelfBooksBuilder shelfId(Long shelfId) {
+            this.shelfId = shelfId;
+            return this;
+        }
+
+        public ShelfBooksBuilder bookId(Long bookId) {
+            this.bookId = bookId;
+            return this;
+        }
+
+        public ShelfBooksBuilder idx(Integer idx) {
+            this.idx = idx;
+            return this;
+        }
+
+        public ShelfBooksBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public void insert(JdbcTemplate jdbcTemplate) {
+            if (shelfId == null || bookId == null) {
+                throw new IllegalArgumentException("ShelfBooks에 (shelfId, bookId)는 필수 설정입니다.");
+            }
+
+            jdbcTemplate.update(INSERT_SQL, ps -> {
+                if (id != null) {
+                    ps.setLong(1, id);
+                } else {
+                    ps.setNull(1, java.sql.Types.BIGINT); // AUTO_INCREMENT 처리 시 NULL 허용 필요
+                }
+                ps.setLong(2, shelfId);
+                ps.setLong(3, bookId);
+                ps.setInt(4, idx);
+                ps.setTimestamp(5, Timestamp.valueOf(createdAt));
+            });
+        }
+    }
+
+
     public static LibraryBuilder libraryBuilder() {
         return new LibraryBuilder();
     }
@@ -187,4 +356,14 @@ public class TestInsertUtils {
     public static LibraryStockBuilder libraryStockBuilder() {
         return new LibraryStockBuilder();
     }
+    public static UsersBuilder usersBuilder() {
+        return new UsersBuilder();
+    }
+    public static ShelvesBuilder shelvesBuilder() {
+        return new ShelvesBuilder();
+    }
+    public static ShelfBooksBuilder shelfBooksBuilder() {
+        return new ShelfBooksBuilder();
+    }
+
 }
