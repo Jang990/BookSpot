@@ -7,6 +7,7 @@ import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import com.bookspot.shelves.domain.exception.ShelfPrivateAccessException;
+import com.bookspot.shelves.infra.ShelvesPreviewQueryRepository;
 import com.bookspot.shelves.infra.ShelvesQuerydslRepository;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesBookStatusResponse;
@@ -35,6 +36,7 @@ public class ShelvesQueryService {
     private final BookIsbnService bookIsbnService;
 
     private final ShelvesQuerydslRepository shelvesQuerydslRepository;
+    private final ShelvesPreviewQueryRepository shelvesPreviewQueryRepository;
 
     public ShelvesSummaryResponse findPublicShelves(Pageable pageable) {
         // 1:N에 페이징 불가능 => Lazy 로딩 + BatchSize 활용
@@ -53,19 +55,10 @@ public class ShelvesQueryService {
         Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
                 .orElseThrow(UserNotFoundException::new);
 
-        List<Shelves> shelves;
         if(shelvesOwner.getId().equals(loginUserId))
-            shelves = shelvesRepository.findByUsersId(shelvesOwnerUserId);
+            return shelvesPreviewQueryRepository.findAllShelves(shelvesOwnerUserId, THUMBNAIL_BOOK_COUNT);
         else
-            shelves = shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId);
-
-        List<ShelfBook> shelfBooks = shelves.stream()
-                .map(Shelves::getShelfBooks)
-                .flatMap(sb -> sb.stream().limit(THUMBNAIL_BOOK_COUNT))
-                .toList();
-
-        Map<Long, String> bookIdAndIsbn13 = bookIsbnService.findBookIsbn(shelfBooks);
-        return shelvesDataMapper.transform(shelves, bookIdAndIsbn13);
+            return shelvesPreviewQueryRepository.findPublicShelves(shelvesOwnerUserId, THUMBNAIL_BOOK_COUNT);
     }
 
     public ShelfDetailResponse findShelfDetail(Long loginUserId, long shelfId) {
