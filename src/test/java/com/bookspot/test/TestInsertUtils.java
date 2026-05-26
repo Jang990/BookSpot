@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class TestInsertUtils {
 
@@ -183,10 +184,10 @@ public class TestInsertUtils {
 
     public static class UsersBuilder {
         private Long id;
-        private String nickname = "test_user";
+        private String nickname = "test-user";
         private String role = "USER";
         private String provider = OAuthProvider.GOOGLE.toString();
-        private String providerId = "test_provider_id";
+        private String providerId = UUID.randomUUID().toString().substring(0, 20);
 
         private static final String INSERT_SQL = """
             INSERT INTO users
