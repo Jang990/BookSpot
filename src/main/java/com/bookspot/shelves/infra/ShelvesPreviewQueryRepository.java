@@ -3,6 +3,8 @@ package com.bookspot.shelves.infra;
 import com.bookspot.shelves.presentation.dto.ShelfSummaryResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,42 +23,52 @@ public class ShelvesPreviewQueryRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public ShelvesSummaryResponse findAllShelves(long ownerId, int thumbnailBookCount) {
-        return executeQuery(ownerId, thumbnailBookCount, false);
+        return executeQuery(PageRequest.of(0, 12), ownerId, thumbnailBookCount, false);
     }
 
     public ShelvesSummaryResponse findPublicShelves(long ownerId, int thumbnailBookCount) {
-        return executeQuery(ownerId, thumbnailBookCount, true);
+        return executeQuery(PageRequest.of(0, 12), ownerId, thumbnailBookCount, true);
     }
 
-    private ShelvesSummaryResponse executeQuery(long ownerId, int thumbnailBookCount, boolean publicOnly) {
-        String condition = publicOnly ? "AND s.is_public = true" : "";
+    private ShelvesSummaryResponse executeQuery(Pageable pageable, long ownerId, int thumbnailBookCount, boolean publicOnly) {
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("pageSize", pageable.getPageSize())
+                .addValue("offset", pageable.getOffset())
+                .addValue("thumbnailBookCount", thumbnailBookCount)
+                .addValue("ownerId", ownerId);
+
+        StringBuilder whereClause = new StringBuilder("WHERE bs.user_id = :ownerId");
+        if (publicOnly) {
+            whereClause.append(" AND bs.is_public = true");
+        }
 
         String sql = String.format("""
-            WITH RankedBooks AS (
-                SELECT
-                    s.id AS shelf_id,
-                    s.name,
-                    s.book_count,
-                    s.created_at AS shelf_created_at,
-                    s.updated_at AS shelf_updated_at,
-                    s.is_public,
-                    s.user_id AS owner_id,
-                    b.isbn13,
-                    ROW_NUMBER() OVER(PARTITION BY s.id ORDER BY sb.created_at DESC) as rn
-                FROM shelves s
-                LEFT JOIN shelf_books sb ON s.id = sb.shelf_id
-                LEFT JOIN book b ON sb.book_id = b.id
-                WHERE s.user_id = :ownerId
-                  %s
-            )
-            SELECT * FROM RankedBooks
-            WHERE rn <= :limit
-            ORDER BY shelf_updated_at DESC, rn ASC
-            """, condition);
-
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("ownerId", ownerId)
-                .addValue("limit", thumbnailBookCount);
+                WITH
+                RankedBooks AS (
+                    SELECT
+                        s.id AS shelf_id,
+                        s.name,
+                        s.book_count,
+                        s.created_at AS shelf_created_at,
+                        s.updated_at AS shelf_updated_at,
+                        s.is_public,
+                        s.user_id AS owner_id,
+                        b.isbn13,
+                        ROW_NUMBER() OVER(PARTITION BY s.id ORDER BY sb.created_at DESC) as rn
+                    FROM (
+                        SELECT id, name, book_count, created_at, updated_at, is_public, user_id
+                        FROM shelves bs
+                        %s
+                        ORDER BY bs.updated_at DESC
+                        LIMIT :pageSize OFFSET :offset
+                    ) s
+                    LEFT JOIN shelf_books sb ON s.id = sb.shelf_id
+                    LEFT JOIN book b ON sb.book_id = b.id
+                )
+                SELECT * FROM RankedBooks
+                WHERE rn <= :thumbnailBookCount
+                ORDER BY shelf_updated_at DESC, rn ASC
+                """, whereClause.toString(), pageable.getPageSize(), pageable.getOffset());
 
         List<ShelfSummaryResponse> summaryList = jdbcTemplate.query(sql, params, rs -> {
             Map<Long, ShelfSummaryResponse> map = new LinkedHashMap<>();
