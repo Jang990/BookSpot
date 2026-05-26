@@ -40,15 +40,19 @@ class ShelvesQueryServiceTest_findUserShelves {
         책장1 - 책1, 책2, 책3 (public)
         책장2 - 책1, 책2 (private)
         책장3 - 책1, 책3 (public)
+
+        사용자 2
+        책장1 - 책1 (public)
         */
 
         // 책 생성 (id: 1, 2, 3)
-        TestInsertUtils.bookBuilder().id(1L).isbn13("1".repeat(13)).insert(jdbcTemplate);
-        TestInsertUtils.bookBuilder().id(2L).isbn13("2".repeat(13)).insert(jdbcTemplate);
-        TestInsertUtils.bookBuilder().id(3L).isbn13("3".repeat(13)).insert(jdbcTemplate);
+        TestInsertUtils.bookBuilder().id(1L).isbn13(isbn(1)).insert(jdbcTemplate);
+        TestInsertUtils.bookBuilder().id(2L).isbn13(isbn(2)).insert(jdbcTemplate);
+        TestInsertUtils.bookBuilder().id(3L).isbn13(isbn(3)).insert(jdbcTemplate);
 
-        // 사용자 생성 (id: 1)
+        // 사용자 생성 (id: 1, 2)
         TestInsertUtils.usersBuilder().id(1L).insert(jdbcTemplate);
+        TestInsertUtils.usersBuilder().id(2L).insert(jdbcTemplate);
 
         // 책장 생성
 
@@ -67,6 +71,10 @@ class ShelvesQueryServiceTest_findUserShelves {
         TestInsertUtils.shelvesBuilder().id(3L).userId(1L).isPublic(true).name("책장3").updatedAt(ORDER_3).insert(jdbcTemplate);
         TestInsertUtils.shelfBooksBuilder().shelfId(3L).bookId(1L).createdAt(ORDER_1).insert(jdbcTemplate);
         TestInsertUtils.shelfBooksBuilder().shelfId(3L).bookId(3L).createdAt(ORDER_2).insert(jdbcTemplate);
+
+        // 사용자2-책장 (public, [책1])
+        TestInsertUtils.shelvesBuilder().id(4L).userId(2L).isPublic(true).name("사용자2-책장").updatedAt(ORDER_1).insert(jdbcTemplate);
+        TestInsertUtils.shelfBooksBuilder().shelfId(4L).bookId(1L).createdAt(ORDER_1).insert(jdbcTemplate);
     }
 
     @Test
