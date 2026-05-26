@@ -102,9 +102,6 @@ class ShelvesQueryServiceTest_findUserShelves {
 
         // 책장 - updatedAt 최신순 정렬
         List<Long> expectedIds = result.bookshelvesSummary().stream().map(ShelfSummaryResponse::getId).toList();
-        System.out.println(result.bookshelvesSummary().get(0).getId());
-        System.out.println(result.bookshelvesSummary().get(1).getId());
-        System.out.println(result.bookshelvesSummary().get(2).getId());
         assertThat(expectedIds).isEqualTo(List.of(1L, 2L, 3L));
 
         // 내부 책 - createdAt 최신순 정렬

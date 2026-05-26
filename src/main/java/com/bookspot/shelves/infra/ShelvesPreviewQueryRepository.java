@@ -28,9 +28,7 @@ public class ShelvesPreviewQueryRepository {
         return executeQuery(ownerId, thumbnailBookCount, true);
     }
 
-    // 내부 구현: 동적 쿼리 생성 및 실행 (외부에는 숨김)
     private ShelvesSummaryResponse executeQuery(long ownerId, int thumbnailBookCount, boolean publicOnly) {
-        // publicOnly 조건에 따라 WHERE 절을 명확하게 분리하여 옵티마이저 혼동 방지
         String condition = publicOnly ? "AND s.is_public = true" : "";
 
         String sql = String.format("""
