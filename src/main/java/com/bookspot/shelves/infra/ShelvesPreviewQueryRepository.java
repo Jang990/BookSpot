@@ -22,12 +22,12 @@ import java.util.Map;
 public class ShelvesPreviewQueryRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public ShelvesSummaryResponse findAllShelves(long ownerId, int thumbnailBookCount) {
-        return executeQuery(PageRequest.of(0, 12), ownerId, thumbnailBookCount, false);
+    public ShelvesSummaryResponse findAllShelves(Pageable pageable, long ownerId, int thumbnailBookCount) {
+        return executeQuery(pageable, ownerId, thumbnailBookCount, false);
     }
 
-    public ShelvesSummaryResponse findPublicShelves(long ownerId, int thumbnailBookCount) {
-        return executeQuery(PageRequest.of(0, 12), ownerId, thumbnailBookCount, true);
+    public ShelvesSummaryResponse findPublicShelves(Pageable pageable, long ownerId, int thumbnailBookCount) {
+        return executeQuery(pageable, ownerId, thumbnailBookCount, true);
     }
 
     private ShelvesSummaryResponse executeQuery(Pageable pageable, long ownerId, int thumbnailBookCount, boolean publicOnly) {
