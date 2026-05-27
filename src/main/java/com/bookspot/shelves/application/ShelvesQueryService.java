@@ -1,26 +1,20 @@
 package com.bookspot.shelves.application;
 
-import com.bookspot.shelfbooks.domain.ShelfBook;
 import com.bookspot.shelves.application.mapper.ShelvesDataMapper;
-import com.bookspot.book.application.BookIsbnService;
 import com.bookspot.shelves.domain.Shelves;
 import com.bookspot.shelves.domain.ShelvesRepository;
 import com.bookspot.shelves.domain.exception.ShelfNotFoundException;
 import com.bookspot.shelves.domain.exception.ShelfPrivateAccessException;
+import com.bookspot.shelves.infra.ShelvesPreviewQueryRepository;
 import com.bookspot.shelves.infra.ShelvesQuerydslRepository;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
-import com.bookspot.users.domain.Users;
-import com.bookspot.users.domain.UsersRepository;
-import com.bookspot.users.domain.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -28,44 +22,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ShelvesQueryService {
     public static final int THUMBNAIL_BOOK_COUNT = 3;
+    public static final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 50);
 
-    private final UsersRepository usersRepository;
     private final ShelvesRepository shelvesRepository;
     private final ShelvesDataMapper shelvesDataMapper;
-    private final BookIsbnService bookIsbnService;
 
     private final ShelvesQuerydslRepository shelvesQuerydslRepository;
+    private final ShelvesPreviewQueryRepository shelvesPreviewQueryRepository;
 
     public ShelvesSummaryResponse findPublicShelves(Pageable pageable) {
-        // 1:N에 페이징 불가능 => Lazy 로딩 + BatchSize 활용
-        List<Shelves> shelves = shelvesRepository.findPublicShelves(pageable);
-
-        List<ShelfBook> shelfBooks = shelves.stream()
-                .map(Shelves::getShelfBooks)
-                .flatMap(sb -> sb.stream().limit(THUMBNAIL_BOOK_COUNT))
-                .toList();
-
-        Map<Long, String> bookIdAndIsbn13 = bookIsbnService.findBookIsbn(shelfBooks);
-        return shelvesDataMapper.transform(shelves, bookIdAndIsbn13);
+        return shelvesPreviewQueryRepository.findAllShelves(pageable, THUMBNAIL_BOOK_COUNT);
     }
 
     public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
-        Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
-                .orElseThrow(UserNotFoundException::new);
-
-        List<Shelves> shelves;
-        if(shelvesOwner.getId().equals(loginUserId))
-            shelves = shelvesRepository.findByUsersId(shelvesOwnerUserId);
+        if(loginUserId != null && loginUserId.equals(loginUserId))
+            return shelvesPreviewQueryRepository.findAllShelves(DEFAULT_PAGEABLE, shelvesOwnerUserId, THUMBNAIL_BOOK_COUNT);
         else
-            shelves = shelvesRepository.findPublicShelvesBy(shelvesOwnerUserId);
-
-        List<ShelfBook> shelfBooks = shelves.stream()
-                .map(Shelves::getShelfBooks)
-                .flatMap(sb -> sb.stream().limit(THUMBNAIL_BOOK_COUNT))
-                .toList();
-
-        Map<Long, String> bookIdAndIsbn13 = bookIsbnService.findBookIsbn(shelfBooks);
-        return shelvesDataMapper.transform(shelves, bookIdAndIsbn13);
+            return shelvesPreviewQueryRepository.findPublicShelves(DEFAULT_PAGEABLE, shelvesOwnerUserId, THUMBNAIL_BOOK_COUNT);
     }
 
     public ShelfDetailResponse findShelfDetail(Long loginUserId, long shelfId) {
