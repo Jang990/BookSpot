@@ -10,9 +10,6 @@ import com.bookspot.shelves.infra.ShelvesQuerydslRepository;
 import com.bookspot.shelves.presentation.dto.ShelfDetailResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesBookStatusResponse;
 import com.bookspot.shelves.presentation.dto.ShelvesSummaryResponse;
-import com.bookspot.users.domain.Users;
-import com.bookspot.users.domain.UsersRepository;
-import com.bookspot.users.domain.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +24,6 @@ public class ShelvesQueryService {
     public static final int THUMBNAIL_BOOK_COUNT = 3;
     public static final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 50);
 
-    private final UsersRepository usersRepository;
     private final ShelvesRepository shelvesRepository;
     private final ShelvesDataMapper shelvesDataMapper;
 
@@ -38,11 +34,8 @@ public class ShelvesQueryService {
         return shelvesPreviewQueryRepository.findAllShelves(pageable, THUMBNAIL_BOOK_COUNT);
     }
 
-    public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
-        Users shelvesOwner = usersRepository.findById(shelvesOwnerUserId)
-                .orElseThrow(UserNotFoundException::new);
-
-        if(shelvesOwner.getId().equals(loginUserId))
+        public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
+        if(loginUserId != null && loginUserId.equals(loginUserId))
             return shelvesPreviewQueryRepository.findAllShelves(DEFAULT_PAGEABLE, shelvesOwnerUserId, THUMBNAIL_BOOK_COUNT);
         else
             return shelvesPreviewQueryRepository.findPublicShelves(DEFAULT_PAGEABLE, shelvesOwnerUserId, THUMBNAIL_BOOK_COUNT);
