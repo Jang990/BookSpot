@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ class ShelvesQueryServiceTest_findUserShelves {
     LocalDateTime base = LocalDateTime.now();
 
     // 최신순 정렬
+    LocalDateTime ORDER_0 = base.plusMinutes(3);
     LocalDateTime ORDER_1 = base.plusMinutes(2);
     LocalDateTime ORDER_2 = base.plusMinutes(1);
     LocalDateTime ORDER_3 = base;
@@ -73,7 +75,7 @@ class ShelvesQueryServiceTest_findUserShelves {
         TestInsertUtils.shelfBooksBuilder().shelfId(3L).bookId(3L).createdAt(ORDER_2).insert(jdbcTemplate);
 
         // 사용자2-책장 (public, [책1])
-        TestInsertUtils.shelvesBuilder().id(4L).userId(2L).isPublic(true).name("사용자2-책장").updatedAt(ORDER_1).insert(jdbcTemplate);
+        TestInsertUtils.shelvesBuilder().id(4L).userId(2L).isPublic(true).name("사용자2-책장").updatedAt(ORDER_0).insert(jdbcTemplate);
         TestInsertUtils.shelfBooksBuilder().shelfId(4L).bookId(1L).createdAt(ORDER_1).insert(jdbcTemplate);
     }
 
@@ -119,6 +121,20 @@ class ShelvesQueryServiceTest_findUserShelves {
                 .isEqualTo(List.of(isbn(1), isbn(2)));
         assertThat(result.bookshelvesSummary().get(2).getThumbnailImageIsbn())
                 .isEqualTo(List.of(isbn(1), isbn(3)));
+    }
+
+    @Test
+    @DisplayName("전체 책장 목록 조회 - 사용자 상관없이 public 책장만 조회")
+    public void test3() {
+        // when
+        ShelvesSummaryResponse result = queryService.findPublicShelves(PageRequest.of(0, 3));
+
+        // 사용자2 - 책장(4) + 사용자1 - 책장 1,3
+        assertThat(result.bookshelvesSummary().size()).isEqualTo(3);
+
+        // 책장 - updatedAt 최신순 정렬
+        List<Long> expectedIds = result.bookshelvesSummary().stream().map(ShelfSummaryResponse::getId).toList();
+        assertThat(expectedIds).isEqualTo(List.of(4L, 1L, 3L));
     }
 
     public String isbn(long bookId) {
