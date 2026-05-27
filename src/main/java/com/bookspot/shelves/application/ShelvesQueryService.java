@@ -34,7 +34,7 @@ public class ShelvesQueryService {
         return shelvesPreviewQueryRepository.findAllShelves(pageable, THUMBNAIL_BOOK_COUNT);
     }
 
-        public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
+    public ShelvesSummaryResponse findUserShelves(Long loginUserId, long shelvesOwnerUserId) {
         if(loginUserId != null && loginUserId.equals(loginUserId))
             return shelvesPreviewQueryRepository.findAllShelves(DEFAULT_PAGEABLE, shelvesOwnerUserId, THUMBNAIL_BOOK_COUNT);
         else
