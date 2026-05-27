@@ -16,11 +16,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootWithH2Test
-class ShelvesQueryServiceTest_findUserShelves {
+class ShelvesQueryServiceTest_findShelvesPreview {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
