@@ -22,6 +22,10 @@ import java.util.Map;
 public class ShelvesPreviewQueryRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
+    public ShelvesSummaryResponse findAllShelves(Pageable pageable, int thumbnailBookCount) {
+        return executeQuery(pageable, null, thumbnailBookCount, true);
+    }
+
     public ShelvesSummaryResponse findAllShelves(Pageable pageable, long ownerId, int thumbnailBookCount) {
         return executeQuery(pageable, ownerId, thumbnailBookCount, false);
     }
@@ -30,14 +34,17 @@ public class ShelvesPreviewQueryRepository {
         return executeQuery(pageable, ownerId, thumbnailBookCount, true);
     }
 
-    private ShelvesSummaryResponse executeQuery(Pageable pageable, long ownerId, int thumbnailBookCount, boolean publicOnly) {
+    private ShelvesSummaryResponse executeQuery(Pageable pageable, Long ownerId, int thumbnailBookCount, boolean publicOnly) {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("pageSize", pageable.getPageSize())
                 .addValue("offset", pageable.getOffset())
-                .addValue("thumbnailBookCount", thumbnailBookCount)
-                .addValue("ownerId", ownerId);
+                .addValue("thumbnailBookCount", thumbnailBookCount);
 
-        StringBuilder whereClause = new StringBuilder("WHERE bs.user_id = :ownerId");
+        StringBuilder whereClause = new StringBuilder("WHERE 1=1");
+        if (ownerId != null) {
+            whereClause.append(" AND bs.user_id = :ownerId");
+            params.addValue("ownerId", ownerId);
+        }
         if (publicOnly) {
             whereClause.append(" AND bs.is_public = true");
         }
