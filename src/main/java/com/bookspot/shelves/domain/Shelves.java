@@ -51,7 +51,7 @@ public class Shelves {
     }
 
     public boolean isOwnerBy(Users users) {
-        return users.equals(users);
+        return this.users.equals(users);
     }
 
     public boolean isOwnerBy(long userId) {
