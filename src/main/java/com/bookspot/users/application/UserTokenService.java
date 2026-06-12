@@ -9,8 +9,10 @@ import com.bookspot.users.domain.auth.SocialTokenVerifier;
 import com.bookspot.users.presentation.response.UserTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserTokenService {
     private final SocialTokenVerifierSelector socialTokenVerifierSelector;
